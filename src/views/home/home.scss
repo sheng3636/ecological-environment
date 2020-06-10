@@ -1,0 +1,48 @@
+@import '@/assets/styles/mixin.scss';
+.bodyMain {
+  margin: 0 auto;
+  width: 1845px;
+}
+
+
+.main0 {
+  @include fj();
+  .sideItem0,
+  .sideItem1 {
+    @include wh(800px,720px);
+    border: 1px solid #448fe4;
+    background: radial-gradient(circle, rgba(18, 69, 113, 0) 0,  rgba(18, 69, 113, 1) 160%);
+  }
+  .sideItem1 {
+    width: 1020px;
+  }
+  #sideItem0,
+  #sideItem1,
+  #echartsWrap {
+    height: 425px;
+  }
+}
+
+.imgModalBody {
+  position: relative;
+  @include fj(center);
+  #echartsWrap1 {
+    @include wh(95%,415px);
+  }
+
+  .colorArea {
+    // position: absolute;
+    // left: 0px;
+    // top: 0px;
+    margin: 10px 0 0 5px;
+    p {
+      margin-bottom: 5px;
+      .txt {
+        display: block;
+        margin-bottom: 5px;
+        white-space: nowrap;
+        color: #fff;
+      }
+    }
+  }
+}

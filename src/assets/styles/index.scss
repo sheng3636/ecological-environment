@@ -1,0 +1,336 @@
+@import './variables.scss';
+@import './mixin.scss';
+
+html,body {
+  height: 100%;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-family: Helvetica Neue,
+  Helvetica,
+  PingFang SC,
+  Hiragino Sans GB,
+  Microsoft YaHei,
+  Arial,
+  sans-serif;
+  color: #fff;
+  background: #050b24;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  @include scrollBar()
+}
+* {
+  padding: 0;
+  margin: 0;
+  list-style: none
+}
+
+#app {
+  height: 100%;
+  color: #fff;
+}
+
+a:focus,
+a:active {
+  outline: none;
+}
+
+a,
+a:focus,
+a:hover {
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+}
+
+// 顶部导航栏
+.navTopArea {
+  height: 100px;
+  @include fj(flex-start);
+
+  .navLeft {
+    align-items: center;
+    width: 600px;
+    background: url('../../assets/images/logoBg.png') no-repeat left bottom;
+    @include fj(flex-start);
+    @include sc(36px, #02cfe4);
+
+    img {
+      margin-right: 10px;
+    }
+
+    span {
+      font-size: 36px;
+      font-weight: bold;
+      background: linear-gradient(to top, #01a5e8, #00e0d2);
+      -webkit-background-clip: text;
+      color: transparent;
+      letter-spacing: 3px;
+    }
+  }
+
+  .navRight {
+    align-items: center;
+    width: calc(100% - 660px);
+    border-bottom: 1px solid #004c91;
+    @include fj(flex-start);
+
+    li {
+      min-width: 120px;
+      line-height: 100px;
+      cursor: pointer;
+
+      img {
+        vertical-align: middle;
+      }
+
+      span {
+        margin-left: 10px;
+        vertical-align: middle;
+        @include sc(22px, #09b7ff);
+      }
+
+      &.navActive {
+        background: url('../../assets/images/navActiveBg.png') no-repeat center bottom;
+      }
+    }
+  }
+}
+
+// 底部导航栏
+.navBottomArea {
+  align-items: center;
+  margin: 85px -38px 0 -38px;
+  height: 235px;
+  border-top: 2px solid #448fe4;
+  @include fj(center);
+  li {
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+    width: 436px;
+    cursor: pointer;
+    @include sc(24px, #696969);
+    @include fj(center);
+    img {
+      margin-bottom: 15px;
+      @include wh(68px,68px);
+    }
+    span {
+      text-align: c;
+    }
+    .activeImg {
+      position: absolute;
+      top: -87px;
+      @include wh(165px, 52px);
+    }
+    &.active {
+      color: #09b7ff;
+    }
+  }
+}
+
+// 标题分割线
+.txtWrap {
+  margin: 0 auto;
+  @include wh(1620px, 100px);
+  align-items: center;
+  @include fj();
+
+  .txt {
+    font-size: 28px;
+    font-weight: bold;
+  }
+}
+
+// 区域模块标题
+.moudleTitle {
+  position: relative;
+  padding: 0 25px;
+  height: 60px;
+  align-items: center;
+  background: linear-gradient(to right, rgba(0, 237, 255, 0) 30%, rgba(0, 237, 255, 0.4) 80%, rgba(0, 237, 255, 0.6) 90%, rgba(0, 237, 255, 0.9));
+  @include fj();
+
+  &::before {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    content: '';
+    display: block;
+    width: 4px;
+    height: 40px;
+    background: #00edff;
+  }
+
+  .left {
+    font-weight: normal;
+    @include sc(24px, #00edff);
+  }
+
+  .optionGroup {
+    width: 125px;
+    @include fj();
+
+    .optionImg {
+      @include wh(30px, 30px);
+      cursor: pointer;
+    }
+  }
+}
+
+.chartIcon {
+  margin-right: 5px;
+  vertical-align: middle;
+  @include wh(24px, 24px);
+}
+
+// 结论文字区
+.resultWrap {
+  margin: 5px 15px;
+
+  h5 {
+    margin-bottom: 15px;
+    font-size: 20px;
+    font-weight: normal;
+  }
+
+  .content {
+    position: relative;
+    padding: 50px 70px;
+    background: #0b274a;
+    p {
+      line-height: 32px;
+      text-align: left;
+      text-indent: 2em;
+      @include sc(20px, #00d0e0);
+
+      .light {
+        color:#e09e00;
+      }
+    }
+
+    .fourIcon {
+      position: absolute;
+      display: block;
+      @include wh(18px, 17px);
+
+      &.fourIcon0 {
+        top: 5px;
+        left: 5px;
+        @include bis('../../assets/images/leftTopIcon.png');
+      }
+
+      &.fourIcon1 {
+        top: 5px;
+        right: 5px;
+        @include bis('../../assets/images/rightTopIcon.png');
+      }
+
+      &.fourIcon2 {
+        bottom: 5px;
+        left: 5px;
+        @include bis('../../assets/images/leftBottomIcon.png');
+      }
+
+      &.fourIcon3 {
+        bottom: 5px;
+        right: 5px;
+        @include bis('../../assets/images/rightBottomIcon.png');
+      }
+    }
+  }
+}
+
+// 下载echart图片弹窗
+.imagesWrap {
+  position: relative;
+  border: 1px solid #00edff;
+  background: rgba(5,19,37,0.85)!important;
+  
+  .fourIcon {
+    position: absolute;
+    display: block;
+
+    &.fourIcon0 {
+      top: -70px;
+      left: -15px;
+      @include wh(22px, 25px);
+      @include bis('../../assets/images/leftTopIcon1.png');
+    }
+
+    &.fourIcon1 {
+      top: -70px;
+      right: -15px;
+      @include wh(43px, 47px);
+      @include bis('../../assets/images/rightTopIcon1.png');
+    }
+
+    &.fourIcon2 {
+      bottom: -90px;
+      left: -15px;
+      @include wh(43px, 47px);
+      @include bis('../../assets/images/leftBottomIcon1.png');
+    }
+
+    &.fourIcon3 {
+      bottom: -90px;
+      right: -15px;
+      @include wh(22px, 25px);
+      @include bis('../../assets/images/rightBottomIcon1.png');
+    }
+  }
+
+  .el-dialog__headerbtn {
+    top: 45px!important;
+    right: 55px!important;
+  }
+
+  .el-dialog__title {
+    line-height: 24px!important;
+    font-size: 28px!important;
+    color: #00d2ff!important;
+  }
+
+  .el-dialog__headerbtn .el-dialog__close {
+    color: #6cd6ff !important;
+    font-size: 30px !important;
+  }
+}
+
+
+// echarts图类型下拉框样式
+.el-dropdown-menu {
+  background: #0688b3!important;
+  border: 1px solid #00deff!important;
+}
+
+.el-dropdown-menu__item--divided:before {
+  content: '';
+  height: 1px !important;
+  background-color: #00deff!important;
+}
+
+.el-dropdown-menu__item--divided {
+  border-top: 1px solid transparent!important;
+}
+
+.el-popper[x-placement^=bottom] .popper__arrow::after {
+  top: 1px;
+  margin-left: -6px;
+  border-top-width: 0;
+  border-bottom-color: #0688b3!important;
+}
+
+.el-popper[x-placement^=bottom] .popper__arrow {
+  border-bottom-color: #00deff!important;
+}
+
+.el-dropdown-menu__item {
+  color: #fff!important;
+}
+.el-dropdown-menu__item:hover {
+  background-color: transparent!important;
+  color: #00deff!important;
+}

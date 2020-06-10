@@ -1,0 +1,140 @@
+@mixin clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+@mixin scrollBar {
+  &::-webkit-scrollbar-track-piece {
+    background: #d3dce6;
+  }
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #99a9bf;
+    border-radius: 20px;
+  }
+}
+
+// 背景图片地址和大小
+@mixin bis($url) {
+  background-image: url($url);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+// 边框圆角
+@mixin borderRadius($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -ms-border-radius: $radius;
+  -o-border-radius: $radius;
+  border-radius: $radius;
+}
+
+//定位全屏
+@mixin allcover {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+//定位上下左右居中
+@mixin center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+//定位上下居中
+@mixin ct {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+//定位左右居中
+@mixin cl {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+//宽高
+@mixin wh($width, $height) {
+  width: $width;
+  height: $height;
+}
+
+//字体大小、行高、字体
+@mixin font($size, $line-height, $family: 'Microsoft YaHei') {
+  font: #{$size}/#{$line-height} $family;
+}
+
+//字体大小，颜色
+@mixin sc($size, $color) {
+  font-size: $size;
+  color: $color;
+}
+
+//flex 布局和 子元素 对其方式
+@mixin fj($type: space-between) {
+  display: flex;
+  justify-content: $type;
+}
+
+
+@mixin asideItem($height, $content,$titleWidth:162px) {
+  position: relative;
+  width: 100%;
+  height: $height;
+  border: 1px solid #4f7399;
+
+  &::before {
+    content: $content;
+    position: absolute;
+    top: -20px;
+    left: 50px;
+    display: block;
+    @include wh($titleWidth, 39px);
+    line-height: 39px;
+    font-size: 23px;
+    @include bis('../../assets/images/common/asideItemTitleBg.png');
+  }
+
+  .fourIcon {
+    position: absolute;
+    display: block;
+    @include wh(22px, 20px);
+
+    &.fourIcon0 {
+      top: -5px;
+      left: -5px;
+      @include bis('../../assets/images/common/leftTopIcon.png');
+    }
+
+    &.fourIcon1 {
+      top: -5px;
+      right: -5px;
+      @include bis('../../assets/images/common/rightTopIcon.png');
+    }
+
+    &.fourIcon2 {
+      bottom: -5px;
+      left: -5px;
+      @include bis('../../assets/images/common/leftBottomIcon.png');
+    }
+
+    &.fourIcon3 {
+      bottom: -5px;
+      right: -5px;
+      @include bis('../../assets/images/common/rightBottomIcon.png');
+    }
+  }
+}
