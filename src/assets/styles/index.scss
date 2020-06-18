@@ -51,7 +51,7 @@ a:hover {
   .navLeft {
     align-items: center;
     width: 600px;
-    background: url('../../assets/images/logoBg.png') no-repeat left bottom;
+    background: url('../../assets/images/nav/logoBg.png') no-repeat left bottom;
     @include fj(flex-start);
     @include sc(36px, #02cfe4);
 
@@ -100,7 +100,7 @@ a:hover {
 // 底部导航栏
 .navBottomArea {
   align-items: center;
-  margin: 85px -38px 0 -38px;
+  margin: 60px -38px 0 -38px;
   height: 235px;
   border-top: 2px solid #448fe4;
   @include fj(center);
@@ -108,7 +108,7 @@ a:hover {
     position: relative;
     flex-direction: column;
     align-items: center;
-    width: 436px;
+    width: 330px;
     cursor: pointer;
     @include sc(24px, #696969);
     @include fj(center);
@@ -121,7 +121,7 @@ a:hover {
     }
     .activeImg {
       position: absolute;
-      top: -87px;
+      top: -84px;
       @include wh(165px, 52px);
     }
     &.active {
@@ -131,15 +131,18 @@ a:hover {
 }
 
 // 标题分割线
-.txtWrap {
-  margin: 0 auto;
-  @include wh(1620px, 100px);
-  align-items: center;
-  @include fj();
+.CuttingLine {
+  width: 100%;
+  .txtWrap {
+    margin: 0 auto;
+    @include wh(1620px, 100px);
+    align-items: center;
+    @include fj();
 
-  .txt {
-    font-size: 28px;
-    font-weight: bold;
+    .txt {
+      font-size: 28px;
+      font-weight: bold;
+    }
   }
 }
 
@@ -170,7 +173,7 @@ a:hover {
   }
 
   .optionGroup {
-    width: 125px;
+    width: 80px;
     @include fj();
 
     .optionImg {
@@ -186,9 +189,16 @@ a:hover {
   @include wh(24px, 24px);
 }
 
+.dataSourceTxt {
+  margin: 0 auto 15px auto;
+  font-size: 20px;
+  font-weight: normal;
+  text-align: center;
+}
+
 // 结论文字区
 .resultWrap {
-  margin: 5px 15px;
+  margin: 5px 15px 20px 15px;
 
   h5 {
     margin-bottom: 15px;
@@ -198,8 +208,11 @@ a:hover {
 
   .content {
     position: relative;
-    padding: 50px 70px;
+    align-items: center;
+    padding: 0 70px;
+    min-height: 165px;
     background: #0b274a;
+    @include fj(center);
     p {
       line-height: 32px;
       text-align: left;
@@ -239,6 +252,47 @@ a:hover {
         right: 5px;
         @include bis('../../assets/images/rightBottomIcon.png');
       }
+    }
+  }
+}
+.rightResultWrap {
+  position: relative;
+  align-items: center;
+  margin: 10px 10px 0 0;
+  padding: 30px;
+  width: 470px;
+  height: 770px;
+  background: #0b274a;
+  @include fj(center);
+  @include sc(20px, #00d0e0);
+
+  .fourIcon {
+    position: absolute;
+    display: block;
+    @include wh(19px, 17px);
+
+    &.fourIcon0 {
+      top: 5px;
+      left: 5px;
+      @include bis('../../assets/images/leftTopIcon.png');
+    }
+
+    &.fourIcon1 {
+      top: 5px;
+      right: 5px;
+      @include bis('../../assets/images/rightTopIcon.png');
+    }
+
+    &.fourIcon2 {
+      bottom: 5px;
+      left: 5px;
+      @include bis('../../assets/images/leftBottomIcon.png');
+    }
+
+    &.fourIcon3 {
+      bottom: 5px;
+      right: 5px;
+      @include bis('../../assets/images/rightBottomIcon.png');
     }
   }
 }
@@ -333,4 +387,61 @@ a:hover {
 .el-dropdown-menu__item:hover {
   background-color: transparent!important;
   color: #00deff!important;
+}
+
+
+// 表格边框样式
+.tableWrap {
+  margin: 0 auto;
+  width: 96%;
+
+  .el-table--enable-row-hover .el-table__body tr:hover>td {
+    background-color: #212e3e !important;
+  }
+
+  .el-table--border,
+  .el-table--group {
+    background: transparent !important;
+  }
+
+  .el-table th {
+    background: #043f85;
+    color: #fff;
+  }
+
+  .el-table tr:nth-child(odd) {
+    background: #061c38;
+    color: #00d7e9;
+  }
+
+  .el-table tr:nth-child(even) {
+    background: #0b274a;
+    color: #00d7e9;
+  }
+
+  .el-table td,
+  .el-table th {
+    padding: 8px 0;
+    line-height: 30px;
+  }
+
+  .el-table td,
+  .el-table th.is-leaf {
+    border-bottom: none;
+  }
+
+  .el-table--border::after,
+  .el-table--group::after,
+  .el-table::before {
+    height: 0;
+  }
+
+  .el-table,
+  .el-table__expanded-cell {
+    background-color: transparent;
+  }
+
+  .el-table .cell {
+    line-height: 30px;
+  }
 }

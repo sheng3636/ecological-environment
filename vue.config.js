@@ -39,7 +39,8 @@ module.exports = {
       // change xxx-api/login => mock/login
       // 细节见: https://cli.vuejs.org/config/#devserver-proxy
       [process.env.VUE_APP_BASE_API]: {
-        target: `https://www.fastmock.site/mock/a69ece16af0aa480538a0eb8e1312e6a/incomingTelegram/incomingTelegram/`,
+        // target: `https://www.fastmock.site/mock/16cc48478cd7264caa761582d3cceff4/ecologicalEnv/`,
+        target: `http://192.168.13.251:8083/`,
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: '/'

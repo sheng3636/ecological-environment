@@ -1,5 +1,3 @@
-import Vue from 'vue'
-import echarts from 'echarts'
 // 存储localStorage
 const setStore = (name, content) => {
   if (!name) return

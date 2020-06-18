@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { MessageBox, Message } from 'element-ui'
+import { Message } from 'element-ui'
 
 // 创建一个axios实例
 const service = axios.create({
@@ -36,7 +36,7 @@ service.interceptors.response.use(
     const res = response.data
 
     // 如果自定义代码不是0,它是判断一个错误。
-    if (res.code !== '0') {
+    if (res.code !== 0 && res.code !== '0') {
       Message({
         message: res.message || 'Error',
         type: 'error',
