@@ -3,7 +3,10 @@
     <nav class="navTopArea">
       <div class="navLeft">
         <img src="@/assets/images/nav/logo.png">
-        <span>台州市环境质量分析</span>
+        <span v-if="routerActive === 1">{{cityName}}环境质量分析</span>
+        <span v-if="routerActive === 2">{{cityName}}生态资源分析</span>
+        <span v-if="routerActive === 3">{{cityName}}污染物排放分析</span>
+        <span v-if="routerActive === 4">{{cityName}}生态资源状况分析</span>
       </div>
       <ul class="navRight">
         <li :class="{navActive:routerActive === 1}" @click="routerFn(1)">
@@ -72,10 +75,10 @@
         </div>
         <div class="sideItem width800 sideItem1_0">
           <h4 class="moudleTitle">
-            <span class="left">2015年-2019年台州市空气质量达到优良天数比例变化</span>
+            <span class="left">{{chartArr.sideItem1_0.title}}</span>
             <p class="optionGroup">
               <img class="optionImg"
-                @click="imagesModalOpenFn('sideItem1_0','2015年-2019年台州市空气质量达到优良天数比例变化',sideItem1_0Chart)"
+                @click="imagesModalOpenFn('sideItem1_0',chartArr.sideItem1_0.title,sideItem1_0Chart)"
                 src="@/assets/images/downImgIcon.png">
               <el-dropdown trigger="click" @command="chartTypeClick">
                 <span class="el-dropdown-link">
@@ -96,18 +99,19 @@
           </h4>
           <div class="sideItemChart width800" id="sideItem1_0"></div>
           <div class="resultWrap">
-            <h5>数据来源：{{sideItem1_0.dataSource}}</h5>
+            <h5>数据来源：{{chartArr.sideItem1_0.dataSource}}</h5>
             <div class="content">
               <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
-              <p v-html="sideItem1_0.result"></p>
+              <p v-html="chartArr.sideItem1_0.result"></p>
             </div>
           </div>
         </div>
         <div class="sideItem width1020 sideItem1_1">
           <h4 class="moudleTitle">
-            <span class="left">2018年各地市空气质量达到优良天数比例对比</span>
+            <span class="left">{{chartArr.sideItem1_1.title}}</span>
             <p class="optionGroup">
-              <img class="optionImg" @click="imagesModalOpenFn('sideItem1_1','2018年各地市空气质量达到优良天数比例对比',sideItem1_1Chart)"
+              <img class="optionImg"
+                @click="imagesModalOpenFn('sideItem1_1',chartArr.sideItem1_1.title,sideItem1_1Chart)"
                 src="@/assets/images/downImgIcon.png">
               <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                 <span class="el-dropdown-link">
@@ -128,19 +132,19 @@
           </h4>
           <div class="sideItemChart width1020" id="sideItem1_1"></div>
           <div class="resultWrap">
-            <h5>数据来源：{{sideItem1_1.dataSource}}</h5>
+            <h5>数据来源：{{chartArr.sideItem1_1.dataSource}}</h5>
             <div class="content">
               <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
-              <p v-html="sideItem1_1.result"></p>
+              <p v-html="chartArr.sideItem1_1.result"></p>
             </div>
           </div>
         </div>
         <div class="sideItem width910 sideItem1_2">
           <h4 class="moudleTitle">
-            <span class="left">2018年台州市管辖各县级城市空气质量达到优良天数比例</span>
+            <span class="left">{{chartArr.sideItem1_2.title}}</span>
             <p class="optionGroup">
               <img class="optionImg"
-                @click="imagesModalOpenFn('sideItem1_2','2018年台州市管辖各县级城市空气质量达到优良天数比例',sideItem1_2Chart)"
+                @click="imagesModalOpenFn('sideItem1_2',chartArr.sideItem1_2.title,sideItem1_2Chart)"
                 src="@/assets/images/downImgIcon.png">
               <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                 <span class="el-dropdown-link">
@@ -161,20 +165,19 @@
           </h4>
           <div class="sideItemChart width910" id="sideItem1_2"></div>
           <div class="resultWrap">
-            <h5>数据来源：{{sideItem1_2.dataSource}}</h5>
+            <h5>数据来源：{{chartArr.sideItem1_2.dataSource}}</h5>
             <div class="content">
               <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
-              <p>2018年，台州市管辖的各县级城市中，温岭市空气质量达到优良天数比例最高，达到<span class="light">{{99.5}}%</span>；天台县最低，为<span
-                  class="light">{{93.7}}%。</span></p>
+              <p v-html="chartArr.sideItem1_2.result"></p>
             </div>
           </div>
         </div>
         <div class="sideItem width910 sideItem1_3">
           <h4 class="moudleTitle">
-            <span class="left">2018年台州市管辖各县级城市PM2.5年均浓度（µg/m3）对比</span>
+            <span class="left">{{chartArr.sideItem1_3.title}}</span>
             <p class="optionGroup">
               <img class="optionImg"
-                @click="imagesModalOpenFn('sideItem1_3','2018年台州市管辖各县级城市PM2.5年均浓度（µg/m3）对比',sideItem1_3Chart)"
+                @click="imagesModalOpenFn('sideItem1_3',chartArr.sideItem1_3.title,sideItem1_3Chart)"
                 src="@/assets/images/downImgIcon.png">
               <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                 <span class="el-dropdown-link">
@@ -195,20 +198,19 @@
           </h4>
           <div class="sideItemChart width910" id="sideItem1_3"></div>
           <div class="resultWrap">
-            <h5>数据来源：{{sideItem1_0.dataSource}}</h5>
+            <h5>数据来源：{{chartArr.sideItem1_3.dataSource}}</h5>
             <div class="content">
               <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
-              <p>2018年，台州市管辖的各县级城市中，玉环市PM2.5年均浓度最低，达到<span class="light">{{24}}</span>µg/m3；三门县最高，达到<span
-                  class="light">{{31}}</span>µg/m3</p>
+              <p v-html="chartArr.sideItem1_3.result"></p>
             </div>
           </div>
         </div>
         <div class="sideItem width910 sideItem1_4">
           <h4 class="moudleTitle">
-            <span class="left">2018年各地市PM2.5年均浓度（µg/m3）对比</span>
+            <span class="left">{{chartArr.sideItem1_4.title}}</span>
             <p class="optionGroup">
               <img class="optionImg"
-                @click="imagesModalOpenFn('sideItem1_4','2018年各地市PM2.5年均浓度（µg/m3）对比',sideItem1_4Chart)"
+                @click="imagesModalOpenFn('sideItem1_4',chartArr.sideItem1_4.title,sideItem1_4Chart)"
                 src="@/assets/images/downImgIcon.png">
               <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                 <span class="el-dropdown-link">
@@ -229,19 +231,19 @@
           </h4>
           <div class="sideItemChart width910" id="sideItem1_4"></div>
           <div class="resultWrap">
-            <h5>数据来源：{{sideItem1_0.dataSource}}</h5>
+            <h5>数据来源：{{chartArr.sideItem1_4.dataSource}}</h5>
             <div class="content">
               <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
-              <p>2018年，台州市PM2.5年均浓度在全省排第<span class="light">{{9}}</span>位 </p>
+              <p v-html="chartArr.sideItem1_4.result"></p>
             </div>
           </div>
         </div>
         <div class="sideItem width910 sideItem1_5">
           <h4 class="moudleTitle">
-            <span class="left">2015年-2018年台州市PM2.5年平均浓度（µg/m3）变化</span>
+            <span class="left">{{chartArr.sideItem1_5.title}}</span>
             <p class="optionGroup">
               <img class="optionImg"
-                @click="imagesModalOpenFn('sideItem1_5','2015年-2018年台州市PM2.5年平均浓度（µg/m3）变化',sideItem1_5Chart)"
+                @click="imagesModalOpenFn('sideItem1_5',chartArr.sideItem1_5.title,sideItem1_5Chart)"
                 src="@/assets/images/downImgIcon.png">
               <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                 <span class="el-dropdown-link">
@@ -262,10 +264,10 @@
           </h4>
           <div class="sideItemChart width910" id="sideItem1_5"></div>
           <div class="resultWrap">
-            <h5>数据来源：省生态环境厅</h5>
+            <h5>数据来源：{{chartArr.sideItem1_5.dataSource}}</h5>
             <div class="content">
               <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
-              <p>201*年，台州市PM2.5年均浓度在全省排第*位 </p>
+              <p v-html="chartArr.sideItem1_5.result"></p>
             </div>
           </div>
         </div>
@@ -278,9 +280,10 @@
         </div>
         <div class="sideItem width1845 sideItem1_6">
           <h4 class="moudleTitle">
-            <span class="left">台州市各县（市、区）III类以上水质断面数量</span>
+            <span class="left">{{chartArr.sideItem1_6.title}}</span>
             <p class="optionGroup">
-              <img class="optionImg" @click="imagesModalOpenFn('sideItem1_6','台州市各县（市、区）III类以上水质断面数量',sideItem1_6Chart)"
+              <img class="optionImg"
+                @click="imagesModalOpenFn('sideItem1_6',chartArr.sideItem1_6.title,sideItem1_6Chart)"
                 src="@/assets/images/downImgIcon.png">
               <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                 <span class="el-dropdown-link">
@@ -301,21 +304,20 @@
           </h4>
           <div class="sideItemChart width1845" id="sideItem1_6"></div>
           <div class="resultWrap">
-            <h5>数据来源：{{sideItem1_6.dataSource}}</h5>
+            <h5>数据来源：{{chartArr.sideItem1_6.dataSource}}</h5>
             <div class="content">
               <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
-              <p>2019年，台州市27个省控水质断面中，I类<span class="light">{{2}}</span>个，II类<span class="light">{{7}}</span>个，III类<span
-                  class="light">{{10}}</span>个，IV类<span class="light">{{8}}</span>个，V类<span
-                  class="light">{{0}}</span>个，劣IV类<span class="light">{{0}}</span>个。</p>
+              <p v-html="chartArr.sideItem1_6.result"></p>
             </div>
           </div>
         </div>
         <div class="twoWrap">
           <div class="sideItem width910 sideItem1_7">
             <h4 class="moudleTitle">
-              <span class="left"> 全省各地市III类以上水质断面占比</span>
+              <span class="left"> {{chartArr.sideItem1_7.title}}</span>
               <p class="optionGroup">
-                <img class="optionImg" @click="imagesModalOpenFn('sideItem1_7',' 全省各地市III类以上水质断面占比',sideItem1_7Chart)"
+                <img class="optionImg"
+                  @click="imagesModalOpenFn('sideItem1_7',chartArr.sideItem1_7.title,sideItem1_7Chart)"
                   src="@/assets/images/downImgIcon.png">
                 <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                   <span class="el-dropdown-link">
@@ -338,10 +340,10 @@
           </div>
           <div class="sideItem width910 sideItem1_8">
             <h4 class="moudleTitle">
-              <span class="left"> 2015年-2019年台州市省控断面水质类型变化</span>
+              <span class="left">{{chartArr.sideItem1_8.title}}</span>
               <p class="optionGroup">
                 <img class="optionImg"
-                  @click="imagesModalOpenFn('sideItem1_8',' 2015年-2019年台州市省控断面水质类型变化',sideItem1_8Chart)"
+                  @click="imagesModalOpenFn('sideItem1_8',chartArr.sideItem1_8.title,sideItem1_8Chart)"
                   src="@/assets/images/downImgIcon.png">
                 <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                   <span class="el-dropdown-link">
@@ -363,14 +365,14 @@
             <div class="sideItemChart width910" id="sideItem1_8"></div>
           </div>
           <div class="resultWrap" style="width: 100%;">
-            <h5>数据来源：{{sideItem1_8.dataSource}}</h5>
+            <h5>数据来源：{{chartArr.sideItem1_7.dataSource}}</h5>
             <div class="content">
               <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
-              <p>2019年，台州市27个省控水质断面中，III类以上占比为70.4，在全省11个地市中排第10名。</p>
+              <p v-html="chartArr.sideItem1_7.result"></p>
             </div>
           </div>
         </div>
-        <div class="sideItem width1845 sideItem1_6">
+        <div class="sideItem width1845">
           <h4 class="moudleTitle">
             <span class="left">台州市各省控断面水质类型</span>
             <p class="optionGroup" style="justify-content: flex-end;">
@@ -388,7 +390,7 @@
             <h5>数据来源：省生态环境厅</h5>
             <div class="content">
               <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
-              <p>2019年，台州市椒江区、天台县、仙居县、临海市所有省控断面水质全部达到III类及以上。路桥区、玉环市所有省控断面水质均未达到III类 </p>
+              <p v-html="tableDataResult"></p>
             </div>
           </div>
         </div>
@@ -396,9 +398,10 @@
       <div class="mainWrap" style="margin-top: 30px;" v-show="routerActive === 2">
         <div class="sideItem width1080 sideItem2_0">
           <h4 class="moudleTitle">
-            <span class="left">全省各地市森林覆盖率</span>
+            <span class="left">{{chartArr.sideItem2_0.title}}</span>
             <p class="optionGroup">
-              <img class="optionImg" @click="imagesModalOpenFn('sideItem2_0','全省各地市森林覆盖率',sideItem2_0Chart)"
+              <img class="optionImg"
+                @click="imagesModalOpenFn('sideItem2_0',chartArr.sideItem2_0.title,sideItem2_0Chart)"
                 src="@/assets/images/downImgIcon.png">
               <el-dropdown trigger="click" @command="chartTypeClick">
                 <span class="el-dropdown-link">
@@ -419,53 +422,54 @@
           </h4>
           <div class="sideItemChart width1080" id="sideItem2_0"></div>
           <div class="resultWrap">
-            <h5>数据来源：{{sideItem2_0.dataSource}}</h5>
+            <h5>数据来源：{{chartArr.sideItem2_0.dataSource}}</h5>
             <div class="content">
               <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
-              <p>根据2015年调查数据，台州市森林覆盖率<span class="light">59.89%</span>，在全省11地市中排第<span class="light">四</span>位，<span
-                  class="light">高于</span>全省平均水平。</p>
+              <p v-html="chartArr.sideItem2_0.result"></p>
             </div>
           </div>
         </div>
         <div class="sideItem width740 sideItem2_1">
           <h4 class="moudleTitle">
-            <span class="left">全省各地市活立木蓄积量占比</span>
+            <span class="left">{{chartArr.sideItem2_1.title}}</span>
             <p class="optionGroup">
-              <img class="optionImg" @click="imagesModalOpenFn('sideItem2_1','全省各地市活立木蓄积量占比',sideItem2_1Chart)"
+              <img class="optionImg"
+                @click="imagesModalOpenFn('sideItem2_1',chartArr.sideItem2_1.title,sideItem2_1Chart)"
                 src="@/assets/images/downImgIcon.png">
             </p>
           </h4>
           <div class="sideItemChart width740" id="sideItem2_1"></div>
           <div class="resultWrap">
-            <h5>数据来源：省生态环境厅</h5>
+            <h5>数据来源：{{chartArr.sideItem2_1.dataSource}}</h5>
             <div class="content">
               <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
-              <p>2015年台州市活立木蓄积量为<span class="light">2929</span>万立方米，占全省的<span class="light">9</span>%。</p>
+              <p v-html="chartArr.sideItem2_1.result"></p>
             </div>
           </div>
         </div>
         <div class="sideItem width740 sideItem2_2">
           <h4 class="moudleTitle">
-            <span class="left">全省各地市林地面积占比</span>
+            <span class="left">{{chartArr.sideItem2_2.title}}</span>
             <p class="optionGroup">
-              <img class="optionImg" @click="imagesModalOpenFn('sideItem2','全省各地市林地面积占比',sideItem2Chart)"
+              <img class="optionImg" @click="imagesModalOpenFn('sideItem2',chartArr.sideItem2_2.title,sideItem2Chart)"
                 src="@/assets/images/downImgIcon.png">
             </p>
           </h4>
           <div class="sideItemChart width740" id="sideItem2_2"></div>
           <div class="resultWrap">
-            <h5>数据来源：{{sideItem2_2.dataSource}}</h5>
+            <h5>数据来源：{{chartArr.sideItem2_2.dataSource}}</h5>
             <div class="content">
               <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
-              <p>根据2015年调查数据，台州市林地面积为<span class="light">63.02</span>万公顷，占全省的<span class="light">9</span>%。</p>
+              <p v-html="chartArr.sideItem2_2.result"></p>
             </div>
           </div>
         </div>
         <div class="sideItem width1080 sideItem2_3">
           <h4 class="moudleTitle">
-            <span class="left">全省各地市单位面积森林蓄积量</span>
+            <span class="left">{{chartArr.sideItem2_3.title}}</span>
             <p class="optionGroup">
-              <img class="optionImg" @click="imagesModalOpenFn('sideItem2_3','全省各地市单位面积森林蓄积量',sideItem2_3Chart)"
+              <img class="optionImg"
+                @click="imagesModalOpenFn('sideItem2_3',chartArr.sideItem2_3.title,sideItem2_3Chart)"
                 src="@/assets/images/downImgIcon.png">
               <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                 <span class="el-dropdown-link">
@@ -486,19 +490,19 @@
           </h4>
           <div class="sideItemChart width1080" id="sideItem2_3"></div>
           <div class="resultWrap">
-            <h5>数据来源：{{sideItem2_3.dataSource}}</h5>
+            <h5>数据来源：{{chartArr.sideItem2_3.dataSource}}</h5>
             <div class="content">
               <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
-              <p>根据2015年调查数据，台州市单位面积森林蓄积量为<span class="light">47.6</span>（立方米/公顷），在全省11地市中排第<span
-                  class="light">四</span>位，<span class="light">高于</span>全省平均水平。</p>
+              <p v-html="chartArr.sideItem2_3.result"></p>
             </div>
           </div>
         </div>
         <div class="sideItem width910 sideItem2_4">
           <h4 class="moudleTitle">
-            <span class="left">台州市各县、市森林覆盖率</span>
+            <span class="left">{{chartArr.sideItem2_4.title}}</span>
             <p class="optionGroup">
-              <img class="optionImg" @click="imagesModalOpenFn('sideItem2_4','台州市各县、市森林覆盖率',sideItem2_4Chart)"
+              <img class="optionImg"
+                @click="imagesModalOpenFn('sideItem2_4',chartArr.sideItem2_4.title,sideItem2_4Chart)"
                 src="@/assets/images/downImgIcon.png">
               <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                 <span class="el-dropdown-link">
@@ -519,18 +523,18 @@
           </h4>
           <div class="sideItemChart width910" id="sideItem2_4"></div>
           <div class="resultWrap">
-            <h5>数据来源：省生态环境厅</h5>
+            <h5>数据来源：{{chartArr.sideItem2_4.dataSource}}</h5>
             <div class="content">
               <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
-              <p>台州市下辖各县市中，仙居县森林覆盖率最高，达到<span class="light">79.54</span>%，温岭市最低，为<span class="light">31.04</span>%。 </p>
+              <p v-html="chartArr.sideItem2_4.result"></p>
             </div>
           </div>
         </div>
         <div class="sideItem width910 sideItem2_5">
           <h4 class="moudleTitle">
-            <span class="left">台州市各县、市单位面积森林蓄积量</span>
+            <span class="left">{{chartArr.sideItem2_5.title}}</span>
             <p class="optionGroup">
-              <img class="optionImg" @click="imagesModalOpenFn('sideItem2_5','台州市各县、市单位面积森林蓄积量',sideItem2_5Chart)"
+              <img class="optionImg" @click="imagesModalOpenFn('sideItem2_5',chartArr.sideItem2_5.title,sideItem2_5Chart)"
                 src="@/assets/images/downImgIcon.png">
               <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                 <span class="el-dropdown-link">
@@ -551,11 +555,10 @@
           </h4>
           <div class="sideItemChart width910" id="sideItem2_5"></div>
           <div class="resultWrap">
-            <h5>数据来源：省生态环境厅</h5>
+            <h5>数据来源：{{chartArr.sideItem2_5.dataSource}}</h5>
             <div class="content">
               <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
-              <p>台州市下辖各县市中，市区的单位面积森林蓄积量最高，达到<span class="light">71.76</span>立方米/公顷，玉环市最低，为<span
-                  class="light">35.94</span>立方米/公顷。</p>
+              <p v-html="chartArr.sideItem2_5.result"></p>
             </div>
           </div>
         </div>
@@ -1193,9 +1196,7 @@
 </template>
 
 <script>
-import L from 'leaflet'
-import qs from 'qs'
-import { savePic } from '@/api/environmentalQuality'
+import { savePic, exportWord } from '@/api/environmentalQuality'
 import mUtilsFn from '@/utils/mUtils.js'
 import { finishMixin } from '@/utils/finishMixin.js'
 import { environmentalQualityMixin } from '@/utils/environmentalQualityMixin.js'
@@ -1214,7 +1215,8 @@ export default {
   ],
   data() {
     return {
-      routerActive: 1, // 选中模块
+      cityName: '台州市', // 被分析城市
+      routerActive: 2, // 选中模块
       imagesVisi: false, // 是否显示保存图片弹窗
       whichEchart: null, // 要被下载图表对象id
       imagesName: '', // 图片名称
@@ -1251,7 +1253,209 @@ export default {
         '#fff',
         '#000',
         '#666'
-      ] // ColorPicker 颜色选择器文字颜色预定义颜色数组
+      ], // ColorPicker 颜色选择器文字颜色预定义颜色数组
+
+      chartArr: {
+        sideItem1_0: {
+          id: 'sideItem1_0',
+          num: 1,
+          title: '',
+          name: '',
+          chartType: 'line',
+          color: '#ff5975',
+          dataSource: '',
+          result: '',
+          xAxis: [],
+          yAxis: []
+        },
+        sideItem1_1: {
+          id: 'sideItem1_1',
+          num: 2,
+          title: '2018年各地市空气质量达到优良天数比例对比',
+          name: '',
+          chartType: 'bar',
+          color: '#00976d',
+          lightColor: '#00ffb8',
+          dataSource: '',
+          result: '',
+          avg: 0,
+          xAxis: [],
+          yAxis: []
+        },
+        sideItem1_2: {
+          id: 'sideItem1_2',
+          num: 3,
+          title: '',
+          name: '',
+          chartType: 'bar',
+          color: '#e19605',
+          dataSource: '',
+          result: '',
+          xAxis: [],
+          yAxis: []
+        },
+        sideItem1_3: {
+          id: 'sideItem1_3',
+          num: 4,
+          title: '',
+          name: '',
+          chartType: 'bar',
+          color: '#b062ff',
+          dataSource: '',
+          result: '',
+          xAxis: [],
+          yAxis: []
+        },
+        sideItem1_4: {
+          id: 'sideItem1_4',
+          num: 5,
+          title: '',
+          name: '',
+          chartType: 'bar',
+          lightColor: '#00ffff',
+          color: '#00afaf',
+          dataSource: '',
+          result: '',
+          xAxis: [],
+          yAxis: []
+        },
+        sideItem1_5: {
+          id: 'sideItem1_5',
+          num: 6,
+          title: '',
+          name: 'M2.5浓度（µg/m3）',
+          chartType: 'line',
+          color: '#b062ff',
+          result: '',
+          xAxis: [],
+          yAxis: []
+        },
+        sideItem1_6: {
+          id: 'sideItem1_6',
+          num: 7,
+          title: '',
+          name1: 'Ⅲ类以上数量',
+          name2: '省控断面数量',
+          chartType: 'bar',
+          color1: '#ffba00',
+          color2: '#498eff',
+          dataSource: '',
+          color: '#b062ff',
+          result: '',
+          xAxis: [],
+          yAxis1: [],
+          yAxis2: []
+        },
+        sideItem1_7: {
+          id: 'sideItem1_7',
+          num: 8,
+          title: '',
+          name: 'Ⅲ以上水质断面比例（省控断面）%',
+          chartType: 'bar',
+          color: '#00ffb8',
+          lightColor: '#00976d',
+          dataSource: '',
+          result: '',
+          xAxis: [],
+          yAxis1: []
+        },
+        sideItem1_8: {
+          id: 'sideItem1_8',
+          hidden: true,
+          num: 9,
+          title: '',
+          name1: '',
+          name2: '',
+          name3: '',
+          name4: '',
+          name5: '',
+          name6: '',
+          chartType: 'bar',
+          color1: '#ff9f7f',
+          color2: '#67e0e3',
+          color3: '#37a2da',
+          color4: '#e062ae',
+          color5: '#a44bff',
+          color6: '#ffdb5c',
+          xAxis: [],
+          yAxis1: [],
+          yAxis2: [],
+          yAxis3: [],
+          yAxis4: [],
+          yAxis5: [],
+          yAxis6: []
+        },
+        sideItem2_0: {
+          id: 'sideItem2_0',
+          num: 9,
+          title: '',
+          name: '',
+          chartType: 'bar',
+          color: '#5c2700',
+          dataSource: '',
+          result: '根据2015年调查数据，台州市森林覆盖率<span class="light">59.89%</span>，在全省11地市中排第<span class="light">四</span>位，<span class="light">高于</span>全省平均水平。',
+          xAxis: [],
+          yAxis: []
+        },
+        sideItem2_1: {
+          id: 'sideItem2_1',
+          num: 10,
+          title: '',
+          name: '',
+          chartType: 'bar',
+          dataSource: '',
+          result: '2015年台州市活立木蓄积量为<span class="light">2929</span>万立方米，占全省的<span class="light">9</span>%。',
+          list: [],
+          legends: []
+        },
+        sideItem2_2: {
+          id: 'sideItem2_2',
+          num: 11,
+          title: '',
+          name: '',
+          chartType: 'bar',
+          dataSource: '',
+          result: '根据2015年调查数据，台州市林地面积为<span class="light">63.02</span>万公顷，占全省的<span class="light">9</span>%。',
+          list: [],
+          legends: []
+        },
+        sideItem2_3: {
+          id: 'sideItem2_3',
+          num: 12,
+          title: '',
+          name: '',
+          chartType: 'bar',
+          color: '#007621',
+          dataSource: '',
+          result: '根据2015年调查数据，台州市单位面积森林蓄积量为<span class="light">47.6</span>（立方米/公顷），在全省11地市中排第<span class="light">四</span>位，<span class="light">高于</span>全省平均水平。',
+          xAxis: [],
+          yAxis: []
+        },
+        sideItem2_4: {
+          id: 'sideItem2_4',
+          num: 13,
+          title: '',
+          name: '',
+          chartType: 'bar',
+          color: '#ff00ff',
+          dataSource: '',
+          result: '台州市下辖各县市中，仙居县森林覆盖率最高，达到<span class="light">79.54</span>%，温岭市最低，为<span class="light">31.04</span>%。',
+          xAxis: [],
+          yAxis: []
+        },
+        sideItem2_5: {
+          id: 'sideItem2_5',
+          num: 14,
+          title: '',
+          name: '',
+          chartType: 'bar',
+          color: '#00f6ff',
+          dataSource: '',
+          result: '台州市下辖各县市中，市区的单位面积森林蓄积量最高，达到<span class="light">71.76</span>立方米/公顷，玉环市最低，为<span class="light">35.94</span>立方米/公顷。',
+          xAxis: [],
+          yAxis: []
+        }
+      }
     }
   },
   mounted() {},
@@ -1259,12 +1463,12 @@ export default {
     // 颜色选择器背景颜色值发生变化
     backgroundColorChange(color) {
       this.chartColor.backgroundColor = color
-      this.fnName('echartsWrap1', this[this.whichEchart])
+      this.fnName('echartsWrap1', this.chartArr[this.whichEchart])
     },
     // 颜色选择器文字颜色值发生变化
     textColorChange(color) {
       this.chartColor.textColor = color
-      this.fnName('echartsWrap1', this[this.whichEchart])
+      this.fnName('echartsWrap1', this.chartArr[this.whichEchart])
     },
     // 将图表转换成图片并下载
     exportPic() {
@@ -1299,9 +1503,13 @@ export default {
       this.imagesModalCloseFn()
     },
     chartTypeClick(command) {
-      this[command.id].chartType = command.type
-
-      command.fnName(command.id, this[command.id])
+      if (this.routerActive === 1) {
+        this.chartArr[command.id].chartType = command.type
+        command.fnName(command.id, this.chartArr[command.id])
+      } else {
+        this[command.id].chartType = command.type
+        command.fnName(command.id, this[command.id])
+      }
     },
     // 对command参数进行重新封装成一个对象
     beforeHandleCommand(command1, command2, command3) {
@@ -1321,7 +1529,7 @@ export default {
       this.fnName = fnName
 
       this.$nextTick(() => {
-        fnName('echartsWrap1', this[val])
+        fnName('echartsWrap1', this.chartArr[val])
       })
     },
     // 关闭保存图片弹窗
@@ -1332,16 +1540,54 @@ export default {
     },
     // 下载文档
     downloadDoc() {
-      let chart = this.$echarts.init(document.getElementById('sideItem1_0'))
-      let content = chart.getDataURL()
+      let downloadArr1 = []
+      let baseURlArr = []
+      let aaa = []
+      for (let i in this.chartArr) {
+        let chart = this.$echarts.init(
+          document.getElementById(this.chartArr[i].id)
+        )
+        baseURlArr[i] = chart.getDataURL()
+        // downloadArr1.push({
+        //   num: this.chartArr[i].num,
+        //   title: this.chartArr[i].title,
+        //   source: this.chartArr[i].dataSource,
+        //   baseURl: baseURlArr[i]
+        // })
+        savePic({
+          picInfo: baseURlArr[i],
+          no: 'no' + this.chartArr[i].num,
+          type: 'ecology-city',
+          area: this.cityName
+        }).then(res => {})
+      }
+      for (let k in this.chartArr) {
+        if (!this.chartArr[k].hidden) {
+          aaa.push(
+            {
+              name: 'title' + this.chartArr[k].num,
+              value: this.chartArr[k].title
+            },
+            {
+              name: 'verdict' + this.chartArr[k].num,
+              value: this.chartArr[k].result
+            },
+            {
+              name: 'source' + this.chartArr[k].num,
+              value: this.chartArr[k].dataSource
+            }
+          )
+        }
+      }
+      console.log(aaa);
       
-      savePic({
-        picInfo: content,
-        no: 'no0',
-        area:'台州'
-      }).then(res => {
-        
-      })
+      // window.open(
+      //   'http://192.168.13.251:8083/section/exportWord?area=' +
+      //     this.cityName +
+      //     '&type=ecology-city&condition=' +
+      //     encodeURIComponent(JSON.stringify(aaa)),
+      //   '_self'
+      // )
     },
     // 饼图选中指定扇形区域
     pieSelected(target, data, cityName) {

@@ -70,3 +70,17 @@ export function savePic(data) {
     data
   })
 }
+export function getEIWithName(params) {
+  return request({
+    url: 'ecological/getEIWithName',
+    method: 'get',
+    params
+  })
+}
+export function exportWord(data) {
+  return request({
+    url: 'section/exportWord',
+    method: 'post',
+    data
+  })
+}

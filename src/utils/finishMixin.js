@@ -26,6 +26,38 @@ export const finishMixin = {
         sum += arr[i]
       }
       return (sum / arr.length).toFixed(2)
+    },
+    
+    returnRepeatNumArr(arr0,arr1,num,flag) {
+      let dataArr = []
+      let maxNameArr = []
+      let minNameArr = []
+      for (let i = 0; i < arr0.length; i++) {
+        dataArr.push({
+          name: arr0[i],
+          value: arr1[i],
+        })
+      }
+
+      let maxArr = dataArr.filter(function (item) {
+        return item.value === num
+      })
+      let minArr = dataArr.filter(function (item) {
+        return item.value === num
+      })
+
+      for (let i = 0; i < maxArr.length; i++) {
+        maxNameArr.push(maxArr[i].name)
+      }
+      for (let i = 0; i < minArr.length; i++) {
+        minNameArr.push(minArr[i].name)
+      }
+
+      if (flag === 'max') {
+        return maxNameArr
+      } else {
+        return minNameArr
+      }
     }
   }
 }

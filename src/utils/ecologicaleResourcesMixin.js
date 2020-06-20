@@ -6,138 +6,92 @@ from '@/api/environmentalQuality'
 export const ecologicaleResourcesMixin = {
   data() {
     return {
-      sideItem2_0: {
-        name: '',
-        chartType: 'bar',
-        color: '#5c2700',
-        dataSource: '',
-        data: {}
-      },
-      sideItem2_1: {
-        name: '',
-        chartType: 'bar',
-        dataSource: '',
-        data: {
-          legends: []
-        }
-      },
-      sideItem2_2: {
-        name: '',
-        chartType: 'bar',
-        dataSource: '',
-        data: {
-          legends: []
-        }
-      },
-      sideItem2_3: {
-        name: '',
-        chartType: 'bar',
-        dataSource: '',
-        data: {}
-      },
-      sideItem2_4: {
-        name: '',
-        chartType: 'bar',
-        dataSource: '',
-        data: {}
-      },
-      sideItem2_5: {
-        name: 'M2.5浓度（µg/m3）',
-        chartType: 'bar',
-        dataSource: '',
-        data: {}
-      }
     }
   },
   mounted() {
-    // 全省各地市森林覆盖率
+    // 0、全省各地市森林覆盖率
     getScaleData({
       area: '浙江省',
       zb: '森林覆盖率'
     }).then(res => {
       let data = res.data
-      this.sideItem2_0.name = `${data.yAxis.name}(${data.yAxis.unit})`
-      this.sideItem2_0.dataSource = data.yAxis.source
-      this.sideItem2_0.data.xAxis = data.xAxis
-      this.sideItem2_0.data.yAxis = data.yAxis.list
+      this.chartArr.sideItem2_0.title = `${data.yAxis.year}年全省各地市森林覆盖率`
+      this.chartArr.sideItem2_0.name = `${data.yAxis.name}(${data.yAxis.unit})`
+      this.chartArr.sideItem2_0.dataSource = data.yAxis.source
+      this.chartArr.sideItem2_0.xAxis = data.xAxis
+      this.chartArr.sideItem2_0.yAxis = data.yAxis.list
 
-      this.sideItem2_0Chart('sideItem2_0', this.sideItem2_0)
+      this.sideItem2_0Chart('sideItem2_0', this.chartArr.sideItem2_0)
     })
-    // 全省各地市活立木蓄积量占比
+    // 1、全省各地市活立木蓄积量占比
     getScaleDataWithName({ area: '浙江省', zbs: '活立木蓄积量' }).then(res => {
-      let data = res.data
-      let list = data[0].list
-      this.sideItem2_1.data.list = list
-      this.sideItem2_1.name = `${data[0].name}(${data[0].unit})`
-      this.sideItem2_1.dataSource = data[0].source
-      for (let i = 0; i < list.length; i++) {
-        this.sideItem2_1.data.legends.push(list[i].name)
+      let data = res.data[0]
+      this.chartArr.sideItem2_1.list = data.list
+      this.chartArr.sideItem2_1.title = `${data.year}年全省各地市活立木蓄积量占比`
+      this.chartArr.sideItem2_1.name = `${data.name}(${data.unit})`
+      this.chartArr.sideItem2_1.dataSource = data.source
+      for (let i = 0; i < data.list.length; i++) {
+        this.chartArr.sideItem2_1.legends.push(data.list[i].name)
       }
-      this.sideItem2_1Chart('sideItem2_1', this.sideItem2_1)
+      this.sideItem2_1Chart('sideItem2_1', this.chartArr.sideItem2_1)
     })
-    // 全省各地市林地面积占比
+    // 2、全省各地市林地面积占比
     getScaleDataWithName({
       area: '浙江省',
       zbs: '林地面积'
     }).then(res => {
-      let data = res.data
-      let list = data[0].list
-      this.sideItem2_2.data.list = list
-      this.sideItem2_2.name = `${data[0].name}(${data[0].unit})`
-      this.sideItem2_2.dataSource = data[0].source
-      for (let i = 0; i < list.length; i++) {
-        this.sideItem2_2.data.legends.push(list[i].name)
+      let data = res.data[0]    
+      this.chartArr.sideItem2_2.list = data.list
+      this.chartArr.sideItem2_2.title = `${data.year}年全省各地市林地面积占比`
+      this.chartArr.sideItem2_2.name = `${data.name}(${data.unit})`
+      this.chartArr.sideItem2_2.dataSource = data.source
+      for (let i = 0; i < data.list.length; i++) {
+        this.chartArr.sideItem2_2.legends.push(data.list[i].name)
       }
-      this.sideItem2_2Chart('sideItem2_2', this.sideItem2_2)
+      this.sideItem2_2Chart('sideItem2_2', this.chartArr.sideItem2_2)
     })
-    // 全省各地市单位面积森林蓄积量
+    // 3、全省各地市单位面积森林蓄积量
     getScaleData({
       area: '浙江省',
       zb: '单位面积森林蓄积量'
     }).then(res => {
       let data = res.data
-      this.sideItem2_3.name = `${data.yAxis.name}(${data.yAxis.unit})`
-      this.sideItem2_3.dataSource = data.yAxis.source
-      this.sideItem2_3.data.xAxis = data.xAxis
-      this.sideItem2_3.data.yAxis = data.yAxis.list
-      this.sideItem2_3Chart('sideItem2_3', this.sideItem2_3)
+      this.chartArr.sideItem2_3.title = `${data.yAxis.year}年全省各地市单位面积森林蓄积量`
+      this.chartArr.sideItem2_3.name = `${data.yAxis.name}(${data.yAxis.unit})`
+      this.chartArr.sideItem2_3.dataSource = data.yAxis.source
+      this.chartArr.sideItem2_3.xAxis = data.xAxis
+      this.chartArr.sideItem2_3.yAxis = data.yAxis.list
+      this.sideItem2_3Chart('sideItem2_3', this.chartArr.sideItem2_3)
     })
-    // 获取市各县、市森林覆盖率并绘制图表
+    // 4、获取市各县、市森林覆盖率并绘制图表
     getScaleData({
-      area: '台州市',
+      area: this.cityName,
       zb: '森林覆盖率'
     }).then(res => {
       let data = res.data
-      // this.sideItem2_4.name = `${data.yAxis[0].name}(${data.yAxis[0].unit})`
-      this.sideItem2_4.data.xAxis = data.xAxis
-      this.sideItem2_4.data.yAxis = data.yAxis.list
-      this.sideItem2_4Chart('sideItem2_4', this.sideItem2_4)
+      this.chartArr.sideItem2_4.title = `${data.yAxis.year}年${this.cityName}各县、市森林覆盖率`
+      this.chartArr.sideItem2_4.name = `${data.yAxis.name}(${data.yAxis.unit})`
+      this.chartArr.sideItem2_4.dataSource = data.yAxis.source
+      this.chartArr.sideItem2_4.xAxis = data.xAxis
+      this.chartArr.sideItem2_4.yAxis = data.yAxis.list
+      this.sideItem2_4Chart('sideItem2_4', this.chartArr.sideItem2_4)
     })
-    // 获取各县、市单位面积森林蓄积量并绘制图表
+    // 5、获取各县、市单位面积森林蓄积量并绘制图表
     getScaleData({
-      area: '台州市',
+      area: this.cityName,
       zb: '单位面积森林蓄积量'
     }).then(res => {
       let data = res.data
-      this.sideItem2_5.name = `${data.yAxis.name}(${data.yAxis.unit})`
-      this.sideItem2_5.dataSource = data.yAxis.source
-      this.sideItem2_5.data.xAxis = data.xAxis
-      this.sideItem2_5.data.yAxis = data.yAxis.list
-      this.sideItem2_5Chart('sideItem2_5', this.sideItem2_5)
+      this.chartArr.sideItem2_5.title = `${data.yAxis.year}${this.cityName}年各县、市单位面积森林蓄积量`
+      this.chartArr.sideItem2_5.name = `${data.yAxis.name}(${data.yAxis.unit})`
+      this.chartArr.sideItem2_5.dataSource = data.yAxis.source
+      this.chartArr.sideItem2_5.xAxis = data.xAxis
+      this.chartArr.sideItem2_5.yAxis = data.yAxis.list
+      this.sideItem2_5Chart('sideItem2_5', this.chartArr.sideItem2_5)
     })
-    // countyUnitTreeApi().then(res => {
-    //   let data = res.data
-    //   let xAxis = []
-    //   let yAxis = []
-    //   for (let i = 0; i < data.length; i++) {
-    //     this.sideItem2_5.data.xAxis.push(data[i].name)
-    //     this.sideItem2_5.data.yAxis.push(data[i].value)
-    //   }
-    //   this.sideItem2_5Chart('sideItem2_5', this.sideItem2_5)
-    // })
   },
   methods: {
-    // 全省各地市森林覆盖率
+    // 0、全省各地市森林覆盖率
     sideItem2_0Chart(id, data) {
       let chart = this.$echarts.init(document.getElementById(id))
       let option = {
@@ -145,8 +99,7 @@ export const ecologicaleResourcesMixin = {
         tooltip: {
           trigger: 'axis',
           axisPointer: {
-            // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+            type: 'shadow'
           }
         },
         legend: {
@@ -175,26 +128,25 @@ export const ecologicaleResourcesMixin = {
             color: this.chartColor.textColor
           },
           axisLine: {
-            // axisLine:坐标轴轴线相关设置
             lineStyle: {
-              color: '#6291fb' // 底边线的颜色
+              color: '#6291fb'
             }
           },
-          data: data.data.xAxis
+          data: data.xAxis
         }],
         yAxis: [{
           axisTick: {
-            show: false // y轴刻度
+            show: false
           },
           axisLine: {
             show: false,
             lineStyle: {
               type: 'solid',
-              color: this.chartColor.textColor // 左边线的颜色
+              color: this.chartColor.textColor
             }
           },
           splitLine: {
-            show: true, // y轴分隔线
+            show: true,
             lineStyle: {
               type: 'dashed',
               color: '#0124b3'
@@ -221,12 +173,12 @@ export const ecologicaleResourcesMixin = {
               }
             }
           },
-          data: data.data.yAxis
+          data: data.yAxis
         }]
       }
       chart.setOption(option)
     },
-    // 全省各地市活立木蓄积量占比图表
+    // 1、全省各地市活立木蓄积量占比图表
     sideItem2_1Chart(id, data) {
       let chart = this.$echarts.init(document.getElementById(id))
       let option = {
@@ -245,7 +197,7 @@ export const ecologicaleResourcesMixin = {
             fontSize: '14',
             color: '#fff'
           },
-          data: data.data.legends
+          data: data.legends
         },
         series: [{
           name: '活力木蓄积量（万立方米）',
@@ -301,14 +253,14 @@ export const ecologicaleResourcesMixin = {
               }
             }
           },
-          data: data.data.list
+          data: data.list
         }]
       }
       chart.setOption(option)
 
-      this.pieSelected(chart, data.data.list,'台州市')
+      this.pieSelected(chart, data.list,'台州市')
     },
-    // 全省各地市林地面积占比图表
+    // 2、全省各地市林地面积占比图表
     sideItem2_2Chart(id, data) {
       let chart = this.$echarts.init(document.getElementById(id))
       let option = {
@@ -327,7 +279,7 @@ export const ecologicaleResourcesMixin = {
             fontSize: '14',
             color: '#fff'
           },
-          data: data.data.legends
+          data: data.legends
         },
         series: [{
           name: '活力木蓄积量（万立方米）',
@@ -388,13 +340,13 @@ export const ecologicaleResourcesMixin = {
               }
             }
           },
-          data: data.data.list
+          data: data.list
         }]
       }
       chart.setOption(option)
-      this.pieSelected(chart, data.data.list, '台州市')
+      this.pieSelected(chart, data.list, '台州市')
     },
-    // 全省各地市单位面积森林蓄积量图表
+    // 3、全省各地市单位面积森林蓄积量图表
     sideItem2_3Chart(id, data) {
       let chart = this.$echarts.init(document.getElementById(id))
       let option = {
@@ -402,8 +354,7 @@ export const ecologicaleResourcesMixin = {
         tooltip: {
           trigger: 'axis',
           axisPointer: {
-            // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+            type: 'shadow'
           }
         },
         legend: {
@@ -432,26 +383,25 @@ export const ecologicaleResourcesMixin = {
             color: this.chartColor.textColor
           },
           axisLine: {
-            // axisLine:坐标轴轴线相关设置
             lineStyle: {
-              color: '#6291fb' // 底边线的颜色
+              color: '#6291fb'
             }
           },
-          data: data.data.xAxis
+          data: data.xAxis
         }],
         yAxis: [{
           axisTick: {
-            show: false // y轴刻度
+            show: false
           },
           axisLine: {
             show: false,
             lineStyle: {
               type: 'solid',
-              color: this.chartColor.textColor // 左边线的颜色
+              color: this.chartColor.textColor
             }
           },
           splitLine: {
-            show: true, // y轴分隔线
+            show: true,
             lineStyle: {
               type: 'dashed',
               color: '#0124b3'
@@ -465,7 +415,7 @@ export const ecologicaleResourcesMixin = {
           barGap: '50%',
           itemStyle: {
             normal: {
-              color: '#007621'
+              color: data.color
             }
           },
           label: {
@@ -478,12 +428,12 @@ export const ecologicaleResourcesMixin = {
               }
             }
           },
-          data: data.data.yAxis
+          data: data.yAxis
         }]
       }
       chart.setOption(option)
     },
-    // 市各县、市森林覆盖率图表
+    // 4、市各县、市森林覆盖率图表
     sideItem2_4Chart(id, data) {
       let chart = this.$echarts.init(document.getElementById(id))
       let option = {
@@ -491,8 +441,7 @@ export const ecologicaleResourcesMixin = {
         tooltip: {
           trigger: 'axis',
           axisPointer: {
-            // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+            type: 'shadow'
           }
         },
         legend: {
@@ -521,26 +470,25 @@ export const ecologicaleResourcesMixin = {
             color: this.chartColor.textColor
           },
           axisLine: {
-            // axisLine:坐标轴轴线相关设置
             lineStyle: {
-              color: '#6291fb' // 底边线的颜色
+              color: '#6291fb'
             }
           },
-          data: data.data.xAxis
+          data: data.xAxis
         }],
         yAxis: [{
           axisTick: {
-            show: false // y轴刻度
+            show: false
           },
           axisLine: {
             show: false,
             lineStyle: {
               type: 'solid',
-              color: this.chartColor.textColor // 左边线的颜色
+              color: this.chartColor.textColor
             }
           },
           splitLine: {
-            show: true, // y轴分隔线
+            show: true,
             lineStyle: {
               type: 'dashed',
               color: '#0124b3'
@@ -554,7 +502,7 @@ export const ecologicaleResourcesMixin = {
           barGap: '50%',
           itemStyle: {
             normal: {
-              color: '#ff00ff'
+              color: data.color
             }
           },
           label: {
@@ -567,12 +515,12 @@ export const ecologicaleResourcesMixin = {
               }
             }
           },
-          data: data.data.yAxis
+          data: data.yAxis
         }]
       }
       chart.setOption(option)
     },
-    // 市PM2.5年平均浓度（µg/m3）变化图表
+    // 5、市PM2.5年平均浓度（µg/m3）变化图表
     sideItem2_5Chart(id, data) {
       let chart = this.$echarts.init(document.getElementById(id))
       let option = {
@@ -580,8 +528,7 @@ export const ecologicaleResourcesMixin = {
         tooltip: {
           trigger: 'axis',
           axisPointer: {
-            // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+            type: 'shadow'
           }
         },
         legend: {
@@ -610,26 +557,25 @@ export const ecologicaleResourcesMixin = {
             color: this.chartColor.textColor
           },
           axisLine: {
-            // axisLine:坐标轴轴线相关设置
             lineStyle: {
-              color: '#6291fb' // 底边线的颜色
+              color: '#6291fb'
             }
           },
-          data: data.data.xAxis
+          data: data.xAxis
         }],
         yAxis: [{
           axisTick: {
-            show: false // y轴刻度
+            show: false
           },
           axisLine: {
             show: false,
             lineStyle: {
               type: 'solid',
-              color: this.chartColor.textColor // 左边线的颜色
+              color: this.chartColor.textColor
             }
           },
           splitLine: {
-            show: true, // y轴分隔线
+            show: true,
             lineStyle: {
               type: 'dashed',
               color: '#0124b3'
@@ -643,7 +589,7 @@ export const ecologicaleResourcesMixin = {
           barGap: '50%',
           itemStyle: {
             normal: {
-              color: '#00f6ff'
+              color: data.color
             }
           },
           label: {
@@ -656,7 +602,7 @@ export const ecologicaleResourcesMixin = {
               }
             }
           },
-          data: data.data.yAxis
+          data: data.yAxis
         }]
       }
       chart.setOption(option)

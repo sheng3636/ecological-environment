@@ -1,6 +1,7 @@
 import {
   getSubStructuralData,
-  getEIList
+  getEIList,
+  getEIWithName
 }
 from '@/api/environmentalQuality'
 import geoJson from '../../public/js/zheJiang1.json'
@@ -34,13 +35,16 @@ export const environmentStateMixin = {
     }
   },
   mounted() {
-    this.initMap(this.geoJson)
-    // this.initMap1()
+    getEIWithName({
+      area: '浙江省',
+    }).then(res => {
+      this.initMap(this.geoJson, res.data.list)
+    })
     // 获取年台州市各县市区生态环境状况等级和省内排名表格数据
     getEIList({
       area: '台州市'
     }).then(res => {
-      this.EIList = res.data
+      this.EIList = res.data.list
       for (let i = 0; i < res.data.length; i++) {
         res.data[i].class = this.classSwitch(res.data[i].value)
       }
@@ -79,7 +83,7 @@ export const environmentStateMixin = {
     })
   },
   methods: {
-    initMap(geoJson) {
+    initMap(geoJson, data) {  
       let myChart = this.$echarts.init(document.getElementById('sideItem4_3'))
       myChart.showLoading()
       this.$echarts.registerMap('zheJiang', geoJson)
@@ -87,224 +91,135 @@ export const environmentStateMixin = {
       let option = {
         backgroundColor: 'rgba(5,12,37,1)',
         tooltip: {
-
+          show: true
         },
         visualMap: {
-          show: false,
-          min: 0,
-          max: 1,
-          left: '0%',
-          top: '75%',
-          text: ['高', '低'], // 文本，默认为数值文本
-          itemWidth: 40,
-          itemHeight: 200,
-          calculable: false,
+          min: data[0].value,
+          max: data[data.length - 1].value,
+          right: '0%',
+          bottom: '5%',
+          orient: 'vertical',
+          itemWidth: 25,
+          itemHeight: 15,
+          showLabel: true,
+          seriesIndex: [0],
+
           textStyle: {
-            color: '#000',
-            fontSize: 40
+            color: '#fff'
           },
-          inRange: {
-            /*低-高*/
-            color: ['#2AAAE6', '#ED8117']
-          }
-        },
-        grid: {
-          height: '100%',
-          width: '100%'
-        },
-        xAxis: {
-          type: 'category',
-          show: false
-        },
-        yAxis: {
-          position: 'right',
-          axisLabel: {
-            show: true
-          },
-          axisLine: {
-            show: false
-          },
-          splitLine: {
-            show: false
-          },
-          axisTick: {
-            show: false
-          }
-        },
-        geo: {
-          map: 'zheJiang',
-          label: {
-            show: false
-          },
-          top: '9%',
-          left: '19%',
-          width: '70%',
-          height: '84%',
-          roam: false,
-          zoom: 1,
-          itemStyle: {
-            areaColor: '#4985BB',
-            borderColor: '#4985BB',
-            shadowColor: '#4985BB',
-            shadowBlur: 0,
-            borderWidth: 3,
-          }
+          pieces: [{
+              lte: 95,
+              lt: 91,
+              label: "91<EI≤95",
+              color: "#fa0006"
+            },
+            {
+              lte: 86,
+              lt: 90,
+              label: "86<EI≤90",
+              color: "#ff363b"
+            },
+            {
+              lte: 81,
+              lt: 85,
+              label: "81<EI≤85",
+              color: "#fc4d00"
+            },
+            {
+              lte: 76,
+              lt: 80,
+              label: "76<EI≤80",
+              color: "#f88400"
+            },
+            {
+              lte: 71,
+              lt: 75,
+              label: "71<EI≤75",
+              color: "#f9b004"
+            },
+            {
+              lte: 66,
+              lt: 70,
+              label: "66<EI≤70",
+              color: "#f9de02"
+            },
+            {
+              lte: 61,
+              lt: 65,
+              label: "61<EI≤65",
+              color: "#e1f401"
+            },
+            {
+              lte: 56,
+              lt: 60,
+              label: "56<EI≤60",
+              color: "#ff5428"
+            },
+            {
+              lte: 51,
+              lt: 55,
+              label: "51<EI≤55",
+              color: "#8af900"
+            },
+            {
+              lte: 50,
+              lt: 45,
+              label: "45<EI≤50",
+              color: "#00c302"
+            }
+          ],
         },
         series: [{
           name: '浙江',
           type: 'map',
           mapType: 'zheJiang',
-          width: '70%',
-          height: '84%',
-          left: '20%',
-          right: '5%',
+          roam: false, // 是否开启平游或缩放
+          aspectScale: 1, // 长宽比
           label: {
             normal: {
               show: true,
-              position: 'inner',
-              formatter: function (param) {
-                if (param.name == '邯山区') {
-                  return '{a|邯郸}';
-                } else if (param.name == '裕华区') {
-                  return '{a|石家庄}';
-                }
-                if (param.name == '北市区') {
-                  return '{a|保定}';
-                }
-                if (param.name == '桃城区') {
-                  return '{a|衡水}';
-                }
-                if (param.name == '运河区') {
-                  return '{a|沧州}';
-                }
-                if (param.name == '南和县') {
-                  return '{a|邢台}';
-                }
-                if (param.name == '雄县') {
-                  return '{a|雄安}';
-                }
-                return '';
-              },
-              rich: {
-                a: {
-                  color: '#fff',
-                  fontSize: 20,
-                  padding: 20,
-                  backgroundColor: 'rgba(0,0,0,0)',
-                  borderRadius: 15
-                }
-              },
               textStyle: {
-                color: '#fff',
-                fontSize: 50,
-                padding: 20,
-                backgroundColor: 'rgba(0,0,0,0)',
-                borderRadius: 15
+                color: '#fff'
               }
             },
             emphasis: {
-              show: true
+              show: true,
+              textStyle: {
+                color: '#fff'
+              }
             }
           },
           itemStyle: {
-            areaColor: '#15AAF2',
+            normal: {
+              areaColor: 'rgba(16,72,133)',
+              borderColor: 'yellow',
+              borderWidth: 0.2,
+              label: {
+                show: true,
+                textStyle: {
+                  color: 'rgb(249, 249, 249)'
+                }
+              }
+            },
             emphasis: {
-              areaColor: 'green '
-
+              // 鼠标经过区域样式
+              areaColor: 'rgba(11,55,98)',
+              borderColor: 'rgba(11,234,235)',
+              areaStyle: {
+                color: 'rgba(11,55,98)'
+              },
+              label: {
+                show: true,
+                textStyle: {
+                  color: 'rgb(249, 249, 249)'
+                }
+              }
             }
           },
-          emphasis: {
-            itemStyle: {
-              areaColor: '#3FA7DC'
-            }
-          },
-
-        }, {
-          "name": "",
-          "type": "scatter",
-          "coordinateSystem": "geo",
-          symbolSize: 15,
-          "data": [{
-            name: '石家庄平山营里乡桃元村',
-            "value": [114.207094, 38.255970]
-          }, {
-            name: '保定市：阜平县',
-            "value": [114.18, 38.85, 1]
-          }, {
-            name: '保定市：顺平县',
-            "value": [115.13, 38.93, 1]
-          }, {
-            name: '保定市：涞源县',
-            "value": [114.68, 39.35, 1]
-          }, {
-            name: '保定市：易县',
-            "value": [115.50, 39.35, 1]
-          }, {
-            name: '保定市：曲阳县',
-            "value": [114.80, 38.62, 1]
-          }, {
-            name: '保定市：涞水县',
-            "value": [115.75, 39.50, 1]
-          }, {
-            name: '保定市：望都县',
-            "value": [115.25, 38.72, 1]
-          }, {
-            name: '衡水市：武强县',
-            "value": [115.99, 38.08, 1]
-          }, {
-            name: '衡水市：饶阳县',
-            "value": [115.73, 38.23, 1]
-          }, {
-            name: '衡水市：武邑县',
-            "value": [115.98, 37.82, 1]
-          }, {
-            name: '衡水市：阜城县',
-            "value": [116.25, 37.87, 1]
-          }, {
-            name: ' 衡水市：故城县',
-            "value": [115.97, 37.35, 1]
-          }, {
-            name: '衡水市：枣强县',
-            "value": [115.72, 37.52, 1]
-          }, {
-            name: '保定：曲阳县',
-            "value": [114.80, 38.62, 1]
-          }, {
-            name: '保定：曲阳县',
-            "value": [114.80, 38.62, 1]
-          }, {
-            name: '保定：曲阳县',
-            "value": [114.80, 38.62, 1]
-          }, ]
+          data: data
         }]
       }
       myChart.setOption(option)
-    },
-    initMap1() {
-      //到 mapbox 官网注册并创建下面的access token都是免费的，不过有5w次的浏览限制
-      var url = 'http://139.196.226.113:6080/arcgis/rest/services/industry/aiPage/MapServer/';
-      //初始化 地图
-      var leafletMap = L.map('sideItem4_3').setView([41, 123], 5);
-      //将图层加载到地图上，并设置最大的聚焦还有map样式
-      L.tileLayer(url, {
-        maxZoom: 18,
-        id: 'mapbox.streets'
-      }).addTo(leafletMap);
-      //增加一个marker ，地图上的标记，并绑定了一个popup，默认打开
-      L.marker([41, 123]).addTo(leafletMap)
-        .bindPopup("<b>Hello world!</b><br />I am a popup.").openPopup();
-      //增加一个圈，设置圆心、半径、样式
-      L.circle([41, 123], 500, {
-        color: 'red',
-        fillColor: '#f03',
-        fillOpacity: 0.5
-      }).addTo(leafletMap).bindPopup("I am a circle.");
-      //增加多边形
-      L.polygon([
-        [41, 123],
-        [39, 121],
-        [41, 126]
-      ]).addTo(leafletMap).bindPopup("I am a polygon.");
     },
     // 导出市各县市区生态环境状况等级和省内排名表格
     exportExcel() {
