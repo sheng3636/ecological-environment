@@ -5,8 +5,7 @@ import {
 from '@/api/environmentalQuality'
 export const ecologicaleResourcesMixin = {
   data() {
-    return {
-    }
+    return {}
   },
   mounted() {
     // 0、全省各地市森林覆盖率
@@ -24,7 +23,10 @@ export const ecologicaleResourcesMixin = {
       this.sideItem2_0Chart('sideItem2_0', this.chartArr.sideItem2_0)
     })
     // 1、全省各地市活立木蓄积量占比
-    getScaleDataWithName({ area: '浙江省', zbs: '活立木蓄积量' }).then(res => {
+    getScaleDataWithName({
+      area: '浙江省',
+      zbs: '活立木蓄积量'
+    }).then(res => {
       let data = res.data[0]
       this.chartArr.sideItem2_1.list = data.list
       this.chartArr.sideItem2_1.title = `${data.year}年全省各地市活立木蓄积量占比`
@@ -40,7 +42,7 @@ export const ecologicaleResourcesMixin = {
       area: '浙江省',
       zbs: '林地面积'
     }).then(res => {
-      let data = res.data[0]    
+      let data = res.data[0]
       this.chartArr.sideItem2_2.list = data.list
       this.chartArr.sideItem2_2.title = `${data.year}年全省各地市林地面积占比`
       this.chartArr.sideItem2_2.name = `${data.name}(${data.unit})`
@@ -93,9 +95,11 @@ export const ecologicaleResourcesMixin = {
   methods: {
     // 0、全省各地市森林覆盖率
     sideItem2_0Chart(id, data) {
+      let cityName = this.cityName
       let chart = this.$echarts.init(document.getElementById(id))
       let option = {
         backgroundColor: this.chartColor.backgroundColor,
+        color: data.color,
         tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -160,7 +164,13 @@ export const ecologicaleResourcesMixin = {
           barGap: '50%',
           itemStyle: {
             normal: {
-              color: data.color
+              color: function (params) {
+                if (params.name === cityName) {
+                  return data.lightColor
+                } else {
+                  return data.color
+                }
+              }
             }
           },
           label: {
@@ -258,7 +268,7 @@ export const ecologicaleResourcesMixin = {
       }
       chart.setOption(option)
 
-      this.pieSelected(chart, data.list,'台州市')
+      this.pieSelected(chart, data.list, '台州市')
     },
     // 2、全省各地市林地面积占比图表
     sideItem2_2Chart(id, data) {
@@ -348,6 +358,7 @@ export const ecologicaleResourcesMixin = {
     },
     // 3、全省各地市单位面积森林蓄积量图表
     sideItem2_3Chart(id, data) {
+      let cityName = this.cityName
       let chart = this.$echarts.init(document.getElementById(id))
       let option = {
         backgroundColor: this.chartColor.backgroundColor,
@@ -415,7 +426,13 @@ export const ecologicaleResourcesMixin = {
           barGap: '50%',
           itemStyle: {
             normal: {
-              color: data.color
+              color: function (params) {
+                if (params.name === cityName) {
+                  return data.lightColor
+                } else {
+                  return data.color
+                }
+              }
             }
           },
           label: {

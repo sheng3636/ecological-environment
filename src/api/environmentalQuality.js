@@ -6,6 +6,13 @@ export function getStructuralData(params) {
     params
   })
 }
+export function getRankDiff(params) {
+  return request({
+    url: 'ecological/getRankDiff',
+    method: 'get',
+    params
+  })
+}
 export function getSubStructuralData(params) {
   return request({
     url: 'ecological/getSubStructuralData',
@@ -81,6 +88,7 @@ export function exportWord(data) {
   return request({
     url: 'section/exportWord',
     method: 'post',
+    responseType: 'blob',
     data
   })
 }

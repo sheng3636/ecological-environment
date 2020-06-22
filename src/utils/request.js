@@ -5,7 +5,7 @@ import { Message } from 'element-ui'
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   withCredentials: false, // 表示跨域请求时是否需要使用凭证，默认为false
-  timeout: 10000 // 如果请求超过 `timeout` 的时间，请求将被中断
+  timeout: 10000 * 20 // 如果请求超过 `timeout` 的时间，请求将被中断
 })
 
 // 请求拦截器

@@ -3,7 +3,8 @@ import {
   getScaleData,
   sectionNum,
   sectionProportion,
-  sectionList
+  sectionList,
+  getRankDiff
 } from '@/api/environmentalQuality'
 export const environmentalQualityMixin = {
   data() {
@@ -24,8 +25,8 @@ export const environmentalQualityMixin = {
       this.chartArr.sideItem1_0.dataSource = data.yAxis.source
       this.chartArr.sideItem1_0.xAxis = data.xAxis
       this.chartArr.sideItem1_0.yAxis = data.yAxis.list
-      this.sideItem1_0Chart('sideItem1_0', this.chartArr.sideItem1_0)
-
+      this.singleBarLineChart('sideItem1_0', this.chartArr.sideItem1_0)
+      // this.singleBarLineChart('sideItem1_0', this.chartArr.sideItem1_0, 55, true)
 
       let aaa = this.returnArrLast(this.chartArr.sideItem1_0.xAxis)
       let bbb = this.returnArrLast(this.chartArr.sideItem1_0.yAxis)
@@ -33,13 +34,14 @@ export const environmentalQualityMixin = {
       let ddd = this.returnDiff(this.returnArrFirst(this.chartArr.sideItem1_0.yAxis), this.returnArrLast(this.chartArr.sideItem1_0.yAxis))
       let eee = ddd >= 0 ? '增长' : '减少'
       this.chartArr.sideItem1_0.title = `${ccc}年-${aaa}年${this.cityName}空气质量达到优良天数比例变化`
-      this.chartArr.sideItem1_0.result = `${aaa}年，台州市空气质量达到优良天数比例达到<span class="light">${bbb}%</span>，与${ccc}年相比${eee}了<span class="light">${Math.abs(ddd)}%</span>。 `
+      this.chartArr.sideItem1_0.result = `${aaa}年，${this.cityName}空气质量达到优良天数比例达到<span class="light">${bbb}%</span>，与${ccc}年相比${eee}了<span class="light">${Math.abs(ddd)}%</span>。 `
     })
     // 1、获取各地市空气质量达到优良天数比例对比并绘制图表
     getScaleData({
       area: '浙江省',
       zb: 'AQI优良率'
     }).then(res => {
+      let cityName = this.cityName
       let data = res.data
       this.chartArr.sideItem1_1.title = `${data.yAxis.year}年各地市空气质量达到优良天数比例对比`
       this.chartArr.sideItem1_1.name = `${data.yAxis.name}(${data.yAxis.unit})`
@@ -48,14 +50,19 @@ export const environmentalQualityMixin = {
       this.chartArr.sideItem1_1.yAxis = data.yAxis.list
       this.chartArr.sideItem1_1.avg = this.returnArrAvg(data.yAxis.list)
       let i = data.xAxis.findIndex(function (value) {
-        return value === '台州市'
+        return value === cityName
       })
       this.sideItem1_1Chart('sideItem1_1', this.chartArr.sideItem1_1)
 
-
       let aaa = this.returnDiff(this.returnArrAvg(data.yAxis.list), data.yAxis.list[i]) >= 0 ? '高于' : '低于'
-      this.chartArr.sideItem1_1.result = `${data.yAxis.year}年，台州市空气质量达到优良天数的比例<span class="light">${aaa}</span>全市平均水平，排名上升<span class="light">${3}</span>位。`
-
+      getRankDiff({
+        area: cityName,
+        zb: 'AQI优良率'
+      }).then(res1 => {
+        let rankDiff = this.returnDiff(res1.data.newRank, res1.data.oldRank)
+        let bbb = rankDiff >= 0 ? '上升' : '下降'
+        this.chartArr.sideItem1_1.result = `${data.yAxis.year}年，${this.cityName}空气质量达到优良天数的比例<span class="light">${aaa}</span>全市平均水平，排名${bbb}<span class="light">${Math.abs(rankDiff)}</span>位。`
+      })
     })
     // 2、获取管辖各县级城市空气质量达到优良天数比例并绘制图表
     getScaleData({
@@ -73,7 +80,7 @@ export const environmentalQualityMixin = {
 
       let aaa = this.returnRepeatNumArr(this.chartArr.sideItem1_2.xAxis, this.chartArr.sideItem1_2.yAxis, this.chartArr.sideItem1_2.yAxis[this.chartArr.sideItem1_2.yAxis.length - 1], 'max')
       let bbb = this.returnRepeatNumArr(this.chartArr.sideItem1_2.xAxis, this.chartArr.sideItem1_2.yAxis, this.chartArr.sideItem1_2.yAxis[0], 'min')
-      this.chartArr.sideItem1_2.result = `${data.yAxis.year}年，台州市管辖的各县级城市中，${aaa.join()}空气质量达到优良天数比例最低，达到<span class="light">${this.returnArrLast(this.chartArr.sideItem1_2.yAxis)}%</span>；${bbb.join()}最高，为<span class="light">${this.chartArr.sideItem1_2.yAxis[0]}%。</span>`
+      this.chartArr.sideItem1_2.result = `${data.yAxis.year}年，${this.cityName}管辖的各县级城市中，${aaa.join()}空气质量达到优良天数比例最低，达到<span class="light">${this.returnArrLast(this.chartArr.sideItem1_2.yAxis)}%</span>；${bbb.join()}最高，为<span class="light">${this.chartArr.sideItem1_2.yAxis[0]}%。</span>`
     })
 
     // 3、获取市管辖各县级城市PM2.5年均浓度（µg/m3）对比并绘制图表
@@ -91,7 +98,7 @@ export const environmentalQualityMixin = {
 
       let aaa = this.returnRepeatNumArr(this.chartArr.sideItem1_3.xAxis, this.chartArr.sideItem1_3.yAxis, this.chartArr.sideItem1_3.yAxis[this.chartArr.sideItem1_3.yAxis.length - 1], 'max')
       let bbb = this.returnRepeatNumArr(this.chartArr.sideItem1_3.xAxis, this.chartArr.sideItem1_3.yAxis, this.chartArr.sideItem1_3.yAxis[0], 'min')
-      this.chartArr.sideItem1_3.result = `${data.yAxis.year}年，台州市管辖的各县级城市中，${bbb.join()}PM2.5年均浓度最高，达到<span class="light">${this.chartArr.sideItem1_3.yAxis[0]}</span>µg/m3；${aaa.join()}最低，达到<span class="light">${this.returnArrLast(this.chartArr.sideItem1_3.yAxis)}</span>µg/m3`
+      this.chartArr.sideItem1_3.result = `${data.yAxis.year}年，${this.cityName}管辖的各县级城市中，${bbb.join()}PM2.5年均浓度最高，达到<span class="light">${this.chartArr.sideItem1_3.yAxis[0]}</span>µg/m3；${aaa.join()}最低，达到<span class="light">${this.returnArrLast(this.chartArr.sideItem1_3.yAxis)}</span>µg/m3`
     })
 
     // 4、获取年各地市PM2.5年均浓度（µg/m3）对比并绘制图表
@@ -107,17 +114,17 @@ export const environmentalQualityMixin = {
       this.chartArr.sideItem1_4.yAxis = data.yAxis.list
       this.sideItem1_4Chart('sideItem1_4', this.chartArr.sideItem1_4)
 
-      let rank = this.chartArr.sideItem1_4.xAxis.indexOf('台州市')
-      this.chartArr.sideItem1_4.result = `${data.yAxis.year}年，台州市PM2.5年均浓度在全省排第<span class="light">${rank + 1}</span>位`
+      let rank = this.chartArr.sideItem1_4.xAxis.indexOf(this.cityName)
+      this.chartArr.sideItem1_4.result = `${data.yAxis.year}年，${this.cityName}PM2.5年均浓度在全省排第<span class="light">${rank + 1}</span>位`
     })
 
-    // 5、获取年台州市管辖各县级城市PM2.5年均浓度（µg/m3）对比并绘制图表
+    // 5、获取年市管辖各县级城市PM2.5年均浓度（µg/m3）对比并绘制图表
     getStructuralData({
       area: this.cityName,
       zbs: 'PM2.5浓度'
     }).then(res => {
       let data = res.data[0]
-      this.chartArr.sideItem1_5.title = `${this.returnArrFirst(data.xAxis)}年-${this.returnArrLast(data.xAxis)}年台州市PM2.5年平均浓度（µg/m3）变化`
+      this.chartArr.sideItem1_5.title = `${this.returnArrFirst(data.xAxis)}年-${this.returnArrLast(data.xAxis)}年${this.cityName}PM2.5年平均浓度（µg/m3）变化`
       this.chartArr.sideItem1_5.name = `${data.yAxis.name}(${data.yAxis.unit})`
       this.chartArr.sideItem1_5.dataSource = data.yAxis.source
       this.chartArr.sideItem1_5.xAxis = data.xAxis
@@ -126,15 +133,15 @@ export const environmentalQualityMixin = {
 
       let aaa = this.chartArr.sideItem1_5.yAxis[this.chartArr.sideItem1_5.yAxis.length - 1]
       let qualified = this.returnDiff(aaa, 35) > 0 ? '达到' : '不达到'
-      this.chartArr.sideItem1_5.result = `${this.returnArrLast(this.chartArr.sideItem1_5.xAxis)}年，台州市PM2.5浓度年均达到<span class="light">${aaa}</span>µg/m3，<span class="light">${qualified}</span>国家空气质量二级标准要求（35µg/m3）。`
+      this.chartArr.sideItem1_5.result = `${this.returnArrLast(this.chartArr.sideItem1_5.xAxis)}年，${this.cityName}PM2.5浓度年均达到<span class="light">${aaa}</span>µg/m3，<span class="light">${qualified}</span>国家空气质量二级标准要求（35µg/m3）。`
     })
 
     // 6、各县（市、区）III类以上水质断面数量
     sectionNum({
-      area: '台州市'
+      area: this.cityName
     }).then(res => {
       let data = res.data
-      this.chartArr.sideItem1_6.title = `${this.cityName}台州市各县（市、区）III类以上水质断面数量`
+      this.chartArr.sideItem1_6.title = `${data.yAxis.year}${this.cityName}各县（市、区）III类以上水质断面数量`
       this.chartArr.sideItem1_6.dataSource = '省生态环境厅'
       this.chartArr.sideItem1_6.xAxis = data.xAxis
       this.chartArr.sideItem1_6.yAxis1 = data.yAxis.threeList
@@ -167,7 +174,7 @@ export const environmentalQualityMixin = {
         notQualifiedNameArr.push(notQualifiedArr[i].name)
       }
 
-      this.chartArr.sideItem1_6.result = `2019年，台州市${qualifiedNameArr.join()}所有省控断面水质全部达到III类及以上。 ${notQualifiedNameArr.join()}所有省控断面水质均未达到III类。`
+      this.chartArr.sideItem1_6.result = `${data.yAxis.year}年，<span class="light">${this.cityName}${qualifiedNameArr.join()}</span>所有省控断面水质全部达到III类及以上。 <span class="light">${notQualifiedNameArr.join()}</span>所有省控断面水质均未达到III类。`
 
     })
     // 7、获取全省各地市III类以上水质断面占比数据并绘制图表
@@ -181,17 +188,17 @@ export const environmentalQualityMixin = {
       this.sideItem1_7Chart('sideItem1_7', this.chartArr.sideItem1_7)
 
 
-      let i = this.chartArr.sideItem1_7.xAxis.indexOf('台州市')
-      this.chartArr.sideItem1_7.result = `2019年，台州市<span class="light">27</span>个省控水质断面中，III类以上占比为<span class="light">${this.chartArr.sideItem1_7.yAxis[i]}</span>%，在全省11个地市中排第<span class="light">${i + 1}</span>名。`
+      let i = this.chartArr.sideItem1_7.xAxis.indexOf(this.cityName)
+      this.chartArr.sideItem1_7.result = `${data.yAxis.year}年，${this.cityName}<span class="light">27</span>个省控水质断面中，III类以上占比为<span class="light">${this.chartArr.sideItem1_7.yAxis[i]}</span>%，在全省11个地市中排第<span class="light">${i + 1}</span>名。`
     })
-    // 8、获取年台州市省控断面水质类型变化数据并绘制图表
+    // 8、获取年市省控断面水质类型变化数据并绘制图表
     getStructuralData({
       area: this.cityName,
       zbs: 'I类,II类,III类,IV类,V类,劣V类'
     }).then(res => {
       let data = res.data
-      
-      this.chartArr.sideItem1_8.title = `${this.returnArrFirst(data[0].xAxis)}年-${this.returnArrLast(data[0].xAxis)}年台州市省控断面水质类型变化`
+
+      this.chartArr.sideItem1_8.title = `${this.returnArrFirst(data[0].xAxis)}年-${this.returnArrLast(data[0].xAxis)}年${this.cityName}省控断面水质类型变化`
       this.chartArr.sideItem1_8.name1 = data[0].yAxis.name
       this.chartArr.sideItem1_8.name2 = data[1].yAxis.name
       this.chartArr.sideItem1_8.name3 = data[2].yAxis.name
@@ -207,11 +214,13 @@ export const environmentalQualityMixin = {
       this.chartArr.sideItem1_8.yAxis5 = data[4].yAxis.list
       this.chartArr.sideItem1_8.yAxis6 = data[5].yAxis.list
       this.sideItem1_8Chart('sideItem1_8', this.chartArr.sideItem1_8)
+      this.tableDataResult = `2019年，${this.cityName}<span class="light">27</span>个省控水质断面中，I类<span class="light">${this.returnArrLast(data[0].yAxis.list)}</span>个，II类<span class="light">${this.returnArrLast(data[1].yAxis.list)}</span>个，III类<span class="light">${this.returnArrLast(data[2].yAxis.list)}</span>个，IV类<span class="light">${this.returnArrLast(data[3].yAxis.list)}</span>个，V类<span class="light">${this.returnArrLast(data[4].yAxis.list)}</span>个，劣IV类<span class="light">${this.returnArrLast(data[5].yAxis.list)}</span>个。`
     })
     // 市省控断面水质类型
     sectionList({
-      area: '台州市'
+      area: this.cityName
     }).then(res => {
+      console.log(res);
 
       let data = res.data.data
       this.tableData = data
@@ -224,7 +233,6 @@ export const environmentalQualityMixin = {
           this.typeLengthMax = arr[i]
         }
       }
-      this.tableDataResult = `2019年，台州市<span class="light">27</span>个省控水质断面中，I类<span class="light">2</span>个，II类<span class="light">7</span>个，III类<span class="light">10</span>个，IV类<span class="light">0</span>个，V类<span class="light">0</span>个，劣IV类<span class="light">27</span>个。`
     })
   },
   methods: {
@@ -237,6 +245,7 @@ export const environmentalQualityMixin = {
       let chart = this.$echarts.init(document.getElementById(id))
       let option = {
         backgroundColor: this.chartColor.backgroundColor,
+          color: data.color,
         tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -321,6 +330,7 @@ export const environmentalQualityMixin = {
     },
     // 1、各地市空气质量达到优良天数比例对比图表
     sideItem1_1Chart(id, data) {
+      let cityName = this.cityName
       let chart = this.$echarts.init(document.getElementById(id))
       let option = {
         backgroundColor: this.chartColor.backgroundColor,
@@ -328,8 +338,7 @@ export const environmentalQualityMixin = {
         tooltip: {
           trigger: 'axis',
           axisPointer: {
-            // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+            type: 'shadow'
           }
         },
         legend: {
@@ -358,26 +367,25 @@ export const environmentalQualityMixin = {
             color: this.chartColor.textColor
           },
           axisLine: {
-            // axisLine:坐标轴轴线相关设置
             lineStyle: {
-              color: '#6291fb' // 底边线的颜色
+              color: '#6291fb'
             }
           },
           data: data.xAxis
         }],
         yAxis: [{
           axisTick: {
-            show: false // y轴刻度
+            show: false
           },
           axisLine: {
             show: false,
             lineStyle: {
               type: 'solid',
-              color: this.chartColor.textColor // 左边线的颜色
+              color: this.chartColor.textColor
             }
           },
           splitLine: {
-            show: true, // y轴分隔线
+            show: true,
             lineStyle: {
               type: 'dashed',
               color: '#0124b3'
@@ -394,15 +402,15 @@ export const environmentalQualityMixin = {
             silent: true,
             lineStyle: {
               normal: {
-                color: '#ff5975' // 这儿设置安全基线颜色
+                color: '#ff5975'
               }
             },
             data: [{
-              yAxis: data.avg //这儿定义基准线的数值为多少
+              yAxis: data.avg
             }],
             label: {
               normal: {
-                formatter: '全省平均值', // 这儿设置安全基线
+                formatter: '全省平均值',
                 position: 'middle'
               }
             }
@@ -410,7 +418,7 @@ export const environmentalQualityMixin = {
           itemStyle: {
             normal: {
               color: function (params) {
-                if (params.name === '台州市') {
+                if (params.name === cityName) {
                   return data.lightColor
                 } else {
                   return data.color
@@ -441,8 +449,7 @@ export const environmentalQualityMixin = {
         tooltip: {
           trigger: 'axis',
           axisPointer: {
-            // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+            type: 'shadow'
           }
         },
         legend: {
@@ -471,26 +478,25 @@ export const environmentalQualityMixin = {
             color: this.chartColor.textColor
           },
           axisLine: {
-            // axisLine:坐标轴轴线相关设置
             lineStyle: {
-              color: '#6291fb' // 底边线的颜色
+              color: '#6291fb'
             }
           },
           data: data.xAxis
         }],
         yAxis: [{
           axisTick: {
-            show: false // y轴刻度
+            show: false
           },
           axisLine: {
             show: false,
             lineStyle: {
               type: 'solid',
-              color: this.chartColor.textColor // 左边线的颜色
+              color: this.chartColor.textColor
             }
           },
           splitLine: {
-            show: true, // y轴分隔线
+            show: true,
             lineStyle: {
               type: 'dashed',
               color: '#0124b3'
@@ -628,6 +634,7 @@ export const environmentalQualityMixin = {
     },
     // 4、各地市PM2.5年均浓度（µg/m3）对比图表
     sideItem1_4Chart(id, data) {
+      let cityName = this.cityName
       let chart = this.$echarts.init(document.getElementById(id))
       let option = {
         backgroundColor: this.chartColor.backgroundColor,
@@ -635,8 +642,7 @@ export const environmentalQualityMixin = {
         tooltip: {
           trigger: 'axis',
           axisPointer: {
-            // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+            type: 'shadow'
           }
         },
         legend: {
@@ -665,26 +671,25 @@ export const environmentalQualityMixin = {
             color: this.chartColor.textColor
           },
           axisLine: {
-            // axisLine:坐标轴轴线相关设置
             lineStyle: {
-              color: '#6291fb' // 底边线的颜色
+              color: '#6291fb'
             }
           },
           data: data.xAxis
         }],
         yAxis: [{
           axisTick: {
-            show: false // y轴刻度
+            show: false
           },
           axisLine: {
             show: false,
             lineStyle: {
               type: 'solid',
-              color: this.chartColor.textColor // 左边线的颜色
+              color: this.chartColor.textColor
             }
           },
           splitLine: {
-            show: true, // y轴分隔线
+            show: true,
             lineStyle: {
               type: 'dashed',
               color: '#0124b3'
@@ -716,7 +721,7 @@ export const environmentalQualityMixin = {
           itemStyle: {
             normal: {
               color: function (params) {
-                if (params.name === '台州市') {
+                if (params.name === cityName) {
                   return data.lightColor
                 } else {
                   return data.color
@@ -954,6 +959,7 @@ export const environmentalQualityMixin = {
     },
     // 7、全省各地市III类以上水质断面占比图表
     sideItem1_7Chart(id, data) {
+      let cityName = this.cityName
       let chart = this.$echarts.init(document.getElementById(id))
       let option = {
         backgroundColor: this.chartColor.backgroundColor,
@@ -1023,7 +1029,7 @@ export const environmentalQualityMixin = {
           itemStyle: {
             normal: {
               color: function (params) {
-                if (params.name === '台州市') {
+                if (params.name === cityName) {
                   return data.color
                 } else {
                   return data.lightColor

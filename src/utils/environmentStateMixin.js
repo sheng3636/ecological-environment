@@ -11,27 +11,7 @@ export const environmentStateMixin = {
       geoJson: geoJson,
       EIList: [],
       seriesArr0: [],
-      seriesArr1: [],
-      sideItem4_0: {
-        name: '',
-        chartType: 'bar',
-        color: '#ff5975',
-        dataSource: '',
-        data: {
-          legend: [],
-          yAxisArr: []
-        }
-      },
-      sideItem4_1: {
-        name: '',
-        chartType: 'bar',
-        color: '#ff5975',
-        dataSource: '',
-        data: {
-          legend: [],
-          yAxisArr: []
-        }
-      }
+      seriesArr1: []
     }
   },
   mounted() {
@@ -42,7 +22,7 @@ export const environmentStateMixin = {
     })
     // 获取年台州市各县市区生态环境状况等级和省内排名表格数据
     getEIList({
-      area: '台州市'
+      area: this.cityName
     }).then(res => {
       this.EIList = res.data.list
       for (let i = 0; i < res.data.length; i++) {
@@ -55,31 +35,32 @@ export const environmentStateMixin = {
       zbs: '生态环境指数'
     }).then(res => {
       let data = res.data
-      this.sideItem4_0.name = data.yAxis.name
-      this.sideItem4_0.dataSource = data.yAxis.source
-      this.sideItem4_0.data.xAxis = data.xAxis
       let item = data.yAxis.data
+      this.chartArr.sideItem4_0.title = `${item[0].name}年-${item[item.length - 1].name}年各地市生态环境状况指数`
+      this.chartArr.sideItem4_0.name = data.yAxis.name
+      this.chartArr.sideItem4_0.dataSource = data.yAxis.source
+      this.chartArr.sideItem4_0.xAxis = data.xAxis
       for (let i = 0; i < item.length; i++) {
-        this.sideItem4_0.data.legend.push('E1' + data.yAxis.data[i].name)
-        this.sideItem4_0.data.yAxisArr.push(data.yAxis.data[i].list)
+        this.chartArr.sideItem4_0.legend.push('E1' + data.yAxis.data[i].name)
+        this.chartArr.sideItem4_0.yAxisArr.push(data.yAxis.data[i].list)
       }
-      this.sideItem4_0Chart('sideItem4_0', this.sideItem4_0)
+      this.sideItem4_0Chart('sideItem4_0', this.chartArr.sideItem4_0)
     })
     // 获取各地市生态环境状况指数数据并绘制图表
     getSubStructuralData({
-      area: '台州市',
+      area: this.cityName,
       zbs: '生态环境指数'
     }).then(res => {
       let data = res.data
-      this.sideItem4_1.name = data.yAxis.name
-      this.sideItem4_1.dataSource = data.yAxis.source
-      this.sideItem4_1.data.xAxis = data.xAxis
       let item = data.yAxis.data
+      this.chartArr.sideItem4_1.title = `${item[0].name}年-${item[item.length - 1].name}台州市各县市区生态环境状况指数`
+      this.chartArr.sideItem4_1.name = data.yAxis.name
+      this.chartArr.sideItem4_1.xAxis = data.xAxis
       for (let i = 0; i < item.length; i++) {
-        this.sideItem4_1.data.legend.push('E1' + data.yAxis.data[i].name)
-        this.sideItem4_1.data.yAxisArr.push(data.yAxis.data[i].list)
+        this.chartArr.sideItem4_1.legend.push('E1' + data.yAxis.data[i].name)
+        this.chartArr.sideItem4_1.yAxisArr.push(data.yAxis.data[i].list)
       }
-      this.sideItem4_1Chart('sideItem4_1', this.sideItem4_1)
+      this.sideItem4_1Chart('sideItem4_1', this.chartArr.sideItem4_1)
     })
   },
   methods: {
@@ -273,8 +254,6 @@ export const environmentStateMixin = {
     },
     // 各地市生态环境状况指数图表
     sideItem4_0Chart(id, data) {
-      this.seriesArr0 = []
-      this.seriesArr1 = []
       let colorList = [
         '#00fcff',
         '#ffc000',
@@ -288,10 +267,9 @@ export const environmentStateMixin = {
         '#ffb0b0',
         '#e8395d'
       ]
-      let val = data.data
-      for (let i = 0; i < val.yAxisArr.length; i++) {
+      for (let i = 0; i < data.yAxisArr.length; i++) {
         this.seriesArr0.push({
-          name: data.data.legend[i],
+          name: data.legend[i],
           type: data.chartType,
           barWidth: '15px',
           barGap: '0%',
@@ -299,15 +277,15 @@ export const environmentStateMixin = {
             silent: true,
             lineStyle: {
               normal: {
-                color: '#00ff7d' // 这儿设置安全基线颜色
+                color: '#00ff7d'
               }
             },
             data: [{
-              yAxis: 75 //这儿定义基准线的数值为多少
+              yAxis: 75
             }],
             label: {
               normal: {
-                formatter: '优', // 这儿设置安全基线
+                formatter: '优',
                 position: 'middle'
               }
             }
@@ -328,7 +306,7 @@ export const environmentStateMixin = {
               }
             }
           },
-          data: val.yAxisArr[i]
+          data: data.yAxisArr[i]
         })
       }
       let chart = this.$echarts.init(document.getElementById(id))
@@ -337,8 +315,7 @@ export const environmentStateMixin = {
         tooltip: {
           trigger: 'axis',
           axisPointer: {
-            // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+            type: 'shadow'
           }
         },
         legend: {
@@ -348,7 +325,7 @@ export const environmentStateMixin = {
             fontSize: '16px',
             color: this.chartColor.textColor
           },
-          data: data.data.legend
+          data: data.legend
         },
         grid: {
           left: '5%',
@@ -367,26 +344,25 @@ export const environmentStateMixin = {
             color: this.chartColor.textColor
           },
           axisLine: {
-            // axisLine:坐标轴轴线相关设置
             lineStyle: {
-              color: '#6291fb' // 底边线的颜色
+              color: '#6291fb'
             }
           },
-          data: data.data.xAxis
+          data: data.xAxis
         }],
         yAxis: [{
           axisTick: {
-            show: false // y轴刻度
+            show: false
           },
           axisLine: {
             show: false,
             lineStyle: {
               type: 'solid',
-              color: this.chartColor.textColor // 左边线的颜色
+              color: this.chartColor.textColor
             }
           },
           splitLine: {
-            show: true, // y轴分隔线
+            show: true,
             lineStyle: {
               type: 'dashed',
               color: '#0124b3'
@@ -399,8 +375,6 @@ export const environmentStateMixin = {
     },
     // 各县市区生态环境状况指数图表
     sideItem4_1Chart(id, data) {
-      this.seriesArr0 = []
-      this.seriesArr1 = []
       let colorList = [
         '#00ffb8',
         '#7f6f00',
@@ -414,10 +388,9 @@ export const environmentStateMixin = {
         '#ffb0b0',
         '#e8395d'
       ]
-      let val = data.data
-      for (let i = 0; i < val.yAxisArr.length; i++) {
+      for (let i = 0; i < data.yAxisArr.length; i++) {
         this.seriesArr1.push({
-          name: data.data.legend[i],
+          name: data.legend[i],
           type: data.chartType,
           barWidth: '15px',
           barGap: '0%',
@@ -425,15 +398,15 @@ export const environmentStateMixin = {
             silent: true,
             lineStyle: {
               normal: {
-                color: '#00ff7d' // 这儿设置安全基线颜色
+                color: '#00ff7d'
               }
             },
             data: [{
-              yAxis: 75 //这儿定义基准线的数值为多少
+              yAxis: 75
             }],
             label: {
               normal: {
-                formatter: '优', // 这儿设置安全基线
+                formatter: '优',
                 position: 'middle'
               }
             }
@@ -454,7 +427,7 @@ export const environmentStateMixin = {
               }
             }
           },
-          data: val.yAxisArr[i]
+          data: data.yAxisArr[i]
         })
       }
       let chart = this.$echarts.init(document.getElementById(id))
@@ -463,8 +436,7 @@ export const environmentStateMixin = {
         tooltip: {
           trigger: 'axis',
           axisPointer: {
-            // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+            type: 'shadow'
           }
         },
         legend: {
@@ -474,7 +446,7 @@ export const environmentStateMixin = {
             fontSize: '16px',
             color: this.chartColor.textColor
           },
-          data: data.data.legend
+          data: data.legend
         },
         grid: {
           left: '5%',
@@ -493,26 +465,25 @@ export const environmentStateMixin = {
             color: this.chartColor.textColor
           },
           axisLine: {
-            // axisLine:坐标轴轴线相关设置
             lineStyle: {
-              color: '#6291fb' // 底边线的颜色
+              color: '#6291fb'
             }
           },
-          data: data.data.xAxis
+          data: data.xAxis
         }],
         yAxis: [{
           axisTick: {
-            show: false // y轴刻度
+            show: false
           },
           axisLine: {
             show: false,
             lineStyle: {
               type: 'solid',
-              color: this.chartColor.textColor // 左边线的颜色
+              color: this.chartColor.textColor
             }
           },
           splitLine: {
-            show: true, // y轴分隔线
+            show: true,
             lineStyle: {
               type: 'dashed',
               color: '#0124b3'

@@ -1,5 +1,6 @@
 <template>
-  <div class="bodyMain">
+  <div class="bodyMain" v-loading.fullscreen.lock="fullscreenLoading" element-loading-text="拼命加载中"
+    element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
     <nav class="navTopArea">
       <div class="navLeft">
         <img src="@/assets/images/nav/logo.png">
@@ -534,7 +535,8 @@
           <h4 class="moudleTitle">
             <span class="left">{{chartArr.sideItem2_5.title}}</span>
             <p class="optionGroup">
-              <img class="optionImg" @click="imagesModalOpenFn('sideItem2_5',chartArr.sideItem2_5.title,sideItem2_5Chart)"
+              <img class="optionImg"
+                @click="imagesModalOpenFn('sideItem2_5',chartArr.sideItem2_5.title,sideItem2_5Chart)"
                 src="@/assets/images/downImgIcon.png">
               <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                 <span class="el-dropdown-link">
@@ -574,10 +576,10 @@
         <div class="twoWrap">
           <div class="sideItem width1020 sideItem3_0">
             <h4 class="moudleTitle">
-              <span class="left">2015-2018台州市化学需氧量排放总量变化</span>
+              <span class="left">{{chartArr.sideItem3_0.title}}</span>
               <p class="optionGroup">
                 <img class="optionImg"
-                  @click="imagesModalOpenFn('sideItem3_0','2015-2018台州市化学需氧量排放总量变化',sideItem3_0Chart)"
+                  @click="imagesModalOpenFn('sideItem3_0',chartArr.sideItem3_0.title,sideItem3_0Chart)"
                   src="@/assets/images/downImgIcon.png">
                 <el-dropdown trigger="click" @command="chartTypeClick">
                   <span class="el-dropdown-link">
@@ -597,13 +599,14 @@
               </p>
             </h4>
             <div class="sideItemChart width1020" id="sideItem3_0"></div>
-            <h5 class="dataSourceTxt">数据来源：{{sideItem3_0.dataSource}}</h5>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_0.dataSource}}</h5>
           </div>
           <div class="sideItem width800 sideItem3_1">
             <h4 class="moudleTitle">
-              <span class="left"> 2018年全省各地市化学需氧量排放总量</span>
+              <span class="left">{{chartArr.sideItem3_1.title}}</span>
               <p class="optionGroup">
-                <img class="optionImg" @click="imagesModalOpenFn('sideItem3_1',' 2018年全省各地市化学需氧量排放总量',sideItem3_1Chart)"
+                <img class="optionImg"
+                  @click="imagesModalOpenFn('sideItem3_1',chartArr.sideItem3_1.title,sideItem3_1Chart)"
                   src="@/assets/images/downImgIcon.png">
                 <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                   <span class="el-dropdown-link">
@@ -623,14 +626,14 @@
               </p>
             </h4>
             <div class="sideItemChart width800" id="sideItem3_1"></div>
-            <h5 class="dataSourceTxt">数据来源：{{sideItem3_1.dataSource}}</h5>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_1.dataSource}}</h5>
           </div>
           <div class="sideItem width800 sideItem3_2">
             <h4 class="moudleTitle">
-              <span class="left">2018年全省各地市化学需氧量排放总量占比</span>
+              <span class="left">{{chartArr.sideItem3_2.title}}</span>
               <p class="optionGroup">
                 <img class="optionImg"
-                  @click="imagesModalOpenFn('sideItem3_2','2018年全省各地市化学需氧量排放总量占比',sideItem3_2Chart)"
+                  @click="imagesModalOpenFn('sideItem3_2',chartArr.sideItem3_2.title,sideItem3_2Chart)"
                   src="@/assets/images/downImgIcon.png">
                 <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                   <span class="el-dropdown-link">
@@ -650,13 +653,14 @@
               </p>
             </h4>
             <div class="sideItemChart width800" id="sideItem3_2"></div>
-            <h5 class="dataSourceTxt">数据来源：{{sideItem3_2.dataSource}}</h5>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_2.dataSource}}</h5>
           </div>
           <div class="sideItem width1020 sideItem3_3">
             <h4 class="moudleTitle">
-              <span class="left"> 2018年全省各地市化学需氧量排放强度</span>
+              <span class="left">{{chartArr.sideItem3_3.title}}</span>
               <p class="optionGroup">
-                <img class="optionImg" @click="imagesModalOpenFn('sideItem3_3',' 2018年全省各地市化学需氧量排放强度',sideItem3_3Chart)"
+                <img class="optionImg"
+                  @click="imagesModalOpenFn('sideItem3_3',chartArr.sideItem3_3.title,sideItem3_3Chart)"
                   src="@/assets/images/downImgIcon.png">
                 <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                   <span class="el-dropdown-link">
@@ -676,14 +680,12 @@
               </p>
             </h4>
             <div class="sideItemChart width1020" id="sideItem3_3"></div>
-            <h5 class="dataSourceTxt">数据来源：{{sideItem3_3.dataSource}}</h5>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_3.dataSource}}</h5>
           </div>
           <div class="resultWrap" style="width: 100%;">
             <div class="content">
               <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
-              <p>2018年台州市化学需氧量排放量比2015年减少（增加）<span class="light">{{200}}%</span>吨，排放总量占全省的<span
-                  class="light">{{10}}</span>%，排放强度高于全省平均水平<span
-                  class="light">{{17.5}}</span>%，需加大减排力度（如果是“排放强度低于全省平均水平XX%”）。</p>
+              <p v-html="chartArr.sideItem3_0.result"></p>
             </div>
           </div>
         </div>
@@ -697,9 +699,10 @@
         <div class="twoWrap">
           <div class="sideItem width1020 sideItem3_4">
             <h4 class="moudleTitle">
-              <span class="left">2018年全省各地市氨氮排放总量</span>
+              <span class="left">{{chartArr.sideItem3_4.title}}</span>
               <p class="optionGroup">
-                <img class="optionImg" @click="imagesModalOpenFn('sideItem3_4','2018年全省各地市氨氮排放总量',sideItem3_4Chart)"
+                <img class="optionImg"
+                  @click="imagesModalOpenFn('sideItem3_4',chartArr.sideItem3_4.title,sideItem3_4Chart)"
                   src="@/assets/images/downImgIcon.png">
                 <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                   <span class="el-dropdown-link">
@@ -719,14 +722,14 @@
               </p>
             </h4>
             <div class="sideItemChart width1020" id="sideItem3_4"></div>
-            <h5 class="dataSourceTxt">数据来源：{{sideItem3_4.dataSource}}</h5>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_4.dataSource}}</h5>
           </div>
           <div class="sideItem width800 sideItem3_5">
             <h4 class="moudleTitle">
-              <span class="left"> 2015-2018台州市氨氮排放总量变化</span>
+              <span class="left">{{chartArr.sideItem3_5.title}}</span>
               <p class="optionGroup">
                 <img class="optionImg"
-                  @click="imagesModalOpenFn('sideItem3_5',' 2015-2018台州市氨氮排放总量变化',sideItem3_5Chart)"
+                  @click="imagesModalOpenFn('sideItem3_5',chartArr.sideItem3_5.title,sideItem3_5Chart)"
                   src="@/assets/images/downImgIcon.png">
                 <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                   <span class="el-dropdown-link">
@@ -746,13 +749,14 @@
               </p>
             </h4>
             <div class="sideItemChart width800" id="sideItem3_5"></div>
-            <h5 class="dataSourceTxt">数据来源：{{sideItem3_5.dataSource}}</h5>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_5.dataSource}}</h5>
           </div>
           <div class="sideItem width800 sideItem3_6">
             <h4 class="moudleTitle">
-              <span class="left"> 2018年全省各地市氨氮排放总量占比</span>
+              <span class="left">{{chartArr.sideItem3_6.title}}</span>
               <p class="optionGroup">
-                <img class="optionImg" @click="imagesModalOpenFn('sideItem3_6',' 2018年全省各地市氨氮排放总量占比',sideItem3_6Chart)"
+                <img class="optionImg"
+                  @click="imagesModalOpenFn('sideItem3_6',chartArr.sideItem3_6.title,sideItem3_6Chart)"
                   src="@/assets/images/downImgIcon.png">
                 <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                   <span class="el-dropdown-link">
@@ -772,13 +776,14 @@
               </p>
             </h4>
             <div class="sideItemChart width800" id="sideItem3_6"></div>
-            <h5 class="dataSourceTxt">数据来源：{{sideItem3_6.dataSource}}</h5>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_6.dataSource}}</h5>
           </div>
           <div class="sideItem width1020 sideItem3_7">
             <h4 class="moudleTitle">
-              <span class="left"> 2018年全省各地市氨氮排放强度</span>
+              <span class="left">{{chartArr.sideItem3_7.title}}</span>
               <p class="optionGroup">
-                <img class="optionImg" @click="imagesModalOpenFn('sideItem3_7',' 2018年全省各地市氨氮排放强度',sideItem3_7Chart)"
+                <img class="optionImg"
+                  @click="imagesModalOpenFn('sideItem3_7',chartArr.sideItem3_7.title,sideItem3_7Chart)"
                   src="@/assets/images/downImgIcon.png">
                 <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                   <span class="el-dropdown-link">
@@ -798,14 +803,12 @@
               </p>
             </h4>
             <div class="sideItemChart width1020" id="sideItem3_7"></div>
-            <h5 class="dataSourceTxt">数据来源：{{sideItem3_7.dataSource}}</h5>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_2.dataSource}}</h5>
           </div>
           <div class="resultWrap" style="width: 100%;">
             <div class="content">
               <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
-              <p>2018年台州市氨氮排放量比2015年减少（增加）<span class="light">{{200}}</span>吨，排放总量占全省的<span
-                  class="light">{{10}}</span>%，排放强度高于全省平均水平<span
-                  class="light">{{17.5}}</span>%，需加大减排力度（如果是“排放强度低于全省平均水平XX%”）。</p>
+              <p v-html="chartArr.sideItem3_1.result"></p>
             </div>
           </div>
         </div>
@@ -819,9 +822,10 @@
         <div class="twoWrap">
           <div class="sideItem width1020 sideItem3_8">
             <h4 class="moudleTitle">
-              <span class="left">2018年全省各地市二氧化硫排放总量</span>
+              <span class="left">{{chartArr.sideItem3_8.title}}</span>
               <p class="optionGroup">
-                <img class="optionImg" @click="imagesModalOpenFn('sideItem3_8','2018年全省各地市二氧化硫排放总量',sideItem3_8Chart)"
+                <img class="optionImg"
+                  @click="imagesModalOpenFn('sideItem3_8',chartArr.sideItem3_8.title,sideItem3_8Chart)"
                   src="@/assets/images/downImgIcon.png">
                 <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                   <span class="el-dropdown-link">
@@ -841,14 +845,14 @@
               </p>
             </h4>
             <div class="sideItemChart width1020" id="sideItem3_8"></div>
-            <h5 class="dataSourceTxt">数据来源：{{sideItem3_8.dataSource}}</h5>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_8.dataSource}}</h5>
           </div>
           <div class="sideItem width800 sideItem3_9">
             <h4 class="moudleTitle">
-              <span class="left">2015-2018台州市二氧化硫排放总量变化</span>
+              <span class="left">{{chartArr.sideItem3_5.title}}</span>
               <p class="optionGroup">
                 <img class="optionImg"
-                  @click="imagesModalOpenFn('sideItem3_9','  2015-2018台州市二氧化硫排放总量变化',sideItem3_9Chart)"
+                  @click="imagesModalOpenFn('sideItem3_9',chartArr.sideItem3_5.title,sideItem3_9Chart)"
                   src="@/assets/images/downImgIcon.png">
                 <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                   <span class="el-dropdown-link">
@@ -868,14 +872,14 @@
               </p>
             </h4>
             <div class="sideItemChart width800" id="sideItem3_9"></div>
-            <h5 class="dataSourceTxt">数据来源：{{sideItem3_9.dataSource}}</h5>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_5.dataSource}}</h5>
           </div>
           <div class="sideItem width800 sideItem3_10">
             <h4 class="moudleTitle">
-              <span class="left">2018年全省各地市二氧化硫排放总量占比</span>
+              <span class="left">{{chartArr.sideItem3_10.title}}</span>
               <p class="optionGroup">
                 <img class="optionImg"
-                  @click="imagesModalOpenFn('sideItem3_10','  2018年全省各地市二氧化硫排放总量占比',sideItem3_10Chart)"
+                  @click="imagesModalOpenFn('sideItem3_10',chartArr.sideItem3_10.title,sideItem3_10Chart)"
                   src="@/assets/images/downImgIcon.png">
                 <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                   <span class="el-dropdown-link">
@@ -895,14 +899,14 @@
               </p>
             </h4>
             <div class="sideItemChart width800" id="sideItem3_10"></div>
-            <h5 class="dataSourceTxt">数据来源：{{sideItem3_10.dataSource}}</h5>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_10.dataSource}}</h5>
           </div>
           <div class="sideItem width1020 sideItem3_11">
             <h4 class="moudleTitle">
-              <span class="left">2018年全省各地市二氧化硫排放强度</span>
+              <span class="left">{{chartArr.sideItem3_11.title}}</span>
               <p class="optionGroup">
                 <img class="optionImg"
-                  @click="imagesModalOpenFn('sideItem3_11','  2018年全省各地市二氧化硫排放强度',sideItem3_11Chart)"
+                  @click="imagesModalOpenFn('sideItem3_11',chartArr.sideItem3_11.title,sideItem3_11Chart)"
                   src="@/assets/images/downImgIcon.png">
                 <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                   <span class="el-dropdown-link">
@@ -922,7 +926,14 @@
               </p>
             </h4>
             <div class="sideItemChart width1020" id="sideItem3_11"></div>
-            <h5 class="dataSourceTxt">数据来源：{{sideItem3_11.dataSource}}</h5>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_11.dataSource}}</h5>
+          </div>
+          <div class="resultWrap" style="width: 100%;">
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+
+              <p v-html="chartArr.sideItem3_2.result"></p>
+            </div>
           </div>
         </div>
         <div class="CuttingLine">
@@ -935,9 +946,10 @@
         <div class="twoWrap">
           <div class="sideItem width1020 sideItem3_12">
             <h4 class="moudleTitle">
-              <span class="left">2018年全省各地市氮氧化物排放总量</span>
+              <span class="left">{{chartArr.sideItem3_12.title}}</span>
               <p class="optionGroup">
-                <img class="optionImg" @click="imagesModalOpenFn('sideItem3_12','2018年全省各地市氮氧化物排放总量',sideItem3_12Chart)"
+                <img class="optionImg"
+                  @click="imagesModalOpenFn('sideItem3_12',chartArr.sideItem3_12.title,sideItem3_12Chart)"
                   src="@/assets/images/downImgIcon.png">
                 <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                   <span class="el-dropdown-link">
@@ -957,13 +969,14 @@
               </p>
             </h4>
             <div class="sideItemChart width1020" id="sideItem3_12"></div>
-            <h5 class="dataSourceTxt">数据来源：{{sideItem3_12.dataSource}}</h5>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_12.dataSource}}</h5>
           </div>
           <div class="sideItem width800 sideItem3_13">
             <h4 class="moudleTitle">
-              <span class="left">2018年全省各地市氮氧化物排放总量</span>
+              <span class="left">{{chartArr.sideItem3_13.title}}</span>
               <p class="optionGroup">
-                <img class="optionImg" @click="imagesModalOpenFn('sideItem3_13','2018年全省各地市氮氧化物排放总量',sideItem3_13Chart)"
+                <img class="optionImg"
+                  @click="imagesModalOpenFn('sideItem3_13',chartArr.sideItem3_13.title,sideItem3_13Chart)"
                   src="@/assets/images/downImgIcon.png">
                 <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                   <span class="el-dropdown-link">
@@ -983,14 +996,14 @@
               </p>
             </h4>
             <div class="sideItemChart width800" id="sideItem3_13"></div>
-            <h5 class="dataSourceTxt">数据来源：{{sideItem3_13.dataSource}}</h5>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_13.dataSource}}</h5>
           </div>
           <div class="sideItem width800 sideItem3_14">
             <h4 class="moudleTitle">
-              <span class="left">2018年全省各地市氮氧化物排放总量占比</span>
+              <span class="left">{{chartArr.sideItem3_14.title}}</span>
               <p class="optionGroup">
                 <img class="optionImg"
-                  @click="imagesModalOpenFn('sideItem3_14','2018年全省各地市氮氧化物排放总量占比',sideItem3_14Chart)"
+                  @click="imagesModalOpenFn('sideItem3_14',chartArr.sideItem3_14.title,sideItem3_14Chart)"
                   src="@/assets/images/downImgIcon.png">
                 <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                   <span class="el-dropdown-link">
@@ -1010,13 +1023,14 @@
               </p>
             </h4>
             <div class="sideItemChart width800" id="sideItem3_14"></div>
-            <h5 class="dataSourceTxt">数据来源：{{sideItem3_14.dataSource}}</h5>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_14.dataSource}}</h5>
           </div>
           <div class="sideItem width1020 sideItem3_15">
             <h4 class="moudleTitle">
-              <span class="left">2018年全省各地市氮氧化物排放强度</span>
+              <span class="left">{{chartArr.sideItem3_11.title}}</span>
               <p class="optionGroup">
-                <img class="optionImg" @click="imagesModalOpenFn('sideItem3_15','2018年全省各地市氮氧化物排放强度',sideItem3_15Chart)"
+                <img class="optionImg"
+                  @click="imagesModalOpenFn('sideItem3_15',chartArr.sideItem3_11.title,sideItem3_15Chart)"
                   src="@/assets/images/downImgIcon.png">
                 <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                   <span class="el-dropdown-link">
@@ -1036,16 +1050,23 @@
               </p>
             </h4>
             <div class="sideItemChart width1020" id="sideItem3_15"></div>
-            <h5 class="dataSourceTxt">数据来源：{{sideItem3_15.dataSource}}</h5>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_11.dataSource}}</h5>
+          </div>
+          <div class="resultWrap" style="width: 100%;">
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem3_3.result"></p>
+            </div>
           </div>
         </div>
       </div>
       <div class="mainWrap" style="margin-top: 30px;" v-show="routerActive === 4">
         <div class="sideItem width1845 sideItem4_0">
           <h4 class="moudleTitle">
-            <span class="left">2015-2018各地市生态环境状况指数</span>
+            <span class="left">{{chartArr.sideItem4_0.title}}</span>
             <p class="optionGroup">
-              <img class="optionImg" @click="imagesModalOpenFn('sideItem4_0','2015-2018各地市生态环境状况指数',sideItem4_0Chart)"
+              <img class="optionImg"
+                @click="imagesModalOpenFn('sideItem4_0',chartArr.sideItem4_0.title,sideItem4_0Chart)"
                 src="@/assets/images/downImgIcon.png">
               <el-dropdown trigger="click" @command="chartTypeClick">
                 <span class="el-dropdown-link">
@@ -1066,7 +1087,7 @@
           </h4>
           <div class="sideItemChart width1845" id="sideItem4_0"></div>
           <div class="resultWrap">
-            <h5>数据来源：{{sideItem4_0.dataSource}}</h5>
+            <h5>数据来源：{{chartArr.sideItem4_0.dataSource}}</h5>
             <div class="content">
               <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
               <p>2018年台州市生态环境状况等级为<span class="light">优</span>，EI值在全省排第<span class="light">2</span>2位，较2015年下降<span
@@ -1076,10 +1097,10 @@
         </div>
         <div class="sideItem width1845 sideItem4_1">
           <h4 class="moudleTitle">
-            <span class="left">2015-2018台州市各县市区生态环境状况指数</span>
+            <span class="left">{{chartArr.sideItem4_1.title}}</span>
             <p class="optionGroup">
               <img class="optionImg"
-                @click="imagesModalOpenFn('sideItem4_1','2015-2018台州市各县市区生态环境状况指数',sideItem4_1Chart)"
+                @click="imagesModalOpenFn('sideItem4_1',chartArr.sideItem4_1.title,sideItem4_1Chart)"
                 src="@/assets/images/downImgIcon.png">
               <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                 <span class="el-dropdown-link">
@@ -1194,7 +1215,6 @@
     </el-dialog>
   </div>
 </template>
-
 <script>
 import { savePic, exportWord } from '@/api/environmentalQuality'
 import mUtilsFn from '@/utils/mUtils.js'
@@ -1203,6 +1223,7 @@ import { environmentalQualityMixin } from '@/utils/environmentalQualityMixin.js'
 import { ecologicaleResourcesMixin } from '@/utils/ecologicaleResourcesMixin.js'
 import { emissionsMixin } from '@/utils/emissionsMixin.js'
 import { environmentStateMixin } from '@/utils/environmentStateMixin.js'
+import axios from 'axios'
 
 export default {
   name: 'Home',
@@ -1216,7 +1237,8 @@ export default {
   data() {
     return {
       cityName: '台州市', // 被分析城市
-      routerActive: 2, // 选中模块
+      fullscreenLoading: false,
+      routerActive: 1, // 选中模块
       imagesVisi: false, // 是否显示保存图片弹窗
       whichEchart: null, // 要被下载图表对象id
       imagesName: '', // 图片名称
@@ -1387,73 +1409,298 @@ export default {
         },
         sideItem2_0: {
           id: 'sideItem2_0',
-          num: 9,
+          num: 10,
           title: '',
           name: '',
           chartType: 'bar',
           color: '#5c2700',
+          lightColor: '#f19149',
           dataSource: '',
-          result: '根据2015年调查数据，台州市森林覆盖率<span class="light">59.89%</span>，在全省11地市中排第<span class="light">四</span>位，<span class="light">高于</span>全省平均水平。',
+          result:
+            '根据2015年调查数据，台州市森林覆盖率<span class="light">59.89%</span>，在全省11地市中排第<span class="light">四</span>位，<span class="light">高于</span>全省平均水平。',
           xAxis: [],
           yAxis: []
         },
         sideItem2_1: {
           id: 'sideItem2_1',
-          num: 10,
-          title: '',
-          name: '',
-          chartType: 'bar',
-          dataSource: '',
-          result: '2015年台州市活立木蓄积量为<span class="light">2929</span>万立方米，占全省的<span class="light">9</span>%。',
-          list: [],
-          legends: []
-        },
-        sideItem2_2: {
-          id: 'sideItem2_2',
           num: 11,
           title: '',
           name: '',
           chartType: 'bar',
           dataSource: '',
-          result: '根据2015年调查数据，台州市林地面积为<span class="light">63.02</span>万公顷，占全省的<span class="light">9</span>%。',
+          result:
+            '2015年台州市活立木蓄积量为<span class="light">2929</span>万立方米，占全省的<span class="light">9</span>%。',
+          list: [],
+          legends: []
+        },
+        sideItem2_2: {
+          id: 'sideItem2_2',
+          num: 12,
+          title: '',
+          name: '',
+          chartType: 'bar',
+          dataSource: '',
+          result:
+            '根据2015年调查数据，台州市林地面积为<span class="light">63.02</span>万公顷，占全省的<span class="light">9</span>%。',
           list: [],
           legends: []
         },
         sideItem2_3: {
           id: 'sideItem2_3',
-          num: 12,
+          num: 13,
           title: '',
           name: '',
           chartType: 'bar',
           color: '#007621',
+          lightColor: '#00e841',
           dataSource: '',
-          result: '根据2015年调查数据，台州市单位面积森林蓄积量为<span class="light">47.6</span>（立方米/公顷），在全省11地市中排第<span class="light">四</span>位，<span class="light">高于</span>全省平均水平。',
+          result:
+            '根据2015年调查数据，台州市单位面积森林蓄积量为<span class="light">47.6</span>（立方米/公顷），在全省11地市中排第<span class="light">四</span>位，<span class="light">高于</span>全省平均水平。',
           xAxis: [],
           yAxis: []
         },
         sideItem2_4: {
           id: 'sideItem2_4',
-          num: 13,
+          num: 14,
           title: '',
           name: '',
           chartType: 'bar',
           color: '#ff00ff',
           dataSource: '',
-          result: '台州市下辖各县市中，仙居县森林覆盖率最高，达到<span class="light">79.54</span>%，温岭市最低，为<span class="light">31.04</span>%。',
+          result:
+            '台州市下辖各县市中，仙居县森林覆盖率最高，达到<span class="light">79.54</span>%，温岭市最低，为<span class="light">31.04</span>%。',
           xAxis: [],
           yAxis: []
         },
         sideItem2_5: {
           id: 'sideItem2_5',
-          num: 14,
+          num: 15,
           title: '',
           name: '',
           chartType: 'bar',
           color: '#00f6ff',
           dataSource: '',
-          result: '台州市下辖各县市中，市区的单位面积森林蓄积量最高，达到<span class="light">71.76</span>立方米/公顷，玉环市最低，为<span class="light">35.94</span>立方米/公顷。',
+          result:
+            '台州市下辖各县市中，市区的单位面积森林蓄积量最高，达到<span class="light">71.76</span>立方米/公顷，玉环市最低，为<span class="light">35.94</span>立方米/公顷。',
           xAxis: [],
           yAxis: []
+        },
+        sideItem3_0: {
+          id: 'sideItem3_0',
+          num: 16,
+          title: '',
+          name: '',
+          chartType: 'line',
+          color: '#c90eff',
+          dataSource: '',
+          result:
+            '2018年台州市化学需氧量排放量比2015年减少（增加）<span class="light">{{200}}%</span>吨，排放总量占全省的<span class="light">10</span>%，排放强度高于全省平均水平<span class="light">17.5</span>%，需加大减排力度（如果是“排放强度低于全省平均水平XX%”）。',
+          xAxis: [],
+          yAxis: []
+        },
+        sideItem3_1: {
+          id: 'sideItem3_1',
+          num: 17,
+          title: '',
+          name: '',
+          chartType: 'bar',
+          color: '#00ffb8',
+          lightColor: '#00976d',
+          dataSource: '',
+          result:
+            '2018年台州市氨氮排放量比2015年减少（增加）<span class="light">200</span>吨，排放总量占全省的<span class="light">10</span>%，排放强度高于全省平均水平<span class="light">17.5</span>%，需加大减排力度（如果是“排放强度低于全省平均水平XX%”）。',
+          xAxis: [],
+          yAxis: []
+        },
+        sideItem3_2: {
+          id: 'sideItem3_2',
+          num: 18,
+          title: '',
+          name: '',
+          dataSource: '',
+          result:
+            '2018年台州市氨氮排放量比2015年减少（增加）<span class="light">200</span>吨，排放总量占全省的<span class="light">10</span>%，排放强度高于全省平均水平<span class="light">17.5</span>%，需加大减排力度（如果是“排放强度低于全省平均水平XX%”）。',
+          list: [],
+          legends: []
+        },
+        sideItem3_3: {
+          id: 'sideItem3_3',
+          num: 19,
+          title: '',
+          name: '化学需氧量排放强度（千克/万元）',
+          chartType: 'bar',
+          color: '#ff7723',
+          lightColor: '#b14400',
+          dataSource: '省生态环境厅',
+          result:
+            '2018年台州市氨氮排放量比2015年减少（增加）<span class="light">200</span>吨，排放总量占全省的<span class="light">10</span>%，排放强度高于全省平均水平<span class="light">17.5</span>%，需加大减排力度（如果是“排放强度低于全省平均水平XX%”）。',
+          xAxis: [],
+          yAxis: []
+        },
+        sideItem3_4: {
+          id: 'sideItem3_4',
+          num: 20,
+          title: '',
+          name: '',
+          chartType: 'bar',
+          color: '#a00062',
+          lightColor: '#ff62c2',
+          dataSource: '',
+          xAxis: [],
+          yAxis: []
+        },
+        sideItem3_5: {
+          id: 'sideItem3_5',
+          num: 21,
+          title: '',
+          name: '',
+          chartType: 'line',
+          color: '#ff7723',
+          dataSource: '',
+          data: {}
+        },
+        sideItem3_6: {
+          id: 'sideItem3_6',
+          num: 22,
+          title: '',
+          name: '全省各地市氨氮排放总量占比',
+          color: [
+            '#2072ed',
+            '#ff7723',
+            '#8e30ff',
+            '#23fddc',
+            '#2a885c',
+            '#d0fbff',
+            '#fed700',
+            '#96ff00',
+            '#ff89e5',
+            '#ffb0b0',
+            '#e8395d'
+          ],
+          dataSource: '',
+          list: [],
+          legends: []
+        },
+        sideItem3_7: {
+          id: 'sideItem3_7',
+          num: 23,
+          title: '',
+          name: '氨氮排放强度（千克/万元）',
+          chartType: 'bar',
+          color: '#9d7700',
+          lightColor: '#ffd85c',
+          dataSource: '省生态环境厅',
+          xAxis: [],
+          yAxis: []
+        },
+        sideItem3_8: {
+          id: 'sideItem3_8',
+          num: 24,
+          title: '',
+          name: '',
+          chartType: 'bar',
+          color: '#00976d',
+          lightColor: '#00ffb8',
+          dataSource: '',
+          xAxis: [],
+          yAxis: []
+        },
+        sideItem3_9: {
+          id: 'sideItem3_9',
+          num: 25,
+          title: '',
+          name: '',
+          chartType: 'line',
+          color: '#00d8ff',
+          dataSource: '',
+          xAxis: [],
+          yAxis: []
+        },
+        sideItem3_10: {
+          id: 'sideItem3_10',
+          num: 26,
+          title: '',
+          name: '二氧化硫排放总量占比',
+          list: [],
+          legends: []
+        },
+        sideItem3_11: {
+          id: 'sideItem3_11',
+          num: 27,
+          title: '',
+          name: '二氧化硫（千克/万元）',
+          chartType: 'bar',
+          color: '#34249a',
+          lightColor: '#917fff',
+          dataSource: '省生态环境厅',
+          xAxis: [],
+          yAxis: []
+        },
+        sideItem3_12: {
+          id: 'sideItem3_12',
+          num: 28,
+          title: '',
+          name: '',
+          chartType: 'bar',
+          color: '#886000',
+          lightColor: '#ffbe23',
+          dataSource: '',
+          xAxis: [],
+          yAxis: []
+        },
+        sideItem3_13: {
+          id: 'sideItem3_13',
+          num: 29,
+          title: '',
+          name: '',
+          chartType: 'line',
+          color: '#00ffb8',
+          dataSource: '',
+          xAxis: [],
+          yAxis: []
+        },
+        sideItem3_14: {
+          id: 'sideItem3_14',
+          num: 30,
+          title: '',
+          name: '全省各地市氮氧化物排放总量占比',
+          list: [],
+          legends: []
+        },
+        sideItem3_15: {
+          id: 'sideItem3_14',
+          num: 31,
+          title: '',
+          name: '氮氧化物（千克/万元）',
+          chartType: 'bar',
+          color: '#00976d',
+          lightColor: '#00ffb8',
+          dataSource: '省生态环境厅',
+          xAxis: [],
+          yAxis: []
+        },
+
+        sideItem4_0: {
+          id: 'sideItem4_0',
+          num: 32,
+          title: '',
+          name: '',
+          chartType: 'bar',
+          color: '#ff5975',
+          dataSource: '',
+          legend: [],
+          yAxisArr: []
+        },
+        sideItem4_1: {
+          id: 'sideItem4_1',
+          num: 33,
+          title: '',
+          name: '',
+          chartType: 'bar',
+          color: '#ff5975',
+          dataSource: '',
+          legend: [],
+          yAxisArr: []
         }
       }
     }
@@ -1540,7 +1787,7 @@ export default {
     },
     // 下载文档
     downloadDoc() {
-      let downloadArr1 = []
+      this.fullscreenLoading = true
       let baseURlArr = []
       let aaa = []
       for (let i in this.chartArr) {
@@ -1548,12 +1795,6 @@ export default {
           document.getElementById(this.chartArr[i].id)
         )
         baseURlArr[i] = chart.getDataURL()
-        // downloadArr1.push({
-        //   num: this.chartArr[i].num,
-        //   title: this.chartArr[i].title,
-        //   source: this.chartArr[i].dataSource,
-        //   baseURl: baseURlArr[i]
-        // })
         savePic({
           picInfo: baseURlArr[i],
           no: 'no' + this.chartArr[i].num,
@@ -1562,32 +1803,158 @@ export default {
         }).then(res => {})
       }
       for (let k in this.chartArr) {
-        if (!this.chartArr[k].hidden) {
-          aaa.push(
-            {
-              name: 'title' + this.chartArr[k].num,
-              value: this.chartArr[k].title
-            },
-            {
-              name: 'verdict' + this.chartArr[k].num,
-              value: this.chartArr[k].result
-            },
-            {
-              name: 'source' + this.chartArr[k].num,
-              value: this.chartArr[k].dataSource
+        aaa.push(
+          {
+            name: 'title' + this.chartArr[k].num,
+            value: this.chartArr[k].title
+          },
+          {
+            name: 'verdict' + this.chartArr[k].num,
+            value: this.chartArr[k].result
+          },
+          {
+            name: 'source' + this.chartArr[k].num,
+            value: this.chartArr[k].dataSource
+          }
+        )
+      }
+      console.log(aaa)
+
+      axios
+        .post(
+          'http://remote.natapp1.cc/section/exportWord',
+          {
+            area: this.cityName,
+            type: 'ecology-city',
+            condition: JSON.stringify(aaa)
+          },
+          {
+            responseType: 'blob'
+          }
+        )
+        .then(res => {
+          console.log(res)
+          // new Blob([data])用来创建URL的file对象或者blob对象
+          let url = window.URL.createObjectURL(new Blob([res.data]))
+          // 生成一个a标签
+          let link = document.createElement('a')
+          link.style.display = 'none'
+          link.href = url
+          // 生成时间戳
+          // let timestamp = new Date().getTime()
+          let fileName = '台州市生态环境分析报告'
+          link.download = fileName + '.docx'
+          document.body.appendChild(link)
+          link.click()
+          this.fullscreenLoading = false
+          console.log(this.fullscreenLoading)
+        })
+    },
+    // 单条柱状图折线图
+    singleBarLineChart(id, data,barWidth,cityLight) {
+      let cityName = this.cityName
+      let itemStyle = {
+        normal: {
+          color: function (params) {
+            if (params.name === cityName) {
+              return data.lightColor
+            } else {
+              return data.color
             }
-          )
+          }
         }
       }
-      console.log(aaa);
-      
-      // window.open(
-      //   'http://192.168.13.251:8083/section/exportWord?area=' +
-      //     this.cityName +
-      //     '&type=ecology-city&condition=' +
-      //     encodeURIComponent(JSON.stringify(aaa)),
-      //   '_self'
-      // )
+      let chart = this.$echarts.init(document.getElementById(id))
+      let option = {
+        backgroundColor: this.chartColor.backgroundColor,
+        color: data.color,
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        legend: {
+          top: '2%',
+          x: 'center',
+          textStyle: {
+            fontSize: '16px',
+            color: this.chartColor.textColor
+          },
+          data: [data.name]
+        },
+        grid: {
+          left: '5%',
+          right: '5%',
+          bottom: '5%',
+          containLabel: true
+        },
+        xAxis: [{
+          type: 'category',
+          axisTick: {
+            alignWithLabel: true
+          },
+          axisLabel: {
+            interval: 0,
+            padding: [5, 0, 5, 0],
+            color: this.chartColor.textColor
+          },
+          axisLine: {
+            lineStyle: {
+              color: '#6291fb'
+            }
+          },
+          data: data.xAxis
+        }],
+        yAxis: [{
+          axisTick: {
+            show: false
+          },
+          axisLine: {
+            show: false,
+            lineStyle: {
+              type: 'solid',
+              color: this.chartColor.textColor
+            }
+          },
+          splitLine: {
+            show: true,
+            lineStyle: {
+              type: 'dashed',
+              color: '#0124b3'
+            }
+          }
+        }],
+        series: [{
+          name: data.name,
+          type: data.chartType,
+          barWidth: barWidth + 'px',
+          barGap: '50%',
+          itemStyle: {
+            normal: {
+              color: function (params) {
+                if (params.name === cityName && cityLight) {
+                  return data.lightColor
+                } else {
+                  return data.color
+                }
+              }
+            }
+          },
+          label: {
+            normal: {
+              show: true,
+              position: 'top',
+              textStyle: {
+                fontSize: 16,
+                color: this.chartColor.textColor
+              }
+            }
+          },
+          data: data.yAxis
+        }]
+      }
+      chart.setOption(option)
     },
     // 饼图选中指定扇形区域
     pieSelected(target, data, cityName) {
