@@ -295,6 +295,10 @@ a:hover {
       @include bis('../../assets/images/rightBottomIcon.png');
     }
   }
+
+  .light {
+    color: #e09e00;
+  }
 }
 
 // 下载echart图片弹窗

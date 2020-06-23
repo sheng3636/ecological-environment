@@ -8,8 +8,20 @@ import geoJson from '../../public/js/zheJiang1.json'
 export const environmentStateMixin = {
   data() {
     return {
-      geoJson: geoJson,
-      EIList: [],
+      geoJson: geoJson, 
+      colorList: [
+        '#00fcff',
+        '#ffc000',
+        '#e970ff',
+        '#00a8ff',
+        '#2a885c',
+        '#d0fbff',
+        '#fed700',
+        '#96ff00',
+        '#ff89e5',
+        '#ffb0b0',
+        '#e8395d'
+      ],
       seriesArr0: [],
       seriesArr1: []
     }
@@ -18,22 +30,40 @@ export const environmentStateMixin = {
     getEIWithName({
       area: '浙江省',
     }).then(res => {
-      this.initMap(this.geoJson, res.data.list)
+      this.chartArr.sideItem4_3.list = res.data.list
+      this.initMap('sideItem4_3',this.geoJson, this.chartArr.sideItem4_3)      
     })
     // 获取年台州市各县市区生态环境状况等级和省内排名表格数据
     getEIList({
       area: this.cityName
     }).then(res => {
-      this.EIList = res.data.list
+      this.chartArr.sideItem4_2.title = `${res.data.year}年各县市区生态环境状况等级和省内排名`
+      this.chartArr.sideItem4_2.list = res.data.list
       for (let i = 0; i < res.data.length; i++) {
         res.data[i].class = this.classSwitch(res.data[i].value)
       }
+      let excellentArr = this.chartArr.sideItem4_2.list.filter(item => {
+        return item.value >= 75
+      })
+      let wellArr = this.chartArr.sideItem4_2.list.filter(item => {
+        return item.value < 75 && item.value >= 55
+      })
+      let excellentNameArr = []
+      for (let i = 0; i < excellentArr.length; i++) {
+        excellentNameArr.push(excellentArr[i].name)
+      }
+      let wellNameArr = []
+      for (let i = 0; i < wellArr.length; i++) {
+        wellNameArr.push(wellArr[i].name)
+      }
+      this.chartArr.sideItem4_3.result = `${res.data.year}年${this.cityName}下辖县（市、区）中，<span class="light">${excellentNameArr.join()}</span>EI指数等级为优，<span class="light">${wellNameArr.join()}</span>等级为良。`
     })
     // 获取各地市生态环境状况指数数据并绘制图表
     getSubStructuralData({
       area: '浙江省',
       zbs: '生态环境指数'
     }).then(res => {
+      
       let data = res.data
       let item = data.yAxis.data
       this.chartArr.sideItem4_0.title = `${item[0].name}年-${item[item.length - 1].name}年各地市生态环境状况指数`
@@ -41,10 +71,21 @@ export const environmentStateMixin = {
       this.chartArr.sideItem4_0.dataSource = data.yAxis.source
       this.chartArr.sideItem4_0.xAxis = data.xAxis
       for (let i = 0; i < item.length; i++) {
-        this.chartArr.sideItem4_0.legend.push('E1' + data.yAxis.data[i].name)
+        this.chartArr.sideItem4_0.legend.push('' + data.yAxis.data[i].name)
         this.chartArr.sideItem4_0.yAxisArr.push(data.yAxis.data[i].list)
       }
       this.sideItem4_0Chart('sideItem4_0', this.chartArr.sideItem4_0)
+
+      let i = this.chartArr.sideItem4_0.xAxis.indexOf(this.cityName)
+      let aaa = item[item.length - 1].list[i]
+      let yData = data.yAxis.data
+      let ddd = 11 - yData[0].list.sort().indexOf(yData[0].list[data.xAxis.indexOf(this.cityName)])
+      let eee = 11 - yData[yData.length - 1].list.sort().indexOf(yData[yData.length - 1].list[data.xAxis.indexOf(this.cityName)])
+      let fff = eee - ddd
+      let ggg = fff > 0 ? '下降' + Math.abs(fff) : fff === 0 ? '维持不变' : '上升' + Math.abs(fff)
+      
+
+      this.chartArr.sideItem4_0.result = `${item[item.length - 1].name}年${this.cityName}${this.cityName}生态环境状况等级为<span class="light">${this.classSwitch(aaa)}</span>，EI值在全省排第<span class="light">${eee}</span>位，较${item[0].name}年<span class="light">${ggg}</span>。`
     })
     // 获取各地市生态环境状况指数数据并绘制图表
     getSubStructuralData({
@@ -55,28 +96,29 @@ export const environmentStateMixin = {
       let item = data.yAxis.data
       this.chartArr.sideItem4_1.title = `${item[0].name}年-${item[item.length - 1].name}台州市各县市区生态环境状况指数`
       this.chartArr.sideItem4_1.name = data.yAxis.name
+      this.chartArr.sideItem4_1.dataSource = data.yAxis.source
       this.chartArr.sideItem4_1.xAxis = data.xAxis
       for (let i = 0; i < item.length; i++) {
-        this.chartArr.sideItem4_1.legend.push('E1' + data.yAxis.data[i].name)
+        this.chartArr.sideItem4_1.legend.push('' + data.yAxis.data[i].name)
         this.chartArr.sideItem4_1.yAxisArr.push(data.yAxis.data[i].list)
       }
       this.sideItem4_1Chart('sideItem4_1', this.chartArr.sideItem4_1)
     })
   },
   methods: {
-    initMap(geoJson, data) {  
-      let myChart = this.$echarts.init(document.getElementById('sideItem4_3'))
-      myChart.showLoading()
+    initMap(id,geoJson, data) {
+      let chart = this.$echarts.init(document.getElementById(id))
+      chart.showLoading()
       this.$echarts.registerMap('zheJiang', geoJson)
-      myChart.hideLoading()
+      chart.hideLoading()
       let option = {
-        backgroundColor: 'rgba(5,12,37,1)',
+        backgroundColor: this.chartColor.backgroundColor,
         tooltip: {
           show: true
         },
         visualMap: {
-          min: data[0].value,
-          max: data[data.length - 1].value,
+          min: data.list[0].value,
+          max: data.list[data.list.length - 1].value,
           right: '0%',
           bottom: '5%',
           orient: 'vertical',
@@ -86,7 +128,7 @@ export const environmentStateMixin = {
           seriesIndex: [0],
 
           textStyle: {
-            color: '#fff'
+            color: this.chartColor.textColor
           },
           pieces: [{
               lte: 95,
@@ -197,22 +239,23 @@ export const environmentStateMixin = {
               }
             }
           },
-          data: data
+          data: data.list
         }]
       }
-      myChart.setOption(option)
+      chart.clear()
+      chart.setOption(option)
     },
     // 导出市各县市区生态环境状况等级和省内排名表格
     exportExcel() {
       import('@/vendor/Export2Excel').then(excel => {
         const tHeader = ['县（市、区）', 'EI值', '等级', '省内排名']
         const filterVal = ['name', 'value', 'class', 'rank']
-        const list = this.EIList
+        const list = this.chartArr.sideItem4_2.list
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({
           header: tHeader,
           data,
-          filename: '各县市区生态环境状况等级',
+          filename: this.chartArr.sideItem4_2.title,
           autoWidth: this.autoWidth,
           bookType: 'xlsx'
         })
@@ -254,19 +297,8 @@ export const environmentStateMixin = {
     },
     // 各地市生态环境状况指数图表
     sideItem4_0Chart(id, data) {
-      let colorList = [
-        '#00fcff',
-        '#ffc000',
-        '#e970ff',
-        '#00a8ff',
-        '#2a885c',
-        '#d0fbff',
-        '#fed700',
-        '#96ff00',
-        '#ff89e5',
-        '#ffb0b0',
-        '#e8395d'
-      ]
+      this.seriesArr0 = []
+      this.seriesArr1 = []
       for (let i = 0; i < data.yAxisArr.length; i++) {
         this.seriesArr0.push({
           name: data.legend[i],
@@ -293,7 +325,7 @@ export const environmentStateMixin = {
 
           itemStyle: {
             normal: {
-              color: colorList[i]
+              color: this.colorList[i]
             }
           },
           label: {
@@ -351,6 +383,7 @@ export const environmentStateMixin = {
           data: data.xAxis
         }],
         yAxis: [{
+          min: 60, // 最小值
           axisTick: {
             show: false
           },
@@ -375,19 +408,8 @@ export const environmentStateMixin = {
     },
     // 各县市区生态环境状况指数图表
     sideItem4_1Chart(id, data) {
-      let colorList = [
-        '#00ffb8',
-        '#7f6f00',
-        '#ff7070',
-        '#00a8ff',
-        '#2a885c',
-        '#d0fbff',
-        '#fed700',
-        '#96ff00',
-        '#ff89e5',
-        '#ffb0b0',
-        '#e8395d'
-      ]
+      this.seriesArr0 = []
+      this.seriesArr1 = []
       for (let i = 0; i < data.yAxisArr.length; i++) {
         this.seriesArr1.push({
           name: data.legend[i],
@@ -414,7 +436,7 @@ export const environmentStateMixin = {
 
           itemStyle: {
             normal: {
-              color: colorList[i]
+              color: this.colorList[i]
             }
           },
           label: {
@@ -472,6 +494,7 @@ export const environmentStateMixin = {
           data: data.xAxis
         }],
         yAxis: [{
+          min: 60, // 最小值
           axisTick: {
             show: false
           },
@@ -492,6 +515,7 @@ export const environmentStateMixin = {
         }],
         series: this.seriesArr1
       }
+      chart.clear()
       chart.setOption(option)
     }
   }

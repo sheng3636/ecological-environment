@@ -132,3 +132,21 @@
     }
   }
 }
+
+.fileLoadingModal {
+  position: fixed;
+  text-align: center;
+  @include wh(100%,100%);
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  .progressWrap {
+    width: 50%;
+    @include center()
+  }
+  .downTxt {
+
+    display: block;
+    margin-top: 10px;
+  }
+}

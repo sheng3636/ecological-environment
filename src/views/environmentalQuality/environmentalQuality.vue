@@ -1,6 +1,5 @@
 <template>
-  <div class="bodyMain" v-loading.fullscreen.lock="fullscreenLoading" element-loading-text="拼命加载中"
-    element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
+  <div class="bodyMain">
     <nav class="navTopArea">
       <div class="navLeft">
         <img src="@/assets/images/nav/logo.png">
@@ -67,7 +66,7 @@
     </nav>
     <div class="bottomMain">
       <div class="mainWrap" v-show="routerActive === 1">
-        <div class="CuttingLine">
+        <div class="CuttingLine" @click="initQualityChart">
           <p class="txtWrap">
             <img src="@/assets/images/cuttingLine1.png">
             <span class="txt">大气环境质量分析</span>
@@ -79,18 +78,18 @@
             <span class="left">{{chartArr.sideItem1_0.title}}</span>
             <p class="optionGroup">
               <img class="optionImg"
-                @click="imagesModalOpenFn('sideItem1_0',chartArr.sideItem1_0.title,sideItem1_0Chart)"
+                @click="imagesModalOpenFn('sideItem1_0',chartArr.sideItem1_0.title,singleBarLineChart)"
                 src="@/assets/images/downImgIcon.png">
               <el-dropdown trigger="click" @command="chartTypeClick">
                 <span class="el-dropdown-link">
                   <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_0','bar',sideItem1_0Chart)">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_0','bar',singleBarLineChart)">
                     <img class="chartIcon" src="@/assets/images/lineIcon.png">
                     <span class="txt">柱状图样式</span>
                   </el-dropdown-item>
-                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_0','line',sideItem1_0Chart)" divided>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_0','line',singleBarLineChart)" divided>
                     <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                     <span class="txt">折线图样式</span>
                   </el-dropdown-item>
@@ -112,18 +111,18 @@
             <span class="left">{{chartArr.sideItem1_1.title}}</span>
             <p class="optionGroup">
               <img class="optionImg"
-                @click="imagesModalOpenFn('sideItem1_1',chartArr.sideItem1_1.title,sideItem1_1Chart)"
+                @click="imagesModalOpenFn('sideItem1_1',chartArr.sideItem1_1.title,singleBarLineChart)"
                 src="@/assets/images/downImgIcon.png">
               <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                 <span class="el-dropdown-link">
                   <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_1','bar',sideItem1_1Chart)">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_1','bar',singleBarLineChart)">
                     <img class="chartIcon" src="@/assets/images/lineIcon.png">
                     <span class="txt">柱状图样式</span>
                   </el-dropdown-item>
-                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_1','line',sideItem1_1Chart)" divided>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_1','line',singleBarLineChart)" divided>
                     <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                     <span class="txt">折线图样式</span>
                   </el-dropdown-item>
@@ -145,18 +144,18 @@
             <span class="left">{{chartArr.sideItem1_2.title}}</span>
             <p class="optionGroup">
               <img class="optionImg"
-                @click="imagesModalOpenFn('sideItem1_2',chartArr.sideItem1_2.title,sideItem1_2Chart)"
+                @click="imagesModalOpenFn('sideItem1_2',chartArr.sideItem1_2.title,singleBarLineChart)"
                 src="@/assets/images/downImgIcon.png">
               <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                 <span class="el-dropdown-link">
                   <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_2','bar',sideItem1_2Chart)">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_2','bar',singleBarLineChart)">
                     <img class="chartIcon" src="@/assets/images/lineIcon.png">
                     <span class="txt">柱状图样式</span>
                   </el-dropdown-item>
-                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_2','line',sideItem1_2Chart)" divided>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_2','line',singleBarLineChart)" divided>
                     <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                     <span class="txt">折线图样式</span>
                   </el-dropdown-item>
@@ -178,18 +177,18 @@
             <span class="left">{{chartArr.sideItem1_3.title}}</span>
             <p class="optionGroup">
               <img class="optionImg"
-                @click="imagesModalOpenFn('sideItem1_3',chartArr.sideItem1_3.title,sideItem1_3Chart)"
+                @click="imagesModalOpenFn('sideItem1_3',chartArr.sideItem1_3.title,singleBarLineChart)"
                 src="@/assets/images/downImgIcon.png">
               <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                 <span class="el-dropdown-link">
                   <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_3','bar',sideItem1_3Chart)">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_3','bar',singleBarLineChart)">
                     <img class="chartIcon" src="@/assets/images/lineIcon.png">
                     <span class="txt">柱状图样式</span>
                   </el-dropdown-item>
-                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_3','line',sideItem1_3Chart)" divided>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_3','line',singleBarLineChart)" divided>
                     <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                     <span class="txt">折线图样式</span>
                   </el-dropdown-item>
@@ -211,18 +210,18 @@
             <span class="left">{{chartArr.sideItem1_4.title}}</span>
             <p class="optionGroup">
               <img class="optionImg"
-                @click="imagesModalOpenFn('sideItem1_4',chartArr.sideItem1_4.title,sideItem1_4Chart)"
+                @click="imagesModalOpenFn('sideItem1_4',chartArr.sideItem1_4.title,singleBarLineChart)"
                 src="@/assets/images/downImgIcon.png">
               <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                 <span class="el-dropdown-link">
                   <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_4','bar',sideItem1_4Chart)">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_4','bar',singleBarLineChart)">
                     <img class="chartIcon" src="@/assets/images/lineIcon.png">
                     <span class="txt">柱状图样式</span>
                   </el-dropdown-item>
-                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_4','line',sideItem1_4Chart)" divided>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_4','line',singleBarLineChart)" divided>
                     <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                     <span class="txt">折线图样式</span>
                   </el-dropdown-item>
@@ -244,18 +243,18 @@
             <span class="left">{{chartArr.sideItem1_5.title}}</span>
             <p class="optionGroup">
               <img class="optionImg"
-                @click="imagesModalOpenFn('sideItem1_5',chartArr.sideItem1_5.title,sideItem1_5Chart)"
+                @click="imagesModalOpenFn('sideItem1_5',chartArr.sideItem1_5.title,singleBarLineChart)"
                 src="@/assets/images/downImgIcon.png">
               <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                 <span class="el-dropdown-link">
                   <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_5','bar',sideItem1_5Chart)">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_5','bar',singleBarLineChart)">
                     <img class="chartIcon" src="@/assets/images/lineIcon.png">
                     <span class="txt">柱状图样式</span>
                   </el-dropdown-item>
-                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_5','line',sideItem1_5Chart)" divided>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_5','line',singleBarLineChart)" divided>
                     <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                     <span class="txt">折线图样式</span>
                   </el-dropdown-item>
@@ -318,18 +317,18 @@
               <span class="left"> {{chartArr.sideItem1_7.title}}</span>
               <p class="optionGroup">
                 <img class="optionImg"
-                  @click="imagesModalOpenFn('sideItem1_7',chartArr.sideItem1_7.title,sideItem1_7Chart)"
+                  @click="imagesModalOpenFn('sideItem1_7',chartArr.sideItem1_7.title,singleBarLineChart)"
                   src="@/assets/images/downImgIcon.png">
                 <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                   <span class="el-dropdown-link">
                     <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem1_7','bar',sideItem1_7Chart)">
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem1_7','bar',singleBarLineChart)">
                       <img class="chartIcon" src="@/assets/images/lineIcon.png">
                       <span class="txt">柱状图样式</span>
                     </el-dropdown-item>
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem1_7','line',sideItem1_7Chart)" divided>
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem1_7','line',singleBarLineChart)" divided>
                       <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                       <span class="txt">折线图样式</span>
                     </el-dropdown-item>
@@ -338,6 +337,7 @@
               </p>
             </h4>
             <div class="sideItemChart width910" id="sideItem1_7"></div>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem1_7.dataSource}}</h5>
           </div>
           <div class="sideItem width910 sideItem1_8">
             <h4 class="moudleTitle">
@@ -364,9 +364,9 @@
               </p>
             </h4>
             <div class="sideItemChart width910" id="sideItem1_8"></div>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem1_8.dataSource}}</h5>
           </div>
           <div class="resultWrap" style="width: 100%;">
-            <h5>数据来源：{{chartArr.sideItem1_7.dataSource}}</h5>
             <div class="content">
               <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
               <p v-html="chartArr.sideItem1_7.result"></p>
@@ -375,23 +375,23 @@
         </div>
         <div class="sideItem width1845">
           <h4 class="moudleTitle">
-            <span class="left">台州市各省控断面水质类型</span>
+            <span class="left">{{chartArr.sideItem1_9.title}}</span>
             <p class="optionGroup" style="justify-content: flex-end;">
               <img @click="exportType" class="optionImg" src="@/assets/images/exportIcon.png">
             </p>
           </h4>
           <ul class="tableWrap">
-            <li v-for="(item,index) in tableData" :key="index + 'a'">
+            <li v-for="(item,index) in chartArr.sideItem1_9.list" :key="index + 'a'">
               <p class="th">{{item.name}}</p>
               <span v-for="(val,i) in item.list" :key="i + 'b'">{{val}}</span>
               <span v-for="k in typeLengthMax - item.list.length" :key="k + 'c'"></span>
             </li>
           </ul>
           <div class="resultWrap">
-            <h5>数据来源：省生态环境厅</h5>
+            <h5>数据来源：{{chartArr.sideItem1_9.dataSource}}</h5>
             <div class="content">
               <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
-              <p v-html="tableDataResult"></p>
+              <p v-html="chartArr.sideItem1_9.result"></p>
             </div>
           </div>
         </div>
@@ -402,18 +402,18 @@
             <span class="left">{{chartArr.sideItem2_0.title}}</span>
             <p class="optionGroup">
               <img class="optionImg"
-                @click="imagesModalOpenFn('sideItem2_0',chartArr.sideItem2_0.title,sideItem2_0Chart)"
+                @click="imagesModalOpenFn('sideItem2_0',chartArr.sideItem2_0.title,singleBarLineChart)"
                 src="@/assets/images/downImgIcon.png">
               <el-dropdown trigger="click" @command="chartTypeClick">
                 <span class="el-dropdown-link">
                   <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_0','bar',sideItem2_0Chart)">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_0','bar',singleBarLineChart)">
                     <img class="chartIcon" src="@/assets/images/lineIcon.png">
                     <span class="txt">柱状图样式</span>
                   </el-dropdown-item>
-                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_0','line',sideItem2_0Chart)" divided>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_0','line',singleBarLineChart)" divided>
                     <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                     <span class="txt">折线图样式</span>
                   </el-dropdown-item>
@@ -434,8 +434,7 @@
           <h4 class="moudleTitle">
             <span class="left">{{chartArr.sideItem2_1.title}}</span>
             <p class="optionGroup">
-              <img class="optionImg"
-                @click="imagesModalOpenFn('sideItem2_1',chartArr.sideItem2_1.title,sideItem2_1Chart)"
+              <img class="optionImg" @click="imagesModalOpenFn('sideItem2_1',chartArr.sideItem2_1.title,pieChart)"
                 src="@/assets/images/downImgIcon.png">
             </p>
           </h4>
@@ -452,7 +451,7 @@
           <h4 class="moudleTitle">
             <span class="left">{{chartArr.sideItem2_2.title}}</span>
             <p class="optionGroup">
-              <img class="optionImg" @click="imagesModalOpenFn('sideItem2',chartArr.sideItem2_2.title,sideItem2Chart)"
+              <img class="optionImg" @click="imagesModalOpenFn('sideItem2',chartArr.sideItem2_2.title,pieChart)"
                 src="@/assets/images/downImgIcon.png">
             </p>
           </h4>
@@ -470,18 +469,18 @@
             <span class="left">{{chartArr.sideItem2_3.title}}</span>
             <p class="optionGroup">
               <img class="optionImg"
-                @click="imagesModalOpenFn('sideItem2_3',chartArr.sideItem2_3.title,sideItem2_3Chart)"
+                @click="imagesModalOpenFn('sideItem2_3',chartArr.sideItem2_3.title,singleBarLineChart)"
                 src="@/assets/images/downImgIcon.png">
               <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                 <span class="el-dropdown-link">
                   <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_3','bar',sideItem2_3Chart)">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_3','bar',singleBarLineChart)">
                     <img class="chartIcon" src="@/assets/images/lineIcon.png">
                     <span class="txt">柱状图样式</span>
                   </el-dropdown-item>
-                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_3','line',sideItem2_3Chart)" divided>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_3','line',singleBarLineChart)" divided>
                     <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                     <span class="txt">折线图样式</span>
                   </el-dropdown-item>
@@ -503,18 +502,18 @@
             <span class="left">{{chartArr.sideItem2_4.title}}</span>
             <p class="optionGroup">
               <img class="optionImg"
-                @click="imagesModalOpenFn('sideItem2_4',chartArr.sideItem2_4.title,sideItem2_4Chart)"
+                @click="imagesModalOpenFn('sideItem2_4',chartArr.sideItem2_4.title,singleBarLineChart)"
                 src="@/assets/images/downImgIcon.png">
               <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                 <span class="el-dropdown-link">
                   <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_4','bar',sideItem2_4Chart)">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_4','bar',singleBarLineChart)">
                     <img class="chartIcon" src="@/assets/images/lineIcon.png">
                     <span class="txt">柱状图样式</span>
                   </el-dropdown-item>
-                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_4','line',sideItem2_4Chart)" divided>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_4','line',singleBarLineChart)" divided>
                     <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                     <span class="txt">折线图样式</span>
                   </el-dropdown-item>
@@ -536,18 +535,18 @@
             <span class="left">{{chartArr.sideItem2_5.title}}</span>
             <p class="optionGroup">
               <img class="optionImg"
-                @click="imagesModalOpenFn('sideItem2_5',chartArr.sideItem2_5.title,sideItem2_5Chart)"
+                @click="imagesModalOpenFn('sideItem2_5',chartArr.sideItem2_5.title,singleBarLineChart)"
                 src="@/assets/images/downImgIcon.png">
               <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                 <span class="el-dropdown-link">
                   <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_5','bar',sideItem2_5Chart)">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_5','bar',singleBarLineChart)">
                     <img class="chartIcon" src="@/assets/images/lineIcon.png">
                     <span class="txt">柱状图样式</span>
                   </el-dropdown-item>
-                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_5','line',sideItem2_5Chart)" divided>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_5','line',singleBarLineChart)" divided>
                     <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                     <span class="txt">折线图样式</span>
                   </el-dropdown-item>
@@ -579,18 +578,18 @@
               <span class="left">{{chartArr.sideItem3_0.title}}</span>
               <p class="optionGroup">
                 <img class="optionImg"
-                  @click="imagesModalOpenFn('sideItem3_0',chartArr.sideItem3_0.title,sideItem3_0Chart)"
+                  @click="imagesModalOpenFn('sideItem3_0',chartArr.sideItem3_0.title,singleBarLineChart)"
                   src="@/assets/images/downImgIcon.png">
                 <el-dropdown trigger="click" @command="chartTypeClick">
                   <span class="el-dropdown-link">
                     <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_0','bar',sideItem3_0Chart)">
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_0','bar',singleBarLineChart)">
                       <img class="chartIcon" src="@/assets/images/lineIcon.png">
                       <span class="txt">柱状图样式</span>
                     </el-dropdown-item>
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_0','line',sideItem3_0Chart)" divided>
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_0','line',singleBarLineChart)" divided>
                       <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                       <span class="txt">折线图样式</span>
                     </el-dropdown-item>
@@ -606,18 +605,18 @@
               <span class="left">{{chartArr.sideItem3_1.title}}</span>
               <p class="optionGroup">
                 <img class="optionImg"
-                  @click="imagesModalOpenFn('sideItem3_1',chartArr.sideItem3_1.title,sideItem3_1Chart)"
+                  @click="imagesModalOpenFn('sideItem3_1',chartArr.sideItem3_1.title,singleBarLineChart)"
                   src="@/assets/images/downImgIcon.png">
                 <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                   <span class="el-dropdown-link">
                     <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_1','bar',sideItem3_1Chart)">
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_1','bar',singleBarLineChart)">
                       <img class="chartIcon" src="@/assets/images/lineIcon.png">
                       <span class="txt">柱状图样式</span>
                     </el-dropdown-item>
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_1','line',sideItem3_1Chart)" divided>
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_1','line',singleBarLineChart)" divided>
                       <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                       <span class="txt">折线图样式</span>
                     </el-dropdown-item>
@@ -632,24 +631,8 @@
             <h4 class="moudleTitle">
               <span class="left">{{chartArr.sideItem3_2.title}}</span>
               <p class="optionGroup">
-                <img class="optionImg"
-                  @click="imagesModalOpenFn('sideItem3_2',chartArr.sideItem3_2.title,sideItem3_2Chart)"
+                <img class="optionImg" @click="imagesModalOpenFn('sideItem3_2',chartArr.sideItem3_2.title,pieChart)"
                   src="@/assets/images/downImgIcon.png">
-                <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
-                  <span class="el-dropdown-link">
-                    <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
-                  </span>
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_2','bar',sideItem3_2Chart)">
-                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
-                      <span class="txt">柱状图样式</span>
-                    </el-dropdown-item>
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_2','line',sideItem3_2Chart)" divided>
-                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
-                      <span class="txt">折线图样式</span>
-                    </el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
               </p>
             </h4>
             <div class="sideItemChart width800" id="sideItem3_2"></div>
@@ -660,18 +643,18 @@
               <span class="left">{{chartArr.sideItem3_3.title}}</span>
               <p class="optionGroup">
                 <img class="optionImg"
-                  @click="imagesModalOpenFn('sideItem3_3',chartArr.sideItem3_3.title,sideItem3_3Chart)"
+                  @click="imagesModalOpenFn('sideItem3_3',chartArr.sideItem3_3.title,singleBarLineChart)"
                   src="@/assets/images/downImgIcon.png">
                 <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                   <span class="el-dropdown-link">
                     <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_3','bar',sideItem3_3Chart)">
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_3','bar',singleBarLineChart)">
                       <img class="chartIcon" src="@/assets/images/lineIcon.png">
                       <span class="txt">柱状图样式</span>
                     </el-dropdown-item>
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_3','line',sideItem3_3Chart)" divided>
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_3','line',singleBarLineChart)" divided>
                       <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                       <span class="txt">折线图样式</span>
                     </el-dropdown-item>
@@ -702,18 +685,18 @@
               <span class="left">{{chartArr.sideItem3_4.title}}</span>
               <p class="optionGroup">
                 <img class="optionImg"
-                  @click="imagesModalOpenFn('sideItem3_4',chartArr.sideItem3_4.title,sideItem3_4Chart)"
+                  @click="imagesModalOpenFn('sideItem3_4',chartArr.sideItem3_4.title,singleBarLineChart)"
                   src="@/assets/images/downImgIcon.png">
                 <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                   <span class="el-dropdown-link">
                     <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_4','bar',sideItem3_4Chart)">
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_4','bar',singleBarLineChart)">
                       <img class="chartIcon" src="@/assets/images/lineIcon.png">
                       <span class="txt">柱状图样式</span>
                     </el-dropdown-item>
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_4','line',sideItem3_4Chart)" divided>
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_4','line',singleBarLineChart)" divided>
                       <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                       <span class="txt">折线图样式</span>
                     </el-dropdown-item>
@@ -729,18 +712,18 @@
               <span class="left">{{chartArr.sideItem3_5.title}}</span>
               <p class="optionGroup">
                 <img class="optionImg"
-                  @click="imagesModalOpenFn('sideItem3_5',chartArr.sideItem3_5.title,sideItem3_5Chart)"
+                  @click="imagesModalOpenFn('sideItem3_5',chartArr.sideItem3_5.title,singleBarLineChart)"
                   src="@/assets/images/downImgIcon.png">
                 <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                   <span class="el-dropdown-link">
                     <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_5','bar',sideItem3_5Chart)">
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_5','bar',singleBarLineChart)">
                       <img class="chartIcon" src="@/assets/images/lineIcon.png">
                       <span class="txt">柱状图样式</span>
                     </el-dropdown-item>
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_5','line',sideItem3_5Chart)" divided>
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_5','line',singleBarLineChart)" divided>
                       <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                       <span class="txt">折线图样式</span>
                     </el-dropdown-item>
@@ -755,24 +738,8 @@
             <h4 class="moudleTitle">
               <span class="left">{{chartArr.sideItem3_6.title}}</span>
               <p class="optionGroup">
-                <img class="optionImg"
-                  @click="imagesModalOpenFn('sideItem3_6',chartArr.sideItem3_6.title,sideItem3_6Chart)"
+                <img class="optionImg" @click="imagesModalOpenFn('sideItem3_6',chartArr.sideItem3_6.title,pieChart)"
                   src="@/assets/images/downImgIcon.png">
-                <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
-                  <span class="el-dropdown-link">
-                    <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
-                  </span>
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_6','bar',sideItem3_6Chart)">
-                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
-                      <span class="txt">柱状图样式</span>
-                    </el-dropdown-item>
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_6','line',sideItem3_6Chart)" divided>
-                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
-                      <span class="txt">折线图样式</span>
-                    </el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
               </p>
             </h4>
             <div class="sideItemChart width800" id="sideItem3_6"></div>
@@ -783,18 +750,18 @@
               <span class="left">{{chartArr.sideItem3_7.title}}</span>
               <p class="optionGroup">
                 <img class="optionImg"
-                  @click="imagesModalOpenFn('sideItem3_7',chartArr.sideItem3_7.title,sideItem3_7Chart)"
+                  @click="imagesModalOpenFn('sideItem3_7',chartArr.sideItem3_7.title,singleBarLineChart)"
                   src="@/assets/images/downImgIcon.png">
                 <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                   <span class="el-dropdown-link">
                     <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_7','bar',sideItem3_7Chart)">
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_7','bar',singleBarLineChart)">
                       <img class="chartIcon" src="@/assets/images/lineIcon.png">
                       <span class="txt">柱状图样式</span>
                     </el-dropdown-item>
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_7','line',sideItem3_7Chart)" divided>
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_7','line',singleBarLineChart)" divided>
                       <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                       <span class="txt">折线图样式</span>
                     </el-dropdown-item>
@@ -825,18 +792,18 @@
               <span class="left">{{chartArr.sideItem3_8.title}}</span>
               <p class="optionGroup">
                 <img class="optionImg"
-                  @click="imagesModalOpenFn('sideItem3_8',chartArr.sideItem3_8.title,sideItem3_8Chart)"
+                  @click="imagesModalOpenFn('sideItem3_8',chartArr.sideItem3_8.title,singleBarLineChart)"
                   src="@/assets/images/downImgIcon.png">
                 <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                   <span class="el-dropdown-link">
                     <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_8','bar',sideItem3_8Chart)">
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_8','bar',singleBarLineChart)">
                       <img class="chartIcon" src="@/assets/images/lineIcon.png">
                       <span class="txt">柱状图样式</span>
                     </el-dropdown-item>
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_8','line',sideItem3_8Chart)" divided>
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_8','line',singleBarLineChart)" divided>
                       <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                       <span class="txt">折线图样式</span>
                     </el-dropdown-item>
@@ -852,18 +819,18 @@
               <span class="left">{{chartArr.sideItem3_5.title}}</span>
               <p class="optionGroup">
                 <img class="optionImg"
-                  @click="imagesModalOpenFn('sideItem3_9',chartArr.sideItem3_5.title,sideItem3_9Chart)"
+                  @click="imagesModalOpenFn('sideItem3_9',chartArr.sideItem3_5.title,singleBarLineChart)"
                   src="@/assets/images/downImgIcon.png">
                 <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                   <span class="el-dropdown-link">
                     <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_9','bar',sideItem3_9Chart)">
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_9','bar',singleBarLineChart)">
                       <img class="chartIcon" src="@/assets/images/lineIcon.png">
                       <span class="txt">柱状图样式</span>
                     </el-dropdown-item>
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_9','line',sideItem3_9Chart)" divided>
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_9','line',singleBarLineChart)" divided>
                       <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                       <span class="txt">折线图样式</span>
                     </el-dropdown-item>
@@ -872,25 +839,24 @@
               </p>
             </h4>
             <div class="sideItemChart width800" id="sideItem3_9"></div>
-            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_5.dataSource}}</h5>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_9.dataSource}}</h5>
           </div>
           <div class="sideItem width800 sideItem3_10">
             <h4 class="moudleTitle">
               <span class="left">{{chartArr.sideItem3_10.title}}</span>
               <p class="optionGroup">
-                <img class="optionImg"
-                  @click="imagesModalOpenFn('sideItem3_10',chartArr.sideItem3_10.title,sideItem3_10Chart)"
+                <img class="optionImg" @click="imagesModalOpenFn('sideItem3_10',chartArr.sideItem3_10.title,pieChart)"
                   src="@/assets/images/downImgIcon.png">
                 <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                   <span class="el-dropdown-link">
                     <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_10','bar',sideItem3_10Chart)">
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_10','bar',pieChart)">
                       <img class="chartIcon" src="@/assets/images/lineIcon.png">
                       <span class="txt">柱状图样式</span>
                     </el-dropdown-item>
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_10','line',sideItem3_10Chart)" divided>
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_10','line',pieChart)" divided>
                       <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                       <span class="txt">折线图样式</span>
                     </el-dropdown-item>
@@ -906,23 +872,8 @@
               <span class="left">{{chartArr.sideItem3_11.title}}</span>
               <p class="optionGroup">
                 <img class="optionImg"
-                  @click="imagesModalOpenFn('sideItem3_11',chartArr.sideItem3_11.title,sideItem3_11Chart)"
+                  @click="imagesModalOpenFn('sideItem3_11',chartArr.sideItem3_11.title,singleBarLineChart)"
                   src="@/assets/images/downImgIcon.png">
-                <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
-                  <span class="el-dropdown-link">
-                    <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
-                  </span>
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_11','bar',sideItem3_11Chart)">
-                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
-                      <span class="txt">柱状图样式</span>
-                    </el-dropdown-item>
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_11','line',sideItem3_11Chart)" divided>
-                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
-                      <span class="txt">折线图样式</span>
-                    </el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
               </p>
             </h4>
             <div class="sideItemChart width1020" id="sideItem3_11"></div>
@@ -931,7 +882,6 @@
           <div class="resultWrap" style="width: 100%;">
             <div class="content">
               <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
-
               <p v-html="chartArr.sideItem3_2.result"></p>
             </div>
           </div>
@@ -949,18 +899,18 @@
               <span class="left">{{chartArr.sideItem3_12.title}}</span>
               <p class="optionGroup">
                 <img class="optionImg"
-                  @click="imagesModalOpenFn('sideItem3_12',chartArr.sideItem3_12.title,sideItem3_12Chart)"
+                  @click="imagesModalOpenFn('sideItem3_12',chartArr.sideItem3_12.title,singleBarLineChart)"
                   src="@/assets/images/downImgIcon.png">
                 <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                   <span class="el-dropdown-link">
                     <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_12','bar',sideItem3_12Chart)">
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_12','bar',singleBarLineChart)">
                       <img class="chartIcon" src="@/assets/images/lineIcon.png">
                       <span class="txt">柱状图样式</span>
                     </el-dropdown-item>
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_12','line',sideItem3_12Chart)" divided>
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_12','line',singleBarLineChart)" divided>
                       <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                       <span class="txt">折线图样式</span>
                     </el-dropdown-item>
@@ -976,18 +926,18 @@
               <span class="left">{{chartArr.sideItem3_13.title}}</span>
               <p class="optionGroup">
                 <img class="optionImg"
-                  @click="imagesModalOpenFn('sideItem3_13',chartArr.sideItem3_13.title,sideItem3_13Chart)"
+                  @click="imagesModalOpenFn('sideItem3_13',chartArr.sideItem3_13.title,singleBarLineChart)"
                   src="@/assets/images/downImgIcon.png">
                 <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                   <span class="el-dropdown-link">
                     <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_13','bar',sideItem3_13Chart)">
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_13','bar',singleBarLineChart)">
                       <img class="chartIcon" src="@/assets/images/lineIcon.png">
                       <span class="txt">柱状图样式</span>
                     </el-dropdown-item>
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_13','line',sideItem3_13Chart)" divided>
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_13','line',singleBarLineChart)" divided>
                       <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                       <span class="txt">折线图样式</span>
                     </el-dropdown-item>
@@ -1002,24 +952,8 @@
             <h4 class="moudleTitle">
               <span class="left">{{chartArr.sideItem3_14.title}}</span>
               <p class="optionGroup">
-                <img class="optionImg"
-                  @click="imagesModalOpenFn('sideItem3_14',chartArr.sideItem3_14.title,sideItem3_14Chart)"
+                <img class="optionImg" @click="imagesModalOpenFn('sideItem3_14',chartArr.sideItem3_14.title,pieChart)"
                   src="@/assets/images/downImgIcon.png">
-                <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
-                  <span class="el-dropdown-link">
-                    <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
-                  </span>
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_14','bar',sideItem3_14Chart)">
-                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
-                      <span class="txt">柱状图样式</span>
-                    </el-dropdown-item>
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_14','line',sideItem3_14Chart)" divided>
-                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
-                      <span class="txt">折线图样式</span>
-                    </el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
               </p>
             </h4>
             <div class="sideItemChart width800" id="sideItem3_14"></div>
@@ -1027,21 +961,21 @@
           </div>
           <div class="sideItem width1020 sideItem3_15">
             <h4 class="moudleTitle">
-              <span class="left">{{chartArr.sideItem3_11.title}}</span>
+              <span class="left">{{chartArr.sideItem3_15.title}}</span>
               <p class="optionGroup">
                 <img class="optionImg"
-                  @click="imagesModalOpenFn('sideItem3_15',chartArr.sideItem3_11.title,sideItem3_15Chart)"
+                  @click="imagesModalOpenFn('sideItem3_15',chartArr.sideItem3_15.title,singleBarLineChart)"
                   src="@/assets/images/downImgIcon.png">
                 <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
                   <span class="el-dropdown-link">
                     <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_15','bar',sideItem3_15Chart)">
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_15','bar',singleBarLineChart)">
                       <img class="chartIcon" src="@/assets/images/lineIcon.png">
                       <span class="txt">柱状图样式</span>
                     </el-dropdown-item>
-                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_15','line',sideItem3_15Chart)" divided>
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_15','line',singleBarLineChart)" divided>
                       <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                       <span class="txt">折线图样式</span>
                     </el-dropdown-item>
@@ -1050,7 +984,7 @@
               </p>
             </h4>
             <div class="sideItemChart width1020" id="sideItem3_15"></div>
-            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_11.dataSource}}</h5>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_15.dataSource}}</h5>
           </div>
           <div class="resultWrap" style="width: 100%;">
             <div class="content">
@@ -1090,8 +1024,7 @@
             <h5>数据来源：{{chartArr.sideItem4_0.dataSource}}</h5>
             <div class="content">
               <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
-              <p>2018年台州市生态环境状况等级为<span class="light">优</span>，EI值在全省排第<span class="light">2</span>2位，较2015年下降<span
-                  class="light">20</span>%。</p>
+              <p v-html="chartArr.sideItem4_0.result"></p>
             </div>
           </div>
         </div>
@@ -1120,16 +1053,17 @@
             </p>
           </h4>
           <div class="sideItemChart width1845" id="sideItem4_1"></div>
+          <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem4_1.dataSource}}</h5>
         </div>
         <div class="sideItem width1845 sideItem4_2">
           <h4 class="moudleTitle">
-            <span class="left">2018年台州市各县市区生态环境状况等级和省内排名</span>
+            <span class="left">{{chartArr.sideItem4_2.title}}</span>
             <p class="optionGroup" style="justify-content: flex-end;">
               <img @click="exportExcel" class="optionImg" src="@/assets/images/exportIcon.png">
             </p>
           </h4>
           <div class="tableWrap">
-            <el-table :data="EIList" fit>
+            <el-table :data="chartArr.sideItem4_2.list" fit>
               <el-table-column prop="name" label="县（市、区）" align="center" />
               <el-table-column prop="value" label="2018年EI值" align="center">
                 <template slot-scope="scope">
@@ -1143,23 +1077,34 @@
                   </span>
                 </template>
               </el-table-column>
+
               <el-table-column prop="rank" label="省内排名" align="center" />
+              <el-table-column prop="change" label="排名变化" align="center">
+                <template slot-scope="scope">
+                  <i v-if="scope.row.change === 'up'" class="el-icon-top" style="color:#00f082"></i>
+                  <i v-if="scope.row.change === 'down'" class="el-icon-bottom" style="color:red"></i>
+                  <i v-if="scope.row.change === 'const'">-</i>
+                </template>
+              </el-table-column>
             </el-table>
           </div>
+          <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem4_2.dataSource}}</h5>
         </div>
         <div class="twoWrap">
           <div class="sideItem sideItem4_3">
             <h4 class="moudleTitle">
-              <span class="left"> 2018年全省各县市区生态环境状况指数</span>
+              <span class="left"> {{chartArr.sideItem4_3.title}}</span>
               <p class="optionGroup" style="justify-content: flex-end;">
-                <img class="optionImg" src="@/assets/images/downImgIcon.png">
+                <img class="optionImg" @click="imagesModalOpenFn('sideItem4_3',chartArr.sideItem4_3.title,initMap)"
+                  src="@/assets/images/downImgIcon.png">
               </p>
             </h4>
             <div class="sideItemChart" id="sideItem4_3"></div>
           </div>
           <div class="rightResultWrap">
             <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
-            2018年仙居县EI指数等级为优，EI指数值在台州市排第X位，在浙江省排第XX位。</div>
+            <p v-html="chartArr.sideItem4_3.result"></p>
+          </div>
         </div>
       </div>
     </div>
@@ -1191,7 +1136,7 @@
       </li>
     </ul>
 
-    <el-dialog title="图片下载" :visible.sync="imagesVisi" width="55%" custom-class="imagesWrap" center
+    <el-dialog title="图片下载" :visible.sync="imagesVisi" width="60%" custom-class="imagesWrap" center
       :close-on-click-modal="false" :close-on-press-escape="false">
       <div class="imgModalBody">
         <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
@@ -1213,6 +1158,12 @@
         <el-button type="primary" @click="exportPic">保 存</el-button>
       </span>
     </el-dialog>
+    <div class="fileLoadingModal" v-if="fullscreenLoading">
+      <div class="progressWrap">
+        <el-progress :text-inside="true" :stroke-width="15" :percentage="filePercentage"></el-progress>
+        <span class="downTxt">文件导出中</span>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -1238,6 +1189,7 @@ export default {
     return {
       cityName: '台州市', // 被分析城市
       fullscreenLoading: false,
+      filePercentage: 0,
       routerActive: 1, // 选中模块
       imagesVisi: false, // 是否显示保存图片弹窗
       whichEchart: null, // 要被下载图表对象id
@@ -1280,10 +1232,13 @@ export default {
       chartArr: {
         sideItem1_0: {
           id: 'sideItem1_0',
-          num: 1,
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
           title: '',
           name: '',
           chartType: 'line',
+          barWidth: '55px',
           color: '#ff5975',
           dataSource: '',
           result: '',
@@ -1292,24 +1247,49 @@ export default {
         },
         sideItem1_1: {
           id: 'sideItem1_1',
-          num: 2,
-          title: '2018年各地市空气质量达到优良天数比例对比',
+          picNum: 2,
+          infoNum: 2,
+          titleNum: 2,
+          title: '',
           name: '',
           chartType: 'bar',
+          barWidth: '30px',
           color: '#00976d',
           lightColor: '#00ffb8',
           dataSource: '',
           result: '',
           avg: 0,
           xAxis: [],
-          yAxis: []
+          yAxis: [],
+          markLine: {
+            silent: true,
+            lineStyle: {
+              normal: {
+                color: '#ff5975' // 这儿设置安全基线颜色
+              }
+            },
+            data: [
+              {
+                yAxis: 0 //这儿定义基准线的数值为多少
+              }
+            ],
+            label: {
+              normal: {
+                formatter: '全省平均值', // 这儿设置安全基线
+                position: 'middle'
+              }
+            }
+          }
         },
         sideItem1_2: {
           id: 'sideItem1_2',
-          num: 3,
+          picNum: 3,
+          infoNum: 3,
+          titleNum: 3,
           title: '',
           name: '',
           chartType: 'bar',
+          barWidth: '30px',
           color: '#e19605',
           dataSource: '',
           result: '',
@@ -1318,43 +1298,111 @@ export default {
         },
         sideItem1_3: {
           id: 'sideItem1_3',
-          num: 4,
+          picNum: 4,
+          infoNum: 4,
+          titleNum: 4,
           title: '',
           name: '',
           chartType: 'bar',
+          barWidth: '30px',
           color: '#b062ff',
           dataSource: '',
           result: '',
           xAxis: [],
-          yAxis: []
+          yAxis: [],
+          markLine: {
+            silent: true,
+            lineStyle: {
+              normal: {
+                color: '#fff' // 这儿设置安全基线颜色
+              }
+            },
+            data: [
+              {
+                yAxis: 35 //这儿定义基准线的数值为多少
+              }
+            ],
+            label: {
+              normal: {
+                formatter: '国家空气质量二级标准要求（35µg/m3）', // 这儿设置安全基线
+                position: 'middle'
+              }
+            }
+          }
         },
         sideItem1_4: {
           id: 'sideItem1_4',
-          num: 5,
+          picNum: 5,
+          infoNum: 5,
+          titleNum: 5,
           title: '',
           name: '',
           chartType: 'bar',
+          barWidth: '30px',
           lightColor: '#00ffff',
           color: '#00afaf',
           dataSource: '',
           result: '',
           xAxis: [],
-          yAxis: []
+          yAxis: [],
+          markLine: {
+            silent: true,
+            lineStyle: {
+              normal: {
+                color: '#ff5975' // 这儿设置安全基线颜色
+              }
+            },
+            data: [
+              {
+                yAxis: 35 //这儿定义基准线的数值为多少
+              }
+            ],
+            label: {
+              normal: {
+                formatter: '国家空气质量二级标准要求（35µg/m3）', // 这儿设置安全基线
+                position: 'middle'
+              }
+            }
+          }
         },
         sideItem1_5: {
           id: 'sideItem1_5',
-          num: 6,
+          picNum: 6,
+          infoNum: 6,
+          titleNum: 6,
           title: '',
           name: 'M2.5浓度（µg/m3）',
           chartType: 'line',
+          barWidth: '55px',
           color: '#b062ff',
           result: '',
           xAxis: [],
-          yAxis: []
+          yAxis: [],
+          markLine: {
+            silent: true,
+            lineStyle: {
+              normal: {
+                color: '#fff45c'
+              }
+            },
+            data: [
+              {
+                yAxis: 35
+              }
+            ],
+            label: {
+              normal: {
+                formatter: '国家空气质量二级标准要求（35µg/m3）',
+                position: 'middle'
+              }
+            }
+          }
         },
         sideItem1_6: {
           id: 'sideItem1_6',
-          num: 7,
+          picNum: 7,
+          infoNum: 7,
+          titleNum: 7,
           title: '',
           name1: 'Ⅲ类以上数量',
           name2: '省控断面数量',
@@ -1370,12 +1418,15 @@ export default {
         },
         sideItem1_7: {
           id: 'sideItem1_7',
-          num: 8,
+          picNum: 8,
+          infoNum: 8,
+          titleNum: 8,
           title: '',
           name: 'Ⅲ以上水质断面比例（省控断面）%',
           chartType: 'bar',
-          color: '#00ffb8',
-          lightColor: '#00976d',
+          barWidth: '30px',
+          color: '#00976d',
+          lightColor: '#00ffb8',
           dataSource: '',
           result: '',
           xAxis: [],
@@ -1383,8 +1434,8 @@ export default {
         },
         sideItem1_8: {
           id: 'sideItem1_8',
-          hidden: true,
-          num: 9,
+          picNum: 9,
+          titleNum: 9,
           title: '',
           name1: '',
           name2: '',
@@ -1393,12 +1444,14 @@ export default {
           name5: '',
           name6: '',
           chartType: 'bar',
+          barWidth: '30px',
           color1: '#ff9f7f',
           color2: '#67e0e3',
           color3: '#37a2da',
           color4: '#e062ae',
           color5: '#a44bff',
           color6: '#ffdb5c',
+          dataSource: '',
           xAxis: [],
           yAxis1: [],
           yAxis2: [],
@@ -1407,142 +1460,174 @@ export default {
           yAxis5: [],
           yAxis6: []
         },
+        sideItem1_9: {
+          id: 'sideItem1_9',
+          picHidden: true,
+          infoNum: 9,
+          titleNum: 10,
+          title: '',
+          result: ''
+        },
+
         sideItem2_0: {
           id: 'sideItem2_0',
-          num: 10,
+          picNum: 10,
+          infoNum: 10,
+          titleNum: 11,
           title: '',
           name: '',
           chartType: 'bar',
+          barWidth: '30px',
           color: '#5c2700',
           lightColor: '#f19149',
           dataSource: '',
-          result:
-            '根据2015年调查数据，台州市森林覆盖率<span class="light">59.89%</span>，在全省11地市中排第<span class="light">四</span>位，<span class="light">高于</span>全省平均水平。',
+          result: '',
           xAxis: [],
           yAxis: []
         },
         sideItem2_1: {
           id: 'sideItem2_1',
-          num: 11,
+          picNum: 11,
+          infoNum: 11,
+          titleNum: 12,
           title: '',
           name: '',
           chartType: 'bar',
+          unit: '',
           dataSource: '',
-          result:
-            '2015年台州市活立木蓄积量为<span class="light">2929</span>万立方米，占全省的<span class="light">9</span>%。',
+          result: '',
           list: [],
           legends: []
         },
         sideItem2_2: {
           id: 'sideItem2_2',
-          num: 12,
+          picNum: 12,
+          infoNum: 12,
+          titleNum: 13,
           title: '',
           name: '',
           chartType: 'bar',
+          unit: '万立方米',
           dataSource: '',
-          result:
-            '根据2015年调查数据，台州市林地面积为<span class="light">63.02</span>万公顷，占全省的<span class="light">9</span>%。',
+          result: '',
           list: [],
           legends: []
         },
         sideItem2_3: {
           id: 'sideItem2_3',
-          num: 13,
+          picNum: 13,
+          infoNum: 13,
+          titleNum: 14,
           title: '',
           name: '',
           chartType: 'bar',
+          barWidth: '30px',
           color: '#007621',
           lightColor: '#00e841',
           dataSource: '',
-          result:
-            '根据2015年调查数据，台州市单位面积森林蓄积量为<span class="light">47.6</span>（立方米/公顷），在全省11地市中排第<span class="light">四</span>位，<span class="light">高于</span>全省平均水平。',
+          result: '',
           xAxis: [],
           yAxis: []
         },
         sideItem2_4: {
           id: 'sideItem2_4',
-          num: 14,
+          picNum: 14,
+          infoNum: 14,
+          titleNum: 15,
           title: '',
           name: '',
           chartType: 'bar',
+          barWidth: '30px',
           color: '#ff00ff',
           dataSource: '',
-          result:
-            '台州市下辖各县市中，仙居县森林覆盖率最高，达到<span class="light">79.54</span>%，温岭市最低，为<span class="light">31.04</span>%。',
+          result: '',
           xAxis: [],
           yAxis: []
         },
         sideItem2_5: {
           id: 'sideItem2_5',
-          num: 15,
+          picNum: 15,
+          infoNum: 15,
+          titleNum: 16,
           title: '',
           name: '',
           chartType: 'bar',
+          barWidth: '30px',
           color: '#00f6ff',
           dataSource: '',
-          result:
-            '台州市下辖各县市中，市区的单位面积森林蓄积量最高，达到<span class="light">71.76</span>立方米/公顷，玉环市最低，为<span class="light">35.94</span>立方米/公顷。',
+          result: '',
           xAxis: [],
           yAxis: []
         },
+
         sideItem3_0: {
           id: 'sideItem3_0',
-          num: 16,
+          picNum: 16,
+          infoNum: 16,
+          titleNum: 17,
           title: '',
           name: '',
           chartType: 'line',
+          barWidth: '55px',
           color: '#c90eff',
           dataSource: '',
-          result:
-            '2018年台州市化学需氧量排放量比2015年减少（增加）<span class="light">{{200}}%</span>吨，排放总量占全省的<span class="light">10</span>%，排放强度高于全省平均水平<span class="light">17.5</span>%，需加大减排力度（如果是“排放强度低于全省平均水平XX%”）。',
+          result: '',
           xAxis: [],
           yAxis: []
         },
         sideItem3_1: {
           id: 'sideItem3_1',
-          num: 17,
+          picNum: 17,
+          infoNum: 17,
+          titleNum: 18,
           title: '',
           name: '',
           chartType: 'bar',
-          color: '#00ffb8',
-          lightColor: '#00976d',
+          barWidth: '30px',
+          color: '#00976d',
+          lightColor: '#00ffb8',
           dataSource: '',
-          result:
-            '2018年台州市氨氮排放量比2015年减少（增加）<span class="light">200</span>吨，排放总量占全省的<span class="light">10</span>%，排放强度高于全省平均水平<span class="light">17.5</span>%，需加大减排力度（如果是“排放强度低于全省平均水平XX%”）。',
+          result: '',
           xAxis: [],
           yAxis: []
         },
         sideItem3_2: {
           id: 'sideItem3_2',
-          num: 18,
+          picNum: 18,
+          infoNum: 18,
+          titleNum: 19,
           title: '',
           name: '',
           dataSource: '',
-          result:
-            '2018年台州市氨氮排放量比2015年减少（增加）<span class="light">200</span>吨，排放总量占全省的<span class="light">10</span>%，排放强度高于全省平均水平<span class="light">17.5</span>%，需加大减排力度（如果是“排放强度低于全省平均水平XX%”）。',
+          unit: '',
+          result: '',
           list: [],
           legends: []
         },
         sideItem3_3: {
           id: 'sideItem3_3',
-          num: 19,
+          picNum: 19,
+          infoNum: 19,
+          titleNum: 20,
           title: '',
           name: '化学需氧量排放强度（千克/万元）',
           chartType: 'bar',
-          color: '#ff7723',
-          lightColor: '#b14400',
+          barWidth: '30px',
+          color: '#b14400',
+          lightColor: '#ff7723',
           dataSource: '省生态环境厅',
-          result:
-            '2018年台州市氨氮排放量比2015年减少（增加）<span class="light">200</span>吨，排放总量占全省的<span class="light">10</span>%，排放强度高于全省平均水平<span class="light">17.5</span>%，需加大减排力度（如果是“排放强度低于全省平均水平XX%”）。',
+          result: '',
           xAxis: [],
           yAxis: []
         },
         sideItem3_4: {
           id: 'sideItem3_4',
-          num: 20,
+          picNum: 20,
+          titleNum: 21,
           title: '',
           name: '',
           chartType: 'bar',
+          barWidth: '30px',
           color: '#a00062',
           lightColor: '#ff62c2',
           dataSource: '',
@@ -1551,54 +1636,50 @@ export default {
         },
         sideItem3_5: {
           id: 'sideItem3_5',
-          num: 21,
+          picNum: 21,
+          titleNum: 22,
           title: '',
           name: '',
           chartType: 'line',
+          barWidth: '55px',
           color: '#ff7723',
           dataSource: '',
-          data: {}
+          xAxis: [],
+          yAxis: []
         },
         sideItem3_6: {
           id: 'sideItem3_6',
-          num: 22,
+          picNum: 22,
+          titleNum: 23,
           title: '',
           name: '全省各地市氨氮排放总量占比',
-          color: [
-            '#2072ed',
-            '#ff7723',
-            '#8e30ff',
-            '#23fddc',
-            '#2a885c',
-            '#d0fbff',
-            '#fed700',
-            '#96ff00',
-            '#ff89e5',
-            '#ffb0b0',
-            '#e8395d'
-          ],
           dataSource: '',
+          unit: '',
           list: [],
           legends: []
         },
         sideItem3_7: {
           id: 'sideItem3_7',
-          num: 23,
+          picNum: 23,
+          titleNum: 24,
           title: '',
           name: '氨氮排放强度（千克/万元）',
           chartType: 'bar',
           color: '#9d7700',
           lightColor: '#ffd85c',
           dataSource: '省生态环境厅',
+          barWidth: '30px',
           xAxis: [],
           yAxis: []
         },
         sideItem3_8: {
           id: 'sideItem3_8',
-          num: 24,
+          picNum: 24,
+          titleNum: 25,
           title: '',
           name: '',
           chartType: 'bar',
+          barWidth: '30px',
           color: '#00976d',
           lightColor: '#00ffb8',
           dataSource: '',
@@ -1607,10 +1688,12 @@ export default {
         },
         sideItem3_9: {
           id: 'sideItem3_9',
-          num: 25,
+          picNum: 25,
+          titleNum: 26,
           title: '',
           name: '',
           chartType: 'line',
+          barWidth: '55px',
           color: '#00d8ff',
           dataSource: '',
           xAxis: [],
@@ -1618,18 +1701,23 @@ export default {
         },
         sideItem3_10: {
           id: 'sideItem3_10',
-          num: 26,
+          picNum: 26,
+          titleNum: 27,
           title: '',
           name: '二氧化硫排放总量占比',
+          dataSource: '',
+          unti: '',
           list: [],
           legends: []
         },
         sideItem3_11: {
           id: 'sideItem3_11',
-          num: 27,
+          picNum: 27,
+          titleNum: 28,
           title: '',
           name: '二氧化硫（千克/万元）',
           chartType: 'bar',
+          barWidth: '30px',
           color: '#34249a',
           lightColor: '#917fff',
           dataSource: '省生态环境厅',
@@ -1638,10 +1726,12 @@ export default {
         },
         sideItem3_12: {
           id: 'sideItem3_12',
-          num: 28,
+          picNum: 28,
+          titleNum: 29,
           title: '',
           name: '',
           chartType: 'bar',
+          barWidth: '30px',
           color: '#886000',
           lightColor: '#ffbe23',
           dataSource: '',
@@ -1650,29 +1740,37 @@ export default {
         },
         sideItem3_13: {
           id: 'sideItem3_13',
-          num: 29,
+          picNum: 29,
+          titleNum: 30,
           title: '',
           name: '',
           chartType: 'line',
+          barWidth: '55px',
           color: '#00ffb8',
           dataSource: '',
+          unit: '',
           xAxis: [],
           yAxis: []
         },
         sideItem3_14: {
           id: 'sideItem3_14',
-          num: 30,
+          picNum: 30,
+          titleNum: 31,
           title: '',
           name: '全省各地市氮氧化物排放总量占比',
+          unit: '',
+          dataSource: '',
           list: [],
           legends: []
         },
         sideItem3_15: {
-          id: 'sideItem3_14',
-          num: 31,
+          id: 'sideItem3_15',
+          picNum: 31,
+          titleNum: 32,
           title: '',
           name: '氮氧化物（千克/万元）',
           chartType: 'bar',
+          barWidth: '30px',
           color: '#00976d',
           lightColor: '#00ffb8',
           dataSource: '省生态环境厅',
@@ -1682,7 +1780,22 @@ export default {
 
         sideItem4_0: {
           id: 'sideItem4_0',
-          num: 32,
+          picNum: 32,
+          titleNum: 33,
+          title: '',
+          name: '',
+          chartType: 'bar',
+          color: '#ff5975',
+          dataSource: '',
+          result: '',
+          legend: [],
+          yAxisArr: []
+        },
+        sideItem4_1: {
+          id: 'sideItem4_1',
+          picNum: 33,
+          infoNum: 20,
+          titleNum: 34,
           title: '',
           name: '',
           chartType: 'bar',
@@ -1691,31 +1804,98 @@ export default {
           legend: [],
           yAxisArr: []
         },
-        sideItem4_1: {
-          id: 'sideItem4_1',
-          num: 33,
+        sideItem4_2: {
+          picHidden: true,
+          titleNum: 35,
           title: '',
-          name: '',
-          chartType: 'bar',
-          color: '#ff5975',
-          dataSource: '',
-          legend: [],
-          yAxisArr: []
+          dataSource: '省生态环境厅',
+          list: []
+        },
+        sideItem4_3: {
+          id: 'sideItem4_3',
+          picNum: 34,
+          titleNum: 36,
+          infoNum: 21,
+          title: '2018年全省各县市区生态环境状况指数',
+          dataSource: '省生态环境厅',
+          result: '',
+          list: []
         }
       }
     }
   },
   mounted() {},
   methods: {
+    initQualityChart(color) {
+      this.chartColor.backgroundColor = color
+      this.singleBarLineChart('sideItem1_0', this.chartArr.sideItem1_0)
+      this.singleBarLineChart('sideItem1_1', this.chartArr.sideItem1_1)
+      this.singleBarLineChart('sideItem1_2', this.chartArr.sideItem1_2)
+      this.singleBarLineChart('sideItem1_3', this.chartArr.sideItem1_3)
+      this.singleBarLineChart('sideItem1_4', this.chartArr.sideItem1_4)
+      this.singleBarLineChart('sideItem1_5', this.chartArr.sideItem1_5)
+      this.sideItem1_6Chart('sideItem1_6', this.chartArr.sideItem1_6)
+      this.singleBarLineChart('sideItem1_7', this.chartArr.sideItem1_7)
+      this.sideItem1_8Chart('sideItem1_8', this.chartArr.sideItem1_8)
+      
+      this.singleBarLineChart('sideItem2_0', this.chartArr.sideItem2_0)
+      this.pieChart('sideItem2_1', this.chartArr.sideItem2_1)
+      this.pieChart('sideItem2_2', this.chartArr.sideItem2_2)
+      this.singleBarLineChart('sideItem2_3', this.chartArr.sideItem2_3)
+      this.singleBarLineChart('sideItem2_4', this.chartArr.sideItem2_4)
+      this.singleBarLineChart('sideItem2_5', this.chartArr.sideItem2_5)
+
+      this.singleBarLineChart('sideItem3_0', this.chartArr.sideItem3_0)
+      this.singleBarLineChart('sideItem3_1', this.chartArr.sideItem3_1)
+      this.pieChart('sideItem3_2', this.chartArr.sideItem3_2)
+      this.singleBarLineChart('sideItem3_3', this.chartArr.sideItem3_3)
+      this.singleBarLineChart('sideItem3_4', this.chartArr.sideItem3_4)
+      this.singleBarLineChart('sideItem3_5', this.chartArr.sideItem3_5)
+      this.pieChart('sideItem3_6', this.chartArr.sideItem3_6)
+      this.singleBarLineChart('sideItem3_7', this.chartArr.sideItem3_7)
+      this.singleBarLineChart('sideItem3_8', this.chartArr.sideItem3_8)
+      this.singleBarLineChart('sideItem3_9', this.chartArr.sideItem3_9)
+      this.pieChart('sideItem3_10', this.chartArr.sideItem3_10)
+      this.singleBarLineChart('sideItem3_11', this.chartArr.sideItem3_11)
+      this.singleBarLineChart('sideItem3_12', this.chartArr.sideItem3_12)
+      this.singleBarLineChart('sideItem3_13', this.chartArr.sideItem3_13)
+      this.pieChart('sideItem3_14', this.chartArr.sideItem3_14)
+      this.singleBarLineChart('sideItem3_15', this.chartArr.sideItem3_15)
+      
+      this.initMap('sideItem4_3',this.geoJson, this.chartArr.sideItem4_3)
+      this.sideItem4_0Chart('sideItem4_0', this.chartArr.sideItem4_0)
+      this.sideItem4_1Chart('sideItem4_1', this.chartArr.sideItem4_1)
+
+    },
     // 颜色选择器背景颜色值发生变化
     backgroundColorChange(color) {
       this.chartColor.backgroundColor = color
-      this.fnName('echartsWrap1', this.chartArr[this.whichEchart])
+      if (this.whichEchart === 'sideItem4_3') {
+        this.$nextTick(() => {
+          this.initMap(
+            'echartsWrap1',
+            this.geoJson,
+            this.chartArr[this.whichEchart]
+          )
+        })
+      } else {
+        this.fnName('echartsWrap1', this.chartArr[this.whichEchart])
+      }
     },
     // 颜色选择器文字颜色值发生变化
     textColorChange(color) {
       this.chartColor.textColor = color
-      this.fnName('echartsWrap1', this.chartArr[this.whichEchart])
+      if (this.whichEchart === 'sideItem4_3') {
+        this.$nextTick(() => {
+          this.initMap(
+            'echartsWrap1',
+            this.geoJson,
+            this.chartArr[this.whichEchart]
+          )
+        })
+      } else {
+        this.fnName('echartsWrap1', this.chartArr[this.whichEchart])
+      }
     },
     // 将图表转换成图片并下载
     exportPic() {
@@ -1749,22 +1929,19 @@ export default {
 
       this.imagesModalCloseFn()
     },
-    chartTypeClick(command) {
-      if (this.routerActive === 1) {
-        this.chartArr[command.id].chartType = command.type
-        command.fnName(command.id, this.chartArr[command.id])
-      } else {
-        this[command.id].chartType = command.type
-        command.fnName(command.id, this[command.id])
-      }
-    },
     // 对command参数进行重新封装成一个对象
-    beforeHandleCommand(command1, command2, command3) {
+    beforeHandleCommand(command1, command2, command3, command4) {
       return {
         id: command1,
         type: command2,
-        fnName: command3
+        fnName: command3,
+        light: command4
       }
+    },
+    // 图表柱状图折线图转换
+    chartTypeClick(command) {
+      this.chartArr[command.id].chartType = command.type
+      command.fnName(command.id, this.chartArr[command.id], command.light)
     },
     // 打开保存图片弹窗并渲染图表
     imagesModalOpenFn(val, imagesName, fnName) {
@@ -1775,9 +1952,17 @@ export default {
       this.imagesVisi = true
       this.fnName = fnName
 
-      this.$nextTick(() => {
-        fnName('echartsWrap1', this.chartArr[val])
-      })
+      if (val === 'sideItem4_3') {
+        this.$nextTick(() => {
+          console.log('000')
+          this.initMap('echartsWrap1', this.geoJson, this.chartArr[val])
+        })
+      } else {
+        console.log('111')
+        this.$nextTick(() => {
+          fnName('echartsWrap1', this.chartArr[val])
+        })
+      }
     },
     // 关闭保存图片弹窗
     imagesModalCloseFn() {
@@ -1787,83 +1972,100 @@ export default {
     },
     // 下载文档
     downloadDoc() {
-      this.fullscreenLoading = true
+      let _self = this
+      _self.initQualityChart('rgba(0,0,0,0.5)')
+      _self.fullscreenLoading = true
       let baseURlArr = []
-      let aaa = []
-      for (let i in this.chartArr) {
-        let chart = this.$echarts.init(
-          document.getElementById(this.chartArr[i].id)
-        )
-        baseURlArr[i] = chart.getDataURL()
-        savePic({
-          picInfo: baseURlArr[i],
-          no: 'no' + this.chartArr[i].num,
-          type: 'ecology-city',
-          area: this.cityName
-        }).then(res => {})
-      }
-      for (let k in this.chartArr) {
-        aaa.push(
-          {
-            name: 'title' + this.chartArr[k].num,
-            value: this.chartArr[k].title
-          },
-          {
-            name: 'verdict' + this.chartArr[k].num,
-            value: this.chartArr[k].result
-          },
-          {
-            name: 'source' + this.chartArr[k].num,
-            value: this.chartArr[k].dataSource
-          }
-        )
-      }
-      console.log(aaa)
+      let infoArr = []
+      let picArrIndex = 0
+      let picArrFn = []
 
-      axios
-        .post(
-          'http://remote.natapp1.cc/section/exportWord',
-          {
-            area: this.cityName,
-            type: 'ecology-city',
-            condition: JSON.stringify(aaa)
-          },
-          {
-            responseType: 'blob'
+      
+      setTimeout(function(){        
+        for (let key in _self.chartArr) {
+          if (!_self.chartArr[key].picHidden) {
+            let chart = _self.$echarts.init(
+              document.getElementById(_self.chartArr[key].id)
+            )
+            baseURlArr[key] = chart.getDataURL()
+            picArrFn[picArrIndex] = savePic({
+              picInfo: baseURlArr[key],
+              no: 'no' + _self.chartArr[key].picNum,
+              type: 'ecology-city',
+              area: _self.cityName
+            }).then(res => {})
+            picArrIndex++
           }
+          infoArr.push(
+            {
+              name: 'title' + _self.chartArr[key].titleNum,
+              value: _self.chartArr[key].title
+            },
+            {
+              name: 'verdict' + _self.chartArr[key].infoNum,
+              value: _self.chartArr[key].result
+            },
+            {
+              name: 'source' + _self.chartArr[key].titleNum,
+              value: _self.chartArr[key].dataSource
+            }
+          )
+        }
+        
+        axios.all(picArrFn).then(
+          axios.spread(() => {
+            axios({
+              url: 'http://remote.natapp1.cc/section/exportWord',
+              method: 'post',
+              data: {
+                area: _self.cityName,
+                type: 'ecology-city',
+                condition: JSON.stringify(infoArr)
+              },
+              responseType: 'blob',
+              onDownloadProgress(progress) {
+                _self.filePercentage = Math.round(
+                  (progress.loaded / progress.total) * 100
+                )
+              }
+            }).then(res => {
+              // new Blob([data])用来创建URL的file对象或者blob对象
+              let url = window.URL.createObjectURL(new Blob([res.data]))
+              // 生成一个a标签
+              let link = document.createElement('a')
+              link.style.display = 'none'
+              link.href = url
+              let date = new Date()
+              let year = date.getFullYear() // 获取完整的年份(4位)
+              let month =
+                date.getMonth() < 10
+                  ? '0' + (date.getMonth() + 1)
+                  : date.getMonth() + 1 //获取当前月份(0-11,0代表1月)
+              let day = date.getDate() // 获取当前日(1-31)
+              let hours = date.getHours() // 获取当前小时数(0-23)
+              let minutes =
+                date.getMinutes() < 10
+                  ? '0' + date.getMinutes()
+                  : date.getMinutes() // 获取当前分钟数(0-59)
+              let seconds =
+                date.getSeconds() < 10
+                  ? '0' + date.getSeconds()
+                  : date.getSeconds() // 获取当前秒数(0-59)
+              let fileName = `台州市生态环境分析报告${year}${month}${day}${hours}${minutes}${seconds}`
+              link.download = fileName + '.docx'
+              document.body.appendChild(link)
+              link.click()
+              _self.initQualityChart('rgba(0,0,0,0)')
+              _self.filePercentage = 0
+              _self.fullscreenLoading = false
+            })
+          })
         )
-        .then(res => {
-          console.log(res)
-          // new Blob([data])用来创建URL的file对象或者blob对象
-          let url = window.URL.createObjectURL(new Blob([res.data]))
-          // 生成一个a标签
-          let link = document.createElement('a')
-          link.style.display = 'none'
-          link.href = url
-          // 生成时间戳
-          // let timestamp = new Date().getTime()
-          let fileName = '台州市生态环境分析报告'
-          link.download = fileName + '.docx'
-          document.body.appendChild(link)
-          link.click()
-          this.fullscreenLoading = false
-          console.log(this.fullscreenLoading)
-        })
+        },2000)
     },
     // 单条柱状图折线图
-    singleBarLineChart(id, data,barWidth,cityLight) {
+    singleBarLineChart(id, data) {
       let cityName = this.cityName
-      let itemStyle = {
-        normal: {
-          color: function (params) {
-            if (params.name === cityName) {
-              return data.lightColor
-            } else {
-              return data.color
-            }
-          }
-        }
-      }
       let chart = this.$echarts.init(document.getElementById(id))
       let option = {
         backgroundColor: this.chartColor.backgroundColor,
@@ -1889,72 +2091,164 @@ export default {
           bottom: '5%',
           containLabel: true
         },
-        xAxis: [{
-          type: 'category',
-          axisTick: {
-            alignWithLabel: true
-          },
-          axisLabel: {
-            interval: 0,
-            padding: [5, 0, 5, 0],
-            color: this.chartColor.textColor
-          },
-          axisLine: {
-            lineStyle: {
-              color: '#6291fb'
-            }
-          },
-          data: data.xAxis
-        }],
-        yAxis: [{
-          axisTick: {
-            show: false
-          },
-          axisLine: {
-            show: false,
-            lineStyle: {
-              type: 'solid',
+        xAxis: [
+          {
+            type: 'category',
+            axisTick: {
+              alignWithLabel: true
+            },
+            axisLabel: {
+              interval: 0,
+              padding: [5, 0, 5, 0],
               color: this.chartColor.textColor
-            }
-          },
-          splitLine: {
-            show: true,
-            lineStyle: {
-              type: 'dashed',
-              color: '#0124b3'
-            }
-          }
-        }],
-        series: [{
-          name: data.name,
-          type: data.chartType,
-          barWidth: barWidth + 'px',
-          barGap: '50%',
-          itemStyle: {
-            normal: {
-              color: function (params) {
-                if (params.name === cityName && cityLight) {
-                  return data.lightColor
-                } else {
-                  return data.color
-                }
+            },
+            axisLine: {
+              lineStyle: {
+                color: '#6291fb'
               }
-            }
-          },
-          label: {
-            normal: {
-              show: true,
-              position: 'top',
-              textStyle: {
-                fontSize: 16,
+            },
+            data: data.xAxis
+          }
+        ],
+        yAxis: [
+          {
+            axisTick: {
+              show: false
+            },
+            axisLine: {
+              show: false,
+              lineStyle: {
+                type: 'solid',
                 color: this.chartColor.textColor
               }
+            },
+            splitLine: {
+              show: true,
+              lineStyle: {
+                type: 'dashed',
+                color: '#0124b3'
+              }
             }
-          },
-          data: data.yAxis
-        }]
+          }
+        ],
+        series: [
+          {
+            name: data.name,
+            type: data.chartType,
+            barWidth: data.barWidth,
+            barGap: '50%',
+            itemStyle: {
+              normal: {
+                color: function(params) {
+                  if (params.name === cityName) {
+                    return data.lightColor
+                  } else {
+                    return data.color
+                  }
+                }
+              }
+            },
+            label: {
+              normal: {
+                show: true,
+                position: 'top',
+                textStyle: {
+                  fontSize: 16,
+                  color: this.chartColor.textColor
+                }
+              }
+            },
+            markLine: data.markLine ? data.markLine : null,
+            data: data.yAxis
+          }
+        ]
       }
+      chart.clear()
       chart.setOption(option)
+    },
+    // 饼图
+    pieChart(id, data) {
+      let chart = this.$echarts.init(document.getElementById(id))
+      let option = {
+        backgroundColor: this.chartColor.backgroundColor,
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
+        },
+        legend: {
+          orient: 'vertical',
+          right: '10%',
+          top: '15%',
+          itemWidth: 35,
+          itemHeight: 9,
+          itemGap: 25,
+          textStyle: {
+            fontSize: '14',
+            color: this.chartColor.textColor
+          },
+          data: data.legends
+        },
+        series: [
+          {
+            name: data.name,
+            type: 'pie',
+            selectedMode: 'single',
+            radius: [120, 170],
+            center: ['35%', '50%'],
+            label: {
+              normal: {
+                show: false,
+                position: 'center',
+                formatter: '{b|{b}}\n{c|{c}' + data.unit + '}',
+                rich: {
+                  b: {
+                    fontSize: 28,
+                    lineHeight: 33,
+                    color: '#00d7e9'
+                  },
+                  c: {
+                    fontSize: 28,
+                    padding: [8, 0],
+                    color: '#00d7e9'
+                  }
+                }
+              },
+              emphasis: {
+                show: true //文字至于中间时，这里需为true
+              }
+            },
+            itemStyle: {
+              emphasis: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              },
+              normal: {
+                color: function(params) {
+                  let colorList = [
+                    '#2072ed',
+                    '#ff7723',
+                    '#8e30ff',
+                    '#23fddc',
+                    '#2a885c',
+                    '#d0fbff',
+                    '#fed700',
+                    '#96ff00',
+                    '#ff89e5',
+                    '#ffb0b0',
+                    '#e8395d'
+                  ]
+                  return colorList[params.dataIndex]
+                }
+              }
+            },
+            data: data.list
+          }
+        ]
+      }
+      chart.clear()
+      chart.setOption(option)
+      this.pieSelected(chart, data.list, this.cityName)
     },
     // 饼图选中指定扇形区域
     pieSelected(target, data, cityName) {

@@ -13,6 +13,13 @@ export function getRankDiff(params) {
     params
   })
 }
+export function getStrengthVerdict(params) {
+  return request({
+    url: 'verdict/getStrengthVerdict',
+    method: 'get',
+    params
+  })
+}
 export function getSubStructuralData(params) {
   return request({
     url: 'ecological/getSubStructuralData',
