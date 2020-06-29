@@ -29,7 +29,7 @@ export const environmentalQualityMixin = {
       let aaa = this.returnArrLast(this.chartArr.sideItem1_0.xAxis)
       let bbb = this.returnArrLast(this.chartArr.sideItem1_0.yAxis)
       let ccc = this.returnArrFirst(this.chartArr.sideItem1_0.xAxis)
-      let ddd = this.returnDiff(this.returnArrFirst(this.chartArr.sideItem1_0.yAxis), this.returnArrLast(this.chartArr.sideItem1_0.yAxis))
+      let ddd = this.returnDiff(this.returnArrFirst(this.chartArr.sideItem1_0.yAxis), this.returnArrLast(this.chartArr.sideItem1_0.yAxis)).toFixed(1)
       let eee = ddd >= 0 ? '增长' : '减少'
       this.chartArr.sideItem1_0.title = `${ccc}年-${aaa}年${this.cityName}空气质量达到优良天数比例变化`
       this.chartArr.sideItem1_0.result = `${aaa}年，${this.cityName}空气质量达到优良天数比例达到<span class="light">${bbb}</span>%，与${ccc}年相比${eee}了<span class="light">${Math.abs(ddd)}</span>%。 `
@@ -59,8 +59,8 @@ export const environmentalQualityMixin = {
         zb: 'AQI优良率'
       }).then(res1 => {
         let rankDiff = this.returnDiff(res1.data.newRank, res1.data.oldRank)
-        let bbb = rankDiff >= 0 ? '上升' : '下降'
-        this.chartArr.sideItem1_1.result = `${data.yAxis.year}年，${this.cityName}空气质量达到优良天数的比例<span class="light">${aaa}</span>全市平均水平，排名${bbb}<span class="light">${Math.abs(rankDiff)}</span>位。`
+        let bbb = rankDiff > 0 ? '上升' + Math.abs(rankDiff) + '位' : rankDiff === 0 ? '维持不变' : '下降' + Math.abs(rankDiff) + '位'
+        this.chartArr.sideItem1_1.result = `${data.yAxis.year}年，${this.cityName}空气质量达到优良天数的比例<span class="light">${aaa}</span>全省平均水平，排名<span class="light">${bbb}</span>。`
       })
     })
     // 2、获取管辖各县级城市空气质量达到优良天数比例并绘制图表
@@ -81,13 +81,13 @@ export const environmentalQualityMixin = {
       this.chartArr.sideItem1_2.result = `${data.yAxis.year}年，${this.cityName}管辖的各县级城市中，${aaa.join()}空气质量达到优良天数比例最低，达到<span class="light">${this.returnArrLast(this.chartArr.sideItem1_2.yAxis)}</span>%；${bbb.join()}最高，为<span class="light">${this.chartArr.sideItem1_2.yAxis[0]}</span>%。`
     })
 
-    // 3、获取市管辖各县级城市PM2.5年均浓度（µg/m3）对比并绘制图表
+    // 3、获取市管辖各县级城市PM2.5年均浓度（µg/m³）对比并绘制图表
     getScaleData({
       area: this.cityName,
       zb: 'PM2.5浓度'
     }).then(res => {
       let data = res.data
-      this.chartArr.sideItem1_3.title = `${data.yAxis.year}年${this.cityName}管辖各县级城市PM2.5年均浓度（µg/m3）对比`
+      this.chartArr.sideItem1_3.title = `${data.yAxis.year}年${this.cityName}管辖各县级城市PM2.5年均浓度（µg/m³）对比`
       this.chartArr.sideItem1_3.name = `${data.yAxis.name}(${data.yAxis.unit})`
       this.chartArr.sideItem1_3.dataSource = data.yAxis.source
       this.chartArr.sideItem1_3.xAxis = data.xAxis
@@ -96,16 +96,16 @@ export const environmentalQualityMixin = {
 
       let aaa = this.returnRepeatNumArr(this.chartArr.sideItem1_3.xAxis, this.chartArr.sideItem1_3.yAxis, this.chartArr.sideItem1_3.yAxis[this.chartArr.sideItem1_3.yAxis.length - 1], 'max')
       let bbb = this.returnRepeatNumArr(this.chartArr.sideItem1_3.xAxis, this.chartArr.sideItem1_3.yAxis, this.chartArr.sideItem1_3.yAxis[0], 'min')
-      this.chartArr.sideItem1_3.result = `${data.yAxis.year}年，${this.cityName}管辖的各县级城市中，${bbb.join()}PM2.5年均浓度最高，达到<span class="light">${this.chartArr.sideItem1_3.yAxis[0]}</span>µg/m3；${aaa.join()}最低，达到<span class="light">${this.returnArrLast(this.chartArr.sideItem1_3.yAxis)}</span>µg/m3`
+      this.chartArr.sideItem1_3.result = `${data.yAxis.year}年，${this.cityName}管辖的各县级城市中，${bbb.join()}PM2.5年均浓度最高，达到<span class="light">${this.chartArr.sideItem1_3.yAxis[0]}</span>µg/m³；${aaa.join()}最低，达到<span class="light">${this.returnArrLast(this.chartArr.sideItem1_3.yAxis)}</span>µg/m³`
     })
 
-    // 4、获取年各地市PM2.5年均浓度（µg/m3）对比并绘制图表
+    // 4、获取年各地市PM2.5年均浓度（µg/m³）对比并绘制图表
     getScaleData({
       area: '浙江省',
       zb: 'PM2.5浓度'
     }).then(res => {
       let data = res.data
-      this.chartArr.sideItem1_4.title = `${data.yAxis.year}年各地市PM2.5年均浓度（µg/m3）对比`
+      this.chartArr.sideItem1_4.title = `${data.yAxis.year}年各地市PM2.5年均浓度（µg/m³）对比`
       this.chartArr.sideItem1_4.name = `${data.yAxis.name}(${data.yAxis.unit})`
       this.chartArr.sideItem1_4.xAxis = data.xAxis
       this.chartArr.sideItem1_4.dataSource = data.yAxis.source
@@ -116,13 +116,13 @@ export const environmentalQualityMixin = {
       this.chartArr.sideItem1_4.result = `${data.yAxis.year}年，${this.cityName}PM2.5年均浓度在全省排第<span class="light">${rank + 1}</span>位`
     })
 
-    // 5、获取年市管辖各县级城市PM2.5年均浓度（µg/m3）对比并绘制图表
+    // 5、获取年市管辖各县级城市PM2.5年均浓度（µg/m³）对比并绘制图表
     getStructuralData({
       area: this.cityName,
       zbs: 'PM2.5浓度'
     }).then(res => {
       let data = res.data[0]
-      this.chartArr.sideItem1_5.title = `${this.returnArrFirst(data.xAxis)}年-${this.returnArrLast(data.xAxis)}年${this.cityName}PM2.5年平均浓度（µg/m3）变化`
+      this.chartArr.sideItem1_5.title = `${this.returnArrFirst(data.xAxis)}年-${this.returnArrLast(data.xAxis)}年${this.cityName}PM2.5年平均浓度（µg/m³）变化`
       this.chartArr.sideItem1_5.name = `${data.yAxis.name}(${data.yAxis.unit})`
       this.chartArr.sideItem1_5.dataSource = data.yAxis.source
       this.chartArr.sideItem1_5.xAxis = data.xAxis
@@ -131,7 +131,7 @@ export const environmentalQualityMixin = {
 
       let aaa = this.chartArr.sideItem1_5.yAxis[this.chartArr.sideItem1_5.yAxis.length - 1]
       let qualified = this.returnDiff(aaa, 35) > 0 ? '达到' : '不达到'
-      this.chartArr.sideItem1_5.result = `${this.returnArrLast(this.chartArr.sideItem1_5.xAxis)}年，${this.cityName}PM2.5浓度年均达到<span class="light">${aaa}</span>µg/m3，<span class="light">${qualified}</span>国家空气质量二级标准要求（35µg/m3）。`
+      this.chartArr.sideItem1_5.result = `${this.returnArrLast(this.chartArr.sideItem1_5.xAxis)}年，${this.cityName}PM2.5浓度年均达到<span class="light">${aaa}</span>µg/m³，<span class="light">${qualified}</span>国家空气质量二级标准要求（35µg/m³）。`
     })
 
     // 6、各县（市、区）III类以上水质断面数量
@@ -234,7 +234,7 @@ export const environmentalQualityMixin = {
   methods: {
     // 导出各省控断面水质类型
     exportType() {
-      window.open('http://192.168.13.251:8083/section/exportSection?area=' + this.cityName, '_self')
+      window.open(this.baseUrl + '/section/exportSection?area=' + this.cityName, '_self')
     },
     // 6、市各县（市、区）III类以上水质断面数量
     sideItem1_6Chart(id, data) {

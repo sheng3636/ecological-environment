@@ -4,7 +4,7 @@ import {
   getEIWithName
 }
 from '@/api/environmentalQuality'
-import geoJson from '../../public/js/zheJiang1.json'
+import geoJson from '../../../public/js/zheJiang1.json'
 export const environmentStateMixin = {
   data() {
     return {
@@ -85,7 +85,7 @@ export const environmentStateMixin = {
       let ggg = fff > 0 ? '下降' + Math.abs(fff) : fff === 0 ? '维持不变' : '上升' + Math.abs(fff)
       
 
-      this.chartArr.sideItem4_0.result = `${item[item.length - 1].name}年${this.cityName}${this.cityName}生态环境状况等级为<span class="light">${this.classSwitch(aaa)}</span>，EI值在全省排第<span class="light">${eee}</span>位，较${item[0].name}年<span class="light">${ggg}</span>。`
+      this.chartArr.sideItem4_0.result = `${item[item.length - 1].name}年${this.cityName}生态环境状况等级为<span class="light">${this.classSwitch(aaa)}</span>，EI值在全省排第<span class="light">${eee}</span>位，较${item[0].name}年<span class="light">${ggg}</span>。`
     })
     // 获取各地市生态环境状况指数数据并绘制图表
     getSubStructuralData({
@@ -94,7 +94,7 @@ export const environmentStateMixin = {
     }).then(res => {
       let data = res.data
       let item = data.yAxis.data
-      this.chartArr.sideItem4_1.title = `${item[0].name}年-${item[item.length - 1].name}台州市各县市区生态环境状况指数`
+      this.chartArr.sideItem4_1.title = `${item[0].name}年-${item[item.length - 1].name}${this.cityName}各县市区生态环境状况指数`
       this.chartArr.sideItem4_1.name = data.yAxis.name
       this.chartArr.sideItem4_1.dataSource = data.yAxis.source
       this.chartArr.sideItem4_1.xAxis = data.xAxis
@@ -249,7 +249,7 @@ export const environmentStateMixin = {
     exportExcel() {
       import('@/vendor/Export2Excel').then(excel => {
         const tHeader = ['县（市、区）', 'EI值', '等级', '省内排名']
-        const filterVal = ['name', 'value', 'class', 'rank']
+        const filterVal = ['name', 'value', 'level', 'rank']
         const list = this.chartArr.sideItem4_2.list
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({

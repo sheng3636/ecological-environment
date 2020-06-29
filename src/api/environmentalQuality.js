@@ -48,6 +48,13 @@ export function getStrength(params) {
     params
   })
 }
+export function countySectionList(params) {
+  return request({
+    url: 'section/countySectionList',
+    method: 'get',
+    params
+  })
+}
 // 市各县市区生态环境状况等级和省内排名
 export function getEIList(params) {
   return request({

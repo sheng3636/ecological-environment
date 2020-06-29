@@ -15,6 +15,7 @@ export const emissionsMixin = {
       area: this.cityName,
       zb: '化学需氧量排放总量'
     }).then(res => {
+      console.log(res)
       let data = res.data
       let diffTxt = data.diff >= 0 ? '增加' : '减少'
       let aaa = ((res.data.value / res.data.total) * 100).toFixed(2)

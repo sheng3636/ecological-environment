@@ -6,14 +6,22 @@ Vue.use(VueRouter)
   const routes = [
   {
     path: '/',
-    redirect: '/environmentalQuality'
+    redirect: '/cityEnvironmental'
   },
   {
-    path: '/environmentalQuality',
-    name: 'EnvironmentalQuality',
-    component: () => import('@/views/environmentalQuality/environmentalQuality.vue'),
+    path: '/cityEnvironmental',
+    name: 'CityEnvironmental',
+    component: () => import('@/views/cityEnvironmental/cityEnvironmental.vue'),
     meta: {
-      title: '环境质量'
+      title: '市级'
+    }
+  },
+  {
+    path: '/countyEnvironmental',
+    name: 'CountyEnvironmental',
+    component: () => import('@/views/countyEnvironmental/countyEnvironmental.vue'),
+    meta: {
+      title: '县级'
     }
   }
 ]
