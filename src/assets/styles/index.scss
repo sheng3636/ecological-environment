@@ -152,6 +152,7 @@ a:hover {
   padding: 0 25px;
   height: 60px;
   align-items: center;
+  text-align: left;
   background: linear-gradient(to right, rgba(0, 237, 255, 0) 30%, rgba(0, 237, 255, 0.4) 80%, rgba(0, 237, 255, 0.6) 90%, rgba(0, 237, 255, 0.9));
   @include fj();
 
@@ -169,7 +170,7 @@ a:hover {
 
   .left {
     font-weight: normal;
-    @include sc(24px, #00edff);
+    @include sc(20px, #00edff);
   }
 
   .optionGroup {
@@ -182,13 +183,11 @@ a:hover {
     }
   }
 }
-
 .chartIcon {
   margin-right: 5px;
   vertical-align: middle;
   @include wh(24px, 24px);
 }
-
 .dataSourceTxt {
   margin: 0 auto 15px auto;
   font-size: 20px;
@@ -202,14 +201,14 @@ a:hover {
 
   h5 {
     margin-bottom: 15px;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: normal;
   }
 
   .content {
     position: relative;
     align-items: center;
-    padding: 0 70px;
+    padding: 10px 70px;
     min-height: 165px;
     background: #0b274a;
     @include fj(center);
@@ -217,7 +216,7 @@ a:hover {
       line-height: 32px;
       text-align: left;
       text-indent: 2em;
-      @include sc(20px, #00d0e0);
+      @include sc(16px, #00d0e0);
 
       .light {
         color:#e09e00;
@@ -357,34 +356,73 @@ a:hover {
   }
 }
 
+// 反馈意见弹窗
+.feedbackWrap {
+  position: relative;
+  width: 1019px;
+  height: 580px;
+  background: url(../../assets/images/feedbackBg.png) no-repeat center;
+
+  .el-dialog__headerbtn {
+    top: 35px !important;
+    right: 75px !important;
+  }
+
+  .el-dialog__header {
+    line-height: 95px;
+    background: url(../../assets/images/feedbackHeadeBg.png) no-repeat center;
+  }
+  .el-dialog__title {
+    line-height: 24px !important;
+    font-size: 28px !important;
+    color: #fff !important;
+  }
+  .el-dialog__headerbtn .el-dialog__close {
+    color: #6cd6ff !important;
+    font-size: 50px !important;
+    font-weight: bold;
+  }
+  .el-dialog__body {
+    padding: 25px 25px 0px !important;
+  }
+  .feedbackTitle {
+    margin-bottom: 15px;
+    font-size: 28px;
+    color: #00e3fe;
+    text-align: center;
+  }
+  .feedForm {
+    margin: 0 auto;
+    width: 95%;
+    .el-form-item__label {
+      font-size: 16px;
+      color:#fff;
+    }
+  }
+}
 
 // echarts图类型下拉框样式
 .el-dropdown-menu {
   background: #0688b3!important;
   border: 1px solid #00deff!important;
 }
-
 .el-dropdown-menu__item--divided:before {
   content: '';
   height: 1px !important;
   background-color: #00deff!important;
 }
-
 .el-dropdown-menu__item--divided {
   border-top: 1px solid transparent!important;
 }
-
 .el-popper[x-placement^=bottom] .popper__arrow::after {
   top: 1px;
   margin-left: -6px;
   border-top-width: 0;
   border-bottom-color: #0688b3!important;
 }
-
 .el-popper[x-placement^=bottom] .popper__arrow {
   border-bottom-color: #00deff!important;
 }
-
 .el-dropdown-menu__item {
   color: #fff!important;
 }
@@ -392,7 +430,6 @@ a:hover {
   background-color: transparent!important;
   color: #00deff!important;
 }
-
 
 // 表格边框样式
 .tableWrap {

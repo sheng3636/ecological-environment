@@ -99,67 +99,68 @@ export const environmentStateMixin = {
           textStyle: {
             color: this.chartColor.textColor
           },
-          pieces: [{
-              lte: 95,
-              lt: 91,
-              label: "91<EI≤95",
-              color: "#fa0006"
-            },
-            {
-              lte: 86,
-              lt: 90,
-              label: "86<EI≤90",
-              color: "#ff363b"
-            },
-            {
-              lte: 81,
-              lt: 85,
-              label: "81<EI≤85",
-              color: "#fc4d00"
-            },
-            {
-              lte: 76,
-              lt: 80,
-              label: "76<EI≤80",
-              color: "#f88400"
-            },
-            {
-              lte: 71,
-              lt: 75,
-              label: "71<EI≤75",
-              color: "#f9b004"
-            },
-            {
-              lte: 66,
-              lt: 70,
-              label: "66<EI≤70",
-              color: "#f9de02"
-            },
-            {
-              lte: 61,
-              lt: 65,
-              label: "61<EI≤65",
-              color: "#e1f401"
-            },
-            {
-              lte: 56,
-              lt: 60,
-              label: "56<EI≤60",
-              color: "#ff5428"
-            },
-            {
-              lte: 51,
-              lt: 55,
-              label: "51<EI≤55",
-              color: "#8af900"
-            },
-            {
-              lte: 50,
-              lt: 45,
-              label: "45<EI≤50",
-              color: "#00c302"
-            }
-          ],
+          inverse: true,
+            pieces: [{
+                lte: 50,
+                lt: 45,
+                label: "45<EI≤50",
+                color: "#ff363b"
+              },
+              {
+                lte: 51,
+                lt: 55,
+                label: "51<EI≤55",
+                color: "#fc4d00"
+              },
+              {
+                lte: 56,
+                lt: 60,
+                label: "56<EI≤60",
+                color: "#f88400"
+              },
+              {
+                lte: 61,
+                lt: 65,
+                label: "61<EI≤65",
+                color: "#f9b004"
+              },
+              {
+                lte: 66,
+                lt: 70,
+                label: "66<EI≤70",
+                color: "#f9de02"
+              },
+              {
+                lte: 71,
+                lt: 75,
+                label: "71<EI≤75",
+                color: "#e1f401"
+              },
+              {
+                lte: 76,
+                lt: 80,
+                label: "76<EI≤80",
+                color: "#8af900"
+              },
+              {
+                lte: 81,
+                lt: 85,
+                label: "81<EI≤85",
+                color: "#59f800"
+              },
+              {
+                lte: 86,
+                lt: 90,
+                label: "86<EI≤90",
+                color: "#00c302"
+              },
+              {
+                lte: 95,
+                lt: 91,
+                label: "91<EI≤95",
+                color: "#009201"
+              },
+            ]
         },
         series: [{
           name: '浙江',
@@ -215,18 +216,34 @@ export const environmentStateMixin = {
       chart.setOption(option)
     },
     // 导出市各县市区生态环境状况等级和省内排名表格
-    exportExcel() {
-      console.log(this.chartArr.sideItem4_1.list);
-      
+    exportExcel() {      
       import('@/vendor/Export2Excel').then(excel => {
         const tHeader = ['县（市、区）', 'EI值', '等级', '省内排名']
         const filterVal = ['name', 'value', 'level', 'rank']
         const list = this.chartArr.sideItem4_1.list
         const data = this.formatJson(filterVal, list)
+        let date = new Date()
+        let year = date.getFullYear() // 获取完整的年份(4位)
+        let month =
+          date.getMonth() < 10 ?
+          '0' + (date.getMonth() + 1) :
+          date.getMonth() + 1 //获取当前月份(0-11,0代表1月)
+        let day =
+          date.getDate() < 10 ? '0' + date.getDate() : date.getDate() + 1 // 获取当前日(1-31)
+        let hours =
+          date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
+        let minutes =
+          date.getMinutes() < 10 ?
+          '0' + date.getMinutes() :
+          date.getMinutes() // 获取当前分钟数(0-59)
+        let seconds =
+          date.getSeconds() < 10 ?
+          '0' + date.getSeconds() :
+          date.getSeconds() // 获取当前秒数(0-59)
         excel.export_json_to_excel({
           header: tHeader,
           data,
-          filename: this.chartArr.sideItem4_1.title,
+          filename: `${this.chartArr.sideItem4_1.title}${year}${month}${day}${hours}${minutes}${seconds}`,
           autoWidth: this.autoWidth,
           bookType: 'xlsx'
         })
@@ -287,7 +304,7 @@ export const environmentStateMixin = {
             }],
             label: {
               normal: {
-                formatter: '优',
+                formatter: '',
                 position: 'middle'
               }
             }

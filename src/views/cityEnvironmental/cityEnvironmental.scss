@@ -8,10 +8,24 @@
   flex-wrap: wrap;
   @include fj();
   .sideItem {
+    position: relative;
     margin-bottom: 20px;
     width: 910px;
     border: 1px solid #448fe4;
     background: radial-gradient(circle, rgba(18, 69, 113, 0) 0,  rgba(18, 69, 113, 1) 160%);
+    .markLineArea {
+      position: absolute;
+      top: 70px;
+      right: 25px;
+      display: flex;
+      align-items: center;
+      .colorLine {
+        display: inline-block;
+        margin-right: 12px;
+        width: 30px;
+        border-bottom: 1px dashed #ff5975;
+      }
+    }
   }
 
   .width740 {

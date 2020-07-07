@@ -106,3 +106,63 @@ export function exportWord(data) {
     data
   })
 }
+export function feedbackSave(data) {
+  return request({
+    url: 'feedback/save',
+    method: 'post',
+    data
+  })
+}
+
+
+export function getStructuralData1(params) {
+  return request({
+    url: 'people/getStructuralData',
+    method: 'get',
+    params
+  })
+}
+export function getScaleDataWithName1(params) {
+  return request({
+    url: 'people/getScaleDataWithName',
+    method: 'get',
+    params
+  })
+}
+export function getScaleDataMultiZb(params) {
+  return request({
+    url: 'people/getScaleDataMultiZb',
+    method: 'get',
+    params
+  })
+}
+export function getScaleData1(params) {
+  return request({
+    url: 'people/getScaleData',
+    method: 'get',
+    params
+  })
+}
+export function getMultiZoneData(params) {
+  return request({
+    url: 'people/getMultiZoneData',
+    method: 'get',
+    params
+  })
+}
+export function getPopulationData(params) {
+  return request({
+    url: 'people/getPopulationData',
+    method: 'get',
+    params
+  })
+}
+export function getIncrementMultiZb(params) {
+  return request({
+    url: 'people/getIncrementMultiZb',
+    method: 'get',
+    params
+  })
+}
+
+

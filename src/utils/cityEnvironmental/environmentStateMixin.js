@@ -8,7 +8,7 @@ import geoJson from '../../../public/js/zheJiang1.json'
 export const environmentStateMixin = {
   data() {
     return {
-      geoJson: geoJson, 
+      geoJson: geoJson,
       colorList: [
         '#00fcff',
         '#ffc000',
@@ -31,7 +31,7 @@ export const environmentStateMixin = {
       area: '浙江省',
     }).then(res => {
       this.chartArr.sideItem4_3.list = res.data.list
-      this.initMap('sideItem4_3',this.geoJson, this.chartArr.sideItem4_3)      
+      this.initMap('sideItem4_3', this.geoJson, this.chartArr.sideItem4_3)
     })
     // 获取年台州市各县市区生态环境状况等级和省内排名表格数据
     getEIList({
@@ -56,14 +56,15 @@ export const environmentStateMixin = {
       for (let i = 0; i < wellArr.length; i++) {
         wellNameArr.push(wellArr[i].name)
       }
-      this.chartArr.sideItem4_3.result = `${res.data.year}年${this.cityName}下辖县（市、区）中，<span class="light">${excellentNameArr.join()}</span>EI指数等级为优，<span class="light">${wellNameArr.join()}</span>等级为良。`
+      let aaa = excellentNameArr.length > 0 ? `<span class="light">${excellentNameArr.join()}</span>` : '无地区'
+      let bbb = wellNameArr.length > 0 ? `<span class="light">${wellNameArr.join()}</span>` : '无地区'
+      this.chartArr.sideItem4_3.result = `${res.data.year}年${this.cityName}下辖县（市、区）中，${aaa}EI指数等级为优，${bbb}等级为良。`
     })
     // 获取各地市生态环境状况指数数据并绘制图表
     getSubStructuralData({
       area: '浙江省',
       zbs: '生态环境指数'
     }).then(res => {
-      
       let data = res.data
       let item = data.yAxis.data
       this.chartArr.sideItem4_0.title = `${item[0].name}年-${item[item.length - 1].name}年各地市生态环境状况指数`
@@ -76,14 +77,17 @@ export const environmentStateMixin = {
       }
       this.sideItem4_0Chart('sideItem4_0', this.chartArr.sideItem4_0)
 
+      let rrr = JSON.parse(JSON.stringify(data))
       let i = this.chartArr.sideItem4_0.xAxis.indexOf(this.cityName)
       let aaa = item[item.length - 1].list[i]
-      let yData = data.yAxis.data
-      let ddd = 11 - yData[0].list.sort().indexOf(yData[0].list[data.xAxis.indexOf(this.cityName)])
-      let eee = 11 - yData[yData.length - 1].list.sort().indexOf(yData[yData.length - 1].list[data.xAxis.indexOf(this.cityName)])
+      let yData = rrr.yAxis.data
+      let initValue = yData[0].list[rrr.xAxis.indexOf(this.cityName)]
+      let ddd = 11 - yData[0].list.sort().indexOf(initValue)
+      let endValue = yData[yData.length - 1].list[rrr.xAxis.indexOf(this.cityName)]
+      let eee = 11 - yData[yData.length - 1].list.sort().indexOf(endValue)
       let fff = eee - ddd
       let ggg = fff > 0 ? '下降' + Math.abs(fff) : fff === 0 ? '维持不变' : '上升' + Math.abs(fff)
-      
+
 
       this.chartArr.sideItem4_0.result = `${item[item.length - 1].name}年${this.cityName}生态环境状况等级为<span class="light">${this.classSwitch(aaa)}</span>，EI值在全省排第<span class="light">${eee}</span>位，较${item[0].name}年<span class="light">${ggg}</span>。`
     })
@@ -106,7 +110,7 @@ export const environmentStateMixin = {
     })
   },
   methods: {
-    initMap(id,geoJson, data) {
+    initMap(id, geoJson, data) {
       let chart = this.$echarts.init(document.getElementById(id))
       chart.showLoading()
       this.$echarts.registerMap('zheJiang', geoJson)
@@ -126,38 +130,33 @@ export const environmentStateMixin = {
           itemHeight: 15,
           showLabel: true,
           seriesIndex: [0],
-
           textStyle: {
             color: this.chartColor.textColor
           },
-          pieces: [{
-              lte: 95,
-              lt: 91,
-              label: "91<EI≤95",
-              color: "#fa0006"
-            },
+          inverse: true,
+          pieces: [
             {
-              lte: 86,
-              lt: 90,
-              label: "86<EI≤90",
+              lte: 50,
+              lt: 45,
+              label: "45<EI≤50",
               color: "#ff363b"
             },
             {
-              lte: 81,
-              lt: 85,
-              label: "81<EI≤85",
+              lte: 51,
+              lt: 55,
+              label: "51<EI≤55",
               color: "#fc4d00"
             },
             {
-              lte: 76,
-              lt: 80,
-              label: "76<EI≤80",
+              lte: 56,
+              lt: 60,
+              label: "56<EI≤60",
               color: "#f88400"
             },
             {
-              lte: 71,
-              lt: 75,
-              label: "71<EI≤75",
+              lte: 61,
+              lt: 65,
+              label: "61<EI≤65",
               color: "#f9b004"
             },
             {
@@ -165,32 +164,38 @@ export const environmentStateMixin = {
               lt: 70,
               label: "66<EI≤70",
               color: "#f9de02"
+            }, 
+            {
+              lte: 71,
+              lt: 75,
+              label: "71<EI≤75",
+                color: "#e1f401"
+            }, 
+            {
+              lte: 76,
+              lt: 80,
+              label: "76<EI≤80",
+                color: "#8af900"
+            }, 
+            {
+              lte: 81,
+              lt: 85,
+              label: "81<EI≤85",
+                color: "#59f800"
+            }, 
+            {
+              lte: 86,
+              lt: 90,
+              label: "86<EI≤90",
+                color: "#00c302"
             },
             {
-              lte: 61,
-              lt: 65,
-              label: "61<EI≤65",
-              color: "#e1f401"
+              lte: 95,
+              lt: 91,
+              label: "91<EI≤95",
+                color: "#009201"
             },
-            {
-              lte: 56,
-              lt: 60,
-              label: "56<EI≤60",
-              color: "#ff5428"
-            },
-            {
-              lte: 51,
-              lt: 55,
-              label: "51<EI≤55",
-              color: "#8af900"
-            },
-            {
-              lte: 50,
-              lt: 45,
-              label: "45<EI≤50",
-              color: "#00c302"
-            }
-          ],
+          ]
         },
         series: [{
           name: '浙江',
@@ -252,10 +257,28 @@ export const environmentStateMixin = {
         const filterVal = ['name', 'value', 'level', 'rank']
         const list = this.chartArr.sideItem4_2.list
         const data = this.formatJson(filterVal, list)
+        let date = new Date()
+        let year = date.getFullYear() // 获取完整的年份(4位)
+        let month =
+          date.getMonth() < 10 ?
+          '0' + (date.getMonth() + 1) :
+          date.getMonth() + 1 //获取当前月份(0-11,0代表1月)
+        let day =
+          date.getDate() < 10 ? '0' + date.getDate() : date.getDate() + 1 // 获取当前日(1-31)
+        let hours =
+          date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
+        let minutes =
+          date.getMinutes() < 10 ?
+          '0' + date.getMinutes() :
+          date.getMinutes() // 获取当前分钟数(0-59)
+        let seconds =
+          date.getSeconds() < 10 ?
+          '0' + date.getSeconds() :
+          date.getSeconds() // 获取当前秒数(0-59)
         excel.export_json_to_excel({
           header: tHeader,
           data,
-          filename: this.chartArr.sideItem4_2.title,
+          filename: `${this.chartArr.sideItem4_2.title}${year}${month}${day}${hours}${minutes}${seconds}`,
           autoWidth: this.autoWidth,
           bookType: 'xlsx'
         })

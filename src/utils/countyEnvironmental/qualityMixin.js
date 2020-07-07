@@ -105,8 +105,16 @@ export const environmentalQualityMixin = {
       area: this.countyName,
       zbs: '生态环境指数'
     }).then(res => {
-      let data = res.data
+      console.log(res);
       
+      if (res.data === '该区域下无水质断面') {
+        this.chartArr.sideItem1_5.title = `${this.countyName}省控断面水质类型变化`
+        this.chartArr.sideItem1_4.result = `<span class="light">暂无数据</span>`
+        this.chartArr.sideItem1_5.dataSource = '暂无数据'
+        return
+      }
+      
+      let data = res.data
       this.chartArr.sideItem1_5.title = `${data.yAxis.data[0].name}年-${this.returnArrLast(data.yAxis.data).name}年${this.countyName}省控断面水质类型变化`
       this.chartArr.sideItem1_5.dataSource = '省生态环境厅'
       this.chartArr.sideItem1_5.headData = data.xAxis

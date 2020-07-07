@@ -21,7 +21,7 @@ export const emissionsMixin = {
       let bbb = (((res.data.strength - res.data.avgStrength) / res.data.avgStrength) * 100).toFixed(2)
       let ggg = bbb > 0 ? '需加大减排力度' : bbb === 0 ? '与上次相比维持不变' : '减排成效较好'
       let hhh = bbb > 0 ? '高于' : bbb === 0 ? '等于' : '低于'
-      this.chartArr.sideItem3_0.result = `${data.endYear}年${this.countyName}化学需氧量排放量比${data.startYear}年${diffTxt}<span class="light">${Math.abs(data.diff)}</span>吨，排放总量占全省的<span class="light">${aaa}</span>%，排放强度${hhh}全省平均水平<span class="light">${Math.abs(bbb)}</span>%，${ggg}。`
+      this.chartArr.sideItem3_0.result = `${data.endYear}年${this.countyName}化学需氧量排放量比${data.startYear}年${diffTxt}<span class="light">${Math.abs(data.diff)}</span>吨，排放总量占全市的<span class="light">${aaa}</span>%，排放强度${hhh}全市平均水平<span class="light">${Math.abs(bbb)}</span>%，${ggg}。`
     })
     getStrengthVerdict({
       area: this.countyName,
@@ -33,7 +33,7 @@ export const emissionsMixin = {
       let bbb = (((res.data.strength - res.data.avgStrength) / res.data.avgStrength) * 100).toFixed(2)
       let ggg = bbb > 0 ? '需加大减排力度' : bbb === 0 ? '与上次相比维持不变' : '减排成效较好'
       let hhh = bbb > 0 ? '高于' : bbb === 0 ? '等于' : '低于'
-      this.chartArr.sideItem3_1.result = `${data.endYear}年${this.countyName}氨氮排放量比${data.startYear}年${diffTxt}<span class="light">${Math.abs(data.diff)}</span>吨，排放总量占全省的<span class="light">${aaa}</span>%，排放强度${hhh}全省平均水平<span class="light">${Math.abs(bbb)}</span>%，${ggg}。`
+      this.chartArr.sideItem3_1.result = `${data.endYear}年${this.countyName}氨氮排放量比${data.startYear}年${diffTxt}<span class="light">${Math.abs(data.diff)}</span>吨，排放总量占全市的<span class="light">${aaa}</span>%，排放强度${hhh}全市平均水平<span class="light">${Math.abs(bbb)}</span>%，${ggg}。`
     })
     getStrengthVerdict({
       area: this.countyName,
@@ -45,7 +45,7 @@ export const emissionsMixin = {
       let bbb = (((res.data.strength - res.data.avgStrength) / res.data.avgStrength) * 100).toFixed(2)
       let ggg = bbb > 0 ? '需加大减排力度' : bbb === 0 ? '与上次相比维持不变' : '减排成效较好'
       let hhh = bbb > 0 ? '高于' : bbb === 0 ? '等于' : '低于'
-      this.chartArr.sideItem3_2.result = `${data.endYear}年${this.countyName}二氧化硫区排放量比${data.startYear}年${diffTxt}<span class="light">${Math.abs(data.diff)}</span>吨，排放总量占全省的<span class="light">${aaa}</span>%，排放强度${hhh}全省平均水平<span class="light">${Math.abs(bbb)}</span>%，${ggg}。`
+      this.chartArr.sideItem3_2.result = `${data.endYear}年${this.countyName}二氧化硫区排放量比${data.startYear}年${diffTxt}<span class="light">${Math.abs(data.diff)}</span>吨，排放总量占全市的<span class="light">${aaa}</span>%，排放强度${hhh}全市平均水平<span class="light">${Math.abs(bbb)}</span>%，${ggg}。`
     })
     getStrengthVerdict({
       area: this.countyName,
@@ -57,7 +57,7 @@ export const emissionsMixin = {
       let bbb = (((res.data.strength - res.data.avgStrength) / res.data.avgStrength) * 100).toFixed(2)
       let ggg = bbb > 0 ? '需加大减排力度' : bbb === 0 ? '与上次相比维持不变' : '减排成效较好'
       let hhh = bbb > 0 ? '高于' : bbb === 0 ? '等于' : '低于'
-      this.chartArr.sideItem3_3.result = `${data.endYear}年${this.countyName}氮氧化物排放量比${data.startYear}年${diffTxt}<span class="light">${Math.abs(data.diff)}</span>吨，排放总量占全省的<span class="light">${aaa}</span>%，排放强度${hhh}全省平均水平<span class="light">${Math.abs(bbb)}</span>%，${ggg}。`
+      this.chartArr.sideItem3_3.result = `${data.endYear}年${this.countyName}氮氧化物排放量比${data.startYear}年${diffTxt}<span class="light">${Math.abs(data.diff)}</span>吨，排放总量占全市的<span class="light">${aaa}</span>%，排放强度${hhh}全市平均水平<span class="light">${Math.abs(bbb)}</span>%，${ggg}。`
     })
     // 0、获取某段年限某县区化学需氧量排放总量变化并绘制图表
     getStructuralData({

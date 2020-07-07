@@ -3,7 +3,8 @@ import { Message } from 'element-ui'
 
 // 创建一个axios实例
 const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  baseURL: process.env.NODE_ENV === 'production' ? 'http://47.103.102.173:8881/ecologicalMap/' : 'http://192.168.13.251:8083/', // url = base url + request url
   withCredentials: false, // 表示跨域请求时是否需要使用凭证，默认为false
   timeout: 10000 * 20 // 如果请求超过 `timeout` 的时间，请求将被中断
 })

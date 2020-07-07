@@ -45,7 +45,7 @@ export const ecologicaleResourcesMixin = {
         return item.name === this.cityName
       })[0]
       let bbb = (aaa.value / data.total).toFixed(4) * 100
-      this.chartArr.sideItem2_1.result = `${data.year}年${this.cityName}活立木蓄积量为<span class="light">${aaa.value}</span>万立方米，占全省的<span class="light">${bbb}</span>%。`
+      this.chartArr.sideItem2_1.result = `${data.year}年${this.cityName}活立木蓄积量为<span class="light">${aaa.value}</span>万立方米，占全省的<span class="light">${bbb.toFixed(1)}</span>%。`
     })
     // 2、全省各地市林地面积占比
     getScaleDataWithName({
@@ -67,7 +67,7 @@ export const ecologicaleResourcesMixin = {
          return item.name === this.cityName
        })[0]
        let bbb = (aaa.value / data.total).toFixed(4) * 100
-      this.chartArr.sideItem2_2.result = `根据${data.year}年调查数据，${this.cityName}林地面积为<span class="light">${aaa.value}</span>万公顷，占全省的<span class="light">${bbb}</span>%。`
+      this.chartArr.sideItem2_2.result = `根据${data.year}年调查数据，${this.cityName}林地面积为<span class="light">${aaa.value}</span>万公顷，占全省的<span class="light">${bbb.toFixed(1)}</span>%。`
     })
     // 3、全省各地市单位面积森林蓄积量
     getScaleData({

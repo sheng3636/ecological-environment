@@ -20,6 +20,8 @@ export const environmentalQualityMixin = {
     }).then(res => {
       let data = res.data[0]
       this.chartArr.sideItem1_0.name = `${data.yAxis.name}(${data.yAxis.unit})`
+      this.chartArr.sideItem1_0.seriesName = `${data.yAxis.name}`
+      this.chartArr.sideItem1_0.seriesUnit = `${data.yAxis.unit}`
       this.chartArr.sideItem1_0.dataSource = data.yAxis.source
       this.chartArr.sideItem1_0.xAxis = data.xAxis
       this.chartArr.sideItem1_0.yAxis = data.yAxis.list
@@ -47,7 +49,7 @@ export const environmentalQualityMixin = {
       this.chartArr.sideItem1_1.xAxis = data.xAxis
       this.chartArr.sideItem1_1.yAxis = data.yAxis.list
       this.chartArr.sideItem1_1.markLine.data[0].yAxis = this.returnArrAvg(data.yAxis.list)
-      this.chartArr.sideItem1_1.markLine.label.normal.formatter = `全省平均值（${this.chartArr.sideItem1_1.markLine.data[0].yAxis}%）`
+      // this.chartArr.sideItem1_1.markLine.label.normal.formatter = `全省平均值（${this.chartArr.sideItem1_1.markLine.data[0].yAxis}%）`
       let i = data.xAxis.findIndex(function (value) {
         return value === cityName
       })
@@ -113,7 +115,7 @@ export const environmentalQualityMixin = {
       this.singleBarLineChart('sideItem1_4', this.chartArr.sideItem1_4)
 
       let rank = this.chartArr.sideItem1_4.xAxis.indexOf(this.cityName)
-      this.chartArr.sideItem1_4.result = `${data.yAxis.year}年，${this.cityName}PM2.5年均浓度在全省排第<span class="light">${rank + 1}</span>位`
+      this.chartArr.sideItem1_4.result = `${data.yAxis.year}年，${this.cityName}PM2.5年均浓度在全省排第<span class="light">${11 - rank}</span>位`
     })
 
     // 5、获取年市管辖各县级城市PM2.5年均浓度（µg/m³）对比并绘制图表
@@ -171,28 +173,17 @@ export const environmentalQualityMixin = {
       for (let i = 0; i < notQualifiedArr.length; i++) {
         notQualifiedNameArr.push(notQualifiedArr[i].name)
       }
+      let aaa = qualifiedNameArr.length > 0 ? qualifiedNameArr.join() : '无'
+      let bbb = notQualifiedNameArr.length > 0 ? `<span class="light">${notQualifiedNameArr.join()}</span>省控断面水质均未达到III类。` : ''
 
-      this.chartArr.sideItem1_6.result = `${data.yAxis.year}年，${this.cityName}<span class="light">${qualifiedNameArr.join()}</span>所有省控断面水质全部达到III类及以上。 <span class="light">${notQualifiedNameArr.join()}</span>所有省控断面水质均未达到III类。`
-    })
-    // 7、获取全省各地市III类以上水质断面占比数据并绘制图表
-    sectionProportion({
-      area: '浙江省'
-    }).then(res => {
-      let data = res.data
-      this.chartArr.sideItem1_7.title = `${data.yAxis.year}全省各地市III类以上水质断面占比`
-      this.chartArr.sideItem1_7.xAxis = data.xAxis
-      this.chartArr.sideItem1_7.yAxis = data.yAxis.ratelist
-      this.singleBarLineChart('sideItem1_7', this.chartArr.sideItem1_7)
-
-      let i = this.chartArr.sideItem1_7.xAxis.indexOf(this.cityName)
-      this.chartArr.sideItem1_7.result = `${data.yAxis.year}年，${this.cityName}<span class="light">27</span>个省控水质断面中，III类以上占比为<span class="light">${this.chartArr.sideItem1_7.yAxis[i]}</span>%，在全省11个地市中排第<span class="light">${i + 1}</span>名。`
+      this.chartArr.sideItem1_6.result = `${data.yAxis.year}年，${this.cityName}<span class="light">${aaa}</span>省控断面水质达到III类。${bbb} `
     })
     // 8、获取年市省控断面水质类型变化数据并绘制图表
     getStructuralData({
       area: this.cityName,
       zbs: 'I类,II类,III类,IV类,V类,劣V类'
     }).then(res => {
-      let data = res.data      
+      let data = res.data         
       this.chartArr.sideItem1_8.title = `${this.returnArrFirst(data[0].xAxis)}年-${this.returnArrLast(data[0].xAxis)}年${this.cityName}省控断面水质类型变化`
       this.chartArr.sideItem1_8.name1 = data[0].yAxis.name
       this.chartArr.sideItem1_8.name2 = data[1].yAxis.name
@@ -210,7 +201,27 @@ export const environmentalQualityMixin = {
       this.chartArr.sideItem1_8.yAxis5 = data[4].yAxis.list
       this.chartArr.sideItem1_8.yAxis6 = data[5].yAxis.list
       this.sideItem1_8Chart('sideItem1_8', this.chartArr.sideItem1_8)
-      this.chartArr.sideItem1_9.result = `2019年，${this.cityName}<span class="light">27</span>个省控水质断面中，I类<span class="light">${this.returnArrLast(data[0].yAxis.list)}</span>个，II类<span class="light">${this.returnArrLast(data[1].yAxis.list)}</span>个，III类<span class="light">${this.returnArrLast(data[2].yAxis.list)}</span>个，IV类<span class="light">${this.returnArrLast(data[3].yAxis.list)}</span>个，V类<span class="light">${this.returnArrLast(data[4].yAxis.list)}</span>个，劣IV类<span class="light">${this.returnArrLast(data[5].yAxis.list)}</span>个。`
+
+      let sum = 0
+      for (var i = 0; i < data.length; i++) {
+        sum += this.returnArrLast(data[i].yAxis.list)
+      }
+
+      // 7、获取全省各地市III类以上水质断面占比数据并绘制图表
+      sectionProportion({
+        area: '浙江省'
+      }).then(resp => {
+        let data1 = resp.data
+        this.chartArr.sideItem1_7.title = `${data1.yAxis.year}全省各地市III类以上水质断面占比`
+        this.chartArr.sideItem1_7.xAxis = data1.xAxis
+        this.chartArr.sideItem1_7.yAxis = data1.yAxis.ratelist
+        this.singleBarLineChart('sideItem1_7', this.chartArr.sideItem1_7)
+
+        let i = this.chartArr.sideItem1_7.xAxis.indexOf(this.cityName)
+        this.chartArr.sideItem1_7.result = `${data1.yAxis.year}年，${this.cityName}<span class="light">${sum}</span>个省控水质断面中，III类以上占比为<span class="light">${this.chartArr.sideItem1_7.yAxis[i]}</span>%，在全省11个地市中排第<span class="light">${i + 1}</span>名。`
+      })
+      
+      this.chartArr.sideItem1_9.result = `${this.returnArrLast(data[0].xAxis)}年，${this.cityName}<span class="light">${sum}</span>个省控水质断面中，I类<span class="light">${this.returnArrLast(data[0].yAxis.list)}</span>个，II类<span class="light">${this.returnArrLast(data[1].yAxis.list)}</span>个，III类<span class="light">${this.returnArrLast(data[2].yAxis.list)}</span>个，IV类<span class="light">${this.returnArrLast(data[3].yAxis.list)}</span>个，V类<span class="light">${this.returnArrLast(data[4].yAxis.list)}</span>个，劣IV类<span class="light">${this.returnArrLast(data[5].yAxis.list)}</span>个。`
     })
     // 市省控断面水质类型
     sectionList({

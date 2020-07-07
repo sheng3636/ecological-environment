@@ -40,8 +40,8 @@ module.exports = {
       // 细节见: https://cli.vuejs.org/config/#devserver-proxy
       [process.env.VUE_APP_BASE_API]: {
         // target: `https://www.fastmock.site/mock/16cc48478cd7264caa761582d3cceff4/ecologicalEnv/`,
-        target: `http://192.168.13.251:8083/`,
-        // target: `http://remote.natapp1.cc/`,
+        // target: `http://192.168.13.251:8083/`,
+        target: `http://47.103.102.173:8881/ecologicalMap/`,
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: '/'

@@ -48,14 +48,21 @@
             </div>
           </el-tooltip>
         </li>
-        <li>
+        <li @click="feedbackClick">
+          <el-tooltip class="item" effect="dark" content="意见反馈" placement="top">
+            <div>
+              <img src="@/assets/images/feedbackIcon.png">
+            </div>
+          </el-tooltip>
+        </li>
+        <li @click="junpLink('http://118.190.204.249:8989/aiPage?tag=home&cityName=' + countyName)">
           <el-tooltip class="item" effect="dark" content="回到总览" placement="top">
             <div>
               <img src="@/assets/images/nav/navTopIcon6.png">
             </div>
           </el-tooltip>
         </li>
-        <li>
+        <li @click="junpLink('http://118.190.204.249:8989/aiPage')">
           <el-tooltip class="item" effect="dark" content="回到首页" placement="top">
             <div>
               <img src="@/assets/images/nav/navTopIcon7.png">
@@ -86,11 +93,11 @@
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item :command="beforeHandleCommand('sideItem1_0','bar',singleBarLineChart)">
-                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                     <span class="txt">柱状图样式</span>
                   </el-dropdown-item>
                   <el-dropdown-item :command="beforeHandleCommand('sideItem1_0','line',singleBarLineChart)" divided>
-                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
                     <span class="txt">折线图样式</span>
                   </el-dropdown-item>
                 </el-dropdown-menu>
@@ -119,11 +126,11 @@
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item :command="beforeHandleCommand('sideItem1_1','bar',singleBarLineChart)">
-                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                     <span class="txt">柱状图样式</span>
                   </el-dropdown-item>
                   <el-dropdown-item :command="beforeHandleCommand('sideItem1_1','line',singleBarLineChart)" divided>
-                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
                     <span class="txt">折线图样式</span>
                   </el-dropdown-item>
                 </el-dropdown-menu>
@@ -152,17 +159,21 @@
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item :command="beforeHandleCommand('sideItem1_2','bar',singleBarLineChart)">
-                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                     <span class="txt">柱状图样式</span>
                   </el-dropdown-item>
                   <el-dropdown-item :command="beforeHandleCommand('sideItem1_2','line',singleBarLineChart)" divided>
-                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
                     <span class="txt">折线图样式</span>
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </p>
           </h4>
+          <p class="markLineArea">
+            <span class="colorLine" style="border-color: #fff45c;"></span>
+            <span>国家空气质量二级标准要求（35µg/m³）</span>
+          </p>
           <div class="sideItemChart width800" id="sideItem1_2"></div>
           <div class="resultWrap">
             <h5>数据来源：{{chartArr.sideItem1_2.dataSource}}</h5>
@@ -185,17 +196,21 @@
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item :command="beforeHandleCommand('sideItem1_3','bar',singleBarLineChart)">
-                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                     <span class="txt">柱状图样式</span>
                   </el-dropdown-item>
                   <el-dropdown-item :command="beforeHandleCommand('sideItem1_3','line',singleBarLineChart)" divided>
-                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
                     <span class="txt">折线图样式</span>
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </p>
           </h4>
+          <p class="markLineArea">
+            <span class="colorLine" style="border-color: #fff;"></span>
+            <span>国家空气质量二级标准要求（35µg/m³）</span>
+          </p>
           <div class="sideItemChart width1020" id="sideItem1_3"></div>
           <div class="resultWrap">
             <h5>数据来源：{{chartArr.sideItem1_3.dataSource}}</h5>
@@ -227,11 +242,11 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item :command="beforeHandleCommand('sideItem1_4','bar',sideItem1_4Chart)">
-                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                       <span class="txt">柱状图样式</span>
                     </el-dropdown-item>
                     <el-dropdown-item :command="beforeHandleCommand('sideItem1_4','line',sideItem1_4Chart)" divided>
-                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
                       <span class="txt">折线图样式</span>
                     </el-dropdown-item>
                   </el-dropdown-menu>
@@ -245,7 +260,7 @@
             <h4 class="moudleTitle">
               <p class="left">{{chartArr.sideItem1_5.title}}</p>
               <p class="optionGroup" style="justify-content: flex-end;">
-                <img @click="exportType" class="optionImg" src="@/assets/images/exportIcon.png">
+                <img @click="exportType" class="optionImg" src="@/assets/images/exportIcon.png" v-if="chartArr.sideItem1_5.dataSource != '暂无数据'">
               </p>
             </h4>
             <ul class="sideItemChart width910 tableWrap">
@@ -292,11 +307,11 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item :command="beforeHandleCommand('sideItem2_0','bar',singleBarLineChart)">
-                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                       <span class="txt">柱状图样式</span>
                     </el-dropdown-item>
                     <el-dropdown-item :command="beforeHandleCommand('sideItem2_0','line',singleBarLineChart)" divided>
-                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
                       <span class="txt">折线图样式</span>
                     </el-dropdown-item>
                   </el-dropdown-menu>
@@ -319,11 +334,11 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item :command="beforeHandleCommand('sideItem2_1','bar',singleBarLineChart)">
-                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                       <span class="txt">柱状图样式</span>
                     </el-dropdown-item>
                     <el-dropdown-item :command="beforeHandleCommand('sideItem2_1','line',singleBarLineChart)" divided>
-                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
                       <span class="txt">折线图样式</span>
                     </el-dropdown-item>
                   </el-dropdown-menu>
@@ -363,11 +378,11 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item :command="beforeHandleCommand('sideItem3_0','bar',singleBarLineChart)">
-                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                       <span class="txt">柱状图样式</span>
                     </el-dropdown-item>
                     <el-dropdown-item :command="beforeHandleCommand('sideItem3_0','line',singleBarLineChart)" divided>
-                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
                       <span class="txt">折线图样式</span>
                     </el-dropdown-item>
                   </el-dropdown-menu>
@@ -390,11 +405,11 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item :command="beforeHandleCommand('sideItem3_1','bar',singleBarLineChart)">
-                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                       <span class="txt">柱状图样式</span>
                     </el-dropdown-item>
                     <el-dropdown-item :command="beforeHandleCommand('sideItem3_1','line',singleBarLineChart)" divided>
-                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
                       <span class="txt">折线图样式</span>
                     </el-dropdown-item>
                   </el-dropdown-menu>
@@ -428,11 +443,11 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item :command="beforeHandleCommand('sideItem3_3','bar',singleBarLineChart)">
-                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                       <span class="txt">柱状图样式</span>
                     </el-dropdown-item>
                     <el-dropdown-item :command="beforeHandleCommand('sideItem3_3','line',singleBarLineChart)" divided>
-                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
                       <span class="txt">折线图样式</span>
                     </el-dropdown-item>
                   </el-dropdown-menu>
@@ -470,11 +485,11 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item :command="beforeHandleCommand('sideItem3_4','bar',singleBarLineChart)">
-                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                       <span class="txt">柱状图样式</span>
                     </el-dropdown-item>
                     <el-dropdown-item :command="beforeHandleCommand('sideItem3_4','line',singleBarLineChart)" divided>
-                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
                       <span class="txt">折线图样式</span>
                     </el-dropdown-item>
                   </el-dropdown-menu>
@@ -497,11 +512,11 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item :command="beforeHandleCommand('sideItem3_5','bar',singleBarLineChart)">
-                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                       <span class="txt">柱状图样式</span>
                     </el-dropdown-item>
                     <el-dropdown-item :command="beforeHandleCommand('sideItem3_5','line',singleBarLineChart)" divided>
-                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
                       <span class="txt">折线图样式</span>
                     </el-dropdown-item>
                   </el-dropdown-menu>
@@ -535,11 +550,11 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item :command="beforeHandleCommand('sideItem3_7','bar',singleBarLineChart)">
-                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                       <span class="txt">柱状图样式</span>
                     </el-dropdown-item>
                     <el-dropdown-item :command="beforeHandleCommand('sideItem3_7','line',singleBarLineChart)" divided>
-                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
                       <span class="txt">折线图样式</span>
                     </el-dropdown-item>
                   </el-dropdown-menu>
@@ -577,11 +592,11 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item :command="beforeHandleCommand('sideItem3_8','bar',singleBarLineChart)">
-                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                       <span class="txt">柱状图样式</span>
                     </el-dropdown-item>
                     <el-dropdown-item :command="beforeHandleCommand('sideItem3_8','line',singleBarLineChart)" divided>
-                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
                       <span class="txt">折线图样式</span>
                     </el-dropdown-item>
                   </el-dropdown-menu>
@@ -604,11 +619,11 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item :command="beforeHandleCommand('sideItem3_9','bar',singleBarLineChart)">
-                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                       <span class="txt">柱状图样式</span>
                     </el-dropdown-item>
                     <el-dropdown-item :command="beforeHandleCommand('sideItem3_9','line',singleBarLineChart)" divided>
-                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
                       <span class="txt">折线图样式</span>
                     </el-dropdown-item>
                   </el-dropdown-menu>
@@ -642,11 +657,11 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item :command="beforeHandleCommand('sideItem3_11','bar',singleBarLineChart)">
-                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                       <span class="txt">柱状图样式</span>
                     </el-dropdown-item>
                     <el-dropdown-item :command="beforeHandleCommand('sideItem3_11','line',singleBarLineChart)" divided>
-                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
                       <span class="txt">折线图样式</span>
                     </el-dropdown-item>
                   </el-dropdown-menu>
@@ -684,11 +699,11 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item :command="beforeHandleCommand('sideItem3_12','bar',singleBarLineChart)">
-                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                       <span class="txt">柱状图样式</span>
                     </el-dropdown-item>
                     <el-dropdown-item :command="beforeHandleCommand('sideItem3_12','line',singleBarLineChart)" divided>
-                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
                       <span class="txt">折线图样式</span>
                     </el-dropdown-item>
                   </el-dropdown-menu>
@@ -711,11 +726,11 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item :command="beforeHandleCommand('sideItem3_13','bar',singleBarLineChart)">
-                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                       <span class="txt">柱状图样式</span>
                     </el-dropdown-item>
                     <el-dropdown-item :command="beforeHandleCommand('sideItem3_13','line',singleBarLineChart)" divided>
-                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
                       <span class="txt">折线图样式</span>
                     </el-dropdown-item>
                   </el-dropdown-menu>
@@ -749,11 +764,11 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item :command="beforeHandleCommand('sideItem3_15','bar',singleBarLineChart)">
-                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                       <span class="txt">柱状图样式</span>
                     </el-dropdown-item>
                     <el-dropdown-item :command="beforeHandleCommand('sideItem3_15','line',singleBarLineChart)" divided>
-                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
                       <span class="txt">折线图样式</span>
                     </el-dropdown-item>
                   </el-dropdown-menu>
@@ -785,17 +800,21 @@
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item :command="beforeHandleCommand('sideItem4_0','bar',sideItem4_0Chart)">
-                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
                     <span class="txt">柱状图样式</span>
                   </el-dropdown-item>
                   <el-dropdown-item :command="beforeHandleCommand('sideItem4_0','line',sideItem4_0Chart)" divided>
-                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
                     <span class="txt">折线图样式</span>
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </p>
           </h4>
+          <p class="markLineArea">
+            <span class="colorLine" style="border-color:#00ff7d"></span>
+            <span>优</span>
+          </p>
           <div class="sideItemChart width1845" id="sideItem4_0"></div>
           <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem4_0.dataSource}}</h5>
         </div>
@@ -908,12 +927,13 @@
         <span class="downTxt">文件导出中</span>
       </div>
     </div>
+    <feedback :feedbackVisi="feedbackVisi" :feedForm="feedForm" @feedbackDialog="feedbackDialog"></feedback>
   </div>
 </template>
 <script>
 import { savePic, exportWord } from '@/api/environmentalQuality'
 import mUtilsFn from '@/utils/mUtils.js'
-import { finishMixin } from '@/utils/countyEnvironmental/finishMixin.js'
+import { finishMixin } from '@/utils/finishMixin.js'
 import { environmentalQualityMixin } from '@/utils/countyEnvironmental/qualityMixin.js'
 import { ecologicaleResourcesMixin } from '@/utils/countyEnvironmental/ecologicaleResourcesMixin.js'
 import { emissionsMixin } from '@/utils/countyEnvironmental/emissionsMixin.js'
@@ -931,7 +951,11 @@ export default {
   ],
   data() {
     return {
-      baseUrl: 'http://192.168.13.251:8083/', // 系统域名
+      // baseUrl: 'http://47.103.102.173:8881/ecologicalMap/', // 系统域名
+      baseUrl:
+        process.env.NODE_ENV === 'production'
+          ? 'http://47.103.102.173:8881/ecologicalMap/'
+          : 'http://192.168.13.251:8083/', // 系统域名
       cityName: '', // 被分析城市
       countyName: '', // 被分析县区
       fullscreenLoading: false,
@@ -1386,12 +1410,11 @@ export default {
       }
     }
   },
-  created(){
+  created() {
     this.cityName = this.$route.query.cityName
     this.countyName = this.$route.query.countyName
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     initQualityChart(color) {
       this.chartColor.textColor = color
@@ -1475,7 +1498,7 @@ export default {
       let seconds =
         date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds() // 获取当前秒数(0-59)
 
-      aLink.download = `${this.imagesName}${year}${month}${day}${hours}${minutes}${seconds}`
+      aLink.download = `${this.imagesName}${year}${month}${day}${hours}${minutes}${seconds}.png`
       aLink.href = URL.createObjectURL(blob)
       aLink.dispatchEvent(
         new MouseEvent('click', {
@@ -1581,7 +1604,7 @@ export default {
               onDownloadProgress(progress) {
                 _self.filePercentage = Math.round(
                   (progress.loaded / progress.total) * 100
-                )      
+                )
               }
             }).then(res => {
               // new Blob([data])用来创建URL的file对象或者blob对象
@@ -1596,8 +1619,10 @@ export default {
                 date.getMonth() < 10
                   ? '0' + (date.getMonth() + 1)
                   : date.getMonth() + 1 //获取当前月份(0-11,0代表1月)
-              let day = date.getDate() // 获取当前日(1-31)
-              let hours = date.getHours() // 获取当前小时数(0-23)
+              let day =
+                date.getDate() < 10 ? '0' + date.getDate() : date.getDate() + 1 // 获取当前日(1-31)
+              let hours =
+                date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
               let minutes =
                 date.getMinutes() < 10
                   ? '0' + date.getMinutes()
@@ -1609,12 +1634,12 @@ export default {
               let fileName = `${_self.countyName}生态环境分析报告${year}${month}${day}${hours}${minutes}${seconds}`
               link.download = fileName + '.docx'
               document.body.appendChild(link)
-              setTimeout(function(){
+              setTimeout(function() {
                 link.click()
                 _self.initQualityChart('#fff')
                 _self.filePercentage = 0
                 _self.fullscreenLoading = false
-              },1000)
+              }, 1000)
             })
           })
         )
@@ -1769,6 +1794,7 @@ export default {
           itemWidth: 25,
           itemHeight: 9,
           itemGap: 15,
+          selectedMode: false,
           textStyle: {
             fontSize: '14',
             color: this.chartColor.textColor
@@ -1828,7 +1854,7 @@ export default {
                     '#ff89e5',
                     '#ffb0b0',
                     '#e1f401',
-                    '#e8395d',
+                    '#e8395d'
                   ]
                   return colorList[params.dataIndex]
                 }
@@ -1870,11 +1896,6 @@ export default {
         })
       })
     },
-    // 导航栏点击事件
-    routerFn(index) {
-      this.routerActive = index
-      document.body.scrollTop = 0
-    }
   }
 }
 </script>
