@@ -1,0 +1,4 @@
+@import '@/assets/styles/mixin.scss';
+.lightColor {
+  color: #ffba00;
+}

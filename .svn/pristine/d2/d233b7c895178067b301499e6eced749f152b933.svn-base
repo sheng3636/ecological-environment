@@ -1,0 +1,63 @@
+import {
+  apiGet,
+  axiosAll
+}
+from '@/api/api'
+import {
+  getArrFirst,
+  getArrLast,
+  getArrAvg
+}
+from '@/utils/mUtils.js'
+export const synthesisMixin = {
+  data() {
+    return {}
+  },
+  mounted() {
+    // 0、 获取某年某地区主要指标排名对比并绘制图表
+    apiGet(
+      '/statistics/getRank', {
+        startYear: 2015,
+        endYear:2018,
+        areas: '浙江省',
+        area: this.cityName,
+        model: 'city',
+        zbs: '生产总值,生产总值增长率,一般公共预算收入,发明专利授权量,R&D经费投入占生产总值比重,城镇居民人均可支配收入,农村居民人均可支配收入,城乡居民收入比,常住城镇化率,EI指数,空气质量达到优良天数的比率,规上工业亩均税收（万元/亩）,单位建设用地生产总值'
+      }).then(res => {
+      let data = res.data
+      console.log(data);
+      
+      for (let i = 0; i < data.table.length; i++) {
+        this.chartArr.sideItem6_0.chartArr[0].indicator.push({
+          name: data.table[i].title
+        })
+        this.chartArr.sideItem6_0.chartArr[0].seriesData.push(data.table[i].a2018)
+      }
+
+      this.chartArr.sideItem6_0.title = `2018年${this.cityName}主要指标排名对比`
+      this.chartArr.sideItem6_0.list = data.table
+      this.radarChart('sideItem6_0', this.chartArr.sideItem6_0)
+    })
+    // 1、 获取某年某地区主要指标进度对比并绘制图表
+    apiGet(
+      '/statistics/getProgressStatusData', {
+        year: 2018,
+        area: this.cityName,
+        zbs: ['生产总值', '发明专利授权量', 'R&D经费投入占生产总值比重', '常住城镇化率', '空气质量达到优良天数的比率'].join(',')
+      }).then(res => {
+      let data = res.data
+      this.chartArr.sideItem6_1.title = `2018年${this.cityName}主要指标进度对比`
+      for (const key in data) {
+        if (data.hasOwnProperty(key)) {
+          this.chartArr.sideItem6_1.xAxis.push(key)
+          this.chartArr.sideItem6_1.chartArr[0].yAxis.push(data[key] * 100)
+        }
+      }
+      this.horizontalChart('sideItem6_1', this.chartArr.sideItem6_1)
+      // let aaa = (2018 - 2016 + 1) * 0.2
+      // let bbb = this.chartArr.sideItem1_1.chartArr[0].yAxis[0] >= aaa ? '良好' : '滞后'
+      // this.chartArr.sideItem1_1.result = `“十三五”时期，${this.cityName}${this.chartArr.sideItem1_1.xAxis[0]}进度<span class="light">${bbb}</span>。`
+    })
+  },
+  methods: {}
+}

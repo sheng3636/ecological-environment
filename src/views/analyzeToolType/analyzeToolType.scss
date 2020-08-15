@@ -1,0 +1,197 @@
+@import '@/assets/styles/mixin.scss';
+.areaSelect {
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  width: 100%;
+  height: 1080px;
+  background: url(../../assets/images/entranceImgs/mainBg.png) no-repeat center center;
+  background-size: 100% 100%;
+
+  .header {
+    position: relative;
+    height: 120px;
+    line-height: 95px;
+    font-weight: bold;
+    background: url(../../assets/images/entranceImgs/mainLogo.png) no-repeat center center;
+    background-size: 808px 120px;
+    text-align: center;
+
+    .logotxt {
+      font-size: 44px;
+      background: linear-gradient(to bottom, #00e0d2, #01a5e8);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .el-icon-s-home {
+      position: absolute;
+      top: 7px;
+      margin-top: 30px;
+      cursor: pointer;
+      display: block;
+      right: 50px;
+      font-size: 30px;
+      color: #01a5e8;
+    }
+  }
+
+  .cityName {
+    font-size: 32px;
+    line-height: 70px;
+    color: #09b7ff;
+    text-align: center;
+  }
+}
+.mapContent {
+  position: relative;
+
+  #aiMap {
+    position: absolute;
+    top: 55px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 724px;
+    height: 724px;
+    background: url(../../assets/images/entranceImgs/mapBg.png) no-repeat center center;
+  }
+
+  .navItme {
+    position: absolute;
+    width: 331px;
+    height: 90px;
+    line-height: 90px;
+    text-align: center;
+    font-size: 28px;
+    cursor: pointer;
+    color: #09b7ff;
+    background: url(../../assets/images/entranceImgs/navItemBg.png) no-repeat center center;
+
+    .txt {
+      padding-left: 40px;
+      display: inline-block;
+    }
+  }
+
+  .noActive {
+    filter: grayscale(70%);
+  }
+
+  .navItme1 {
+    left: 340px;
+    top: 50px;
+
+    .txt {
+      height: 90px;
+      background: url(../../assets/images/entranceImgs/navItem1.png) no-repeat left center;
+    }
+
+    &:hover .txt {
+      background: url(../../assets/images/entranceImgs/navItem1-1.png) no-repeat left center;
+    }
+  }
+
+  .navItme2 {
+    top: 265px;
+    left: 210px;
+
+    .txt {
+      background: url(../../assets/images/entranceImgs/navItem2.png) no-repeat left center;
+    }
+
+    &:hover .txt {
+      background: url(../../assets/images/entranceImgs/navItem2-1.png) no-repeat left center;
+    }
+  }
+
+  .navItme3 {
+    top: 496px;
+    left: 235px;
+
+    .txt {
+      padding-left: 48px;
+      background: url(../../assets/images/entranceImgs/navItem3.png) no-repeat left center;
+    }
+
+    // &:hover .txt {
+    //   padding-left: 48px;
+    //   background: url(../../assets/images/entranceImgs/navItem3-1.png) no-repeat left center;
+    // }
+  }
+
+  .navItme4 {
+    top: 690px;
+    left: 345px;
+
+    .txt {
+      background: url(../../assets/images/entranceImgs/navItem4.png) no-repeat left center;
+    }
+
+    // &:hover .txt {
+    //   background: url(../../assets/images/entranceImgs/navItem4-1.png) no-repeat left center;
+    // }
+  }
+
+
+  .navItme5 {
+    right: 335px;
+    top: 50px;
+
+    .txt {
+      background: url(../../assets/images/entranceImgs/navItem5.png) no-repeat left center;
+    }
+
+    // &:hover .txt {
+    //   background: url(../../assets/images/entranceImgs/navItem5-1.png) no-repeat left center;
+    // }
+  }
+
+  .navItme6 {
+    top: 265px;
+    right: 215px;
+
+    .txt {
+      background: url(../../assets/images/entranceImgs/navItem6.png) no-repeat left center;
+    }
+
+    // &:hover .txt {
+    //   background: url(../../assets/images/entranceImgs/navItem6-1.png) no-repeat left center;
+    // }
+  }
+
+  .navItme7 {
+    top: 496px;
+    right: 230px;
+
+    .txt {
+      background: url(../../assets/images/entranceImgs/navItem7.png) no-repeat left center;
+    }
+
+    &:hover .txt {
+      background: url(../../assets/images/entranceImgs/navItem7-1.png) no-repeat left center;
+    }
+  }
+
+  .navItme8 {
+    top: 690px;
+    right: 340px;
+
+    .txt {
+      background: url(../../assets/images/entranceImgs/navItem8.png) no-repeat left center;
+    }
+
+    &:hover .txt {
+      background: url(../../assets/images/entranceImgs/navItem8-1.png) no-repeat left center;
+    }
+  }
+
+  .aaa:hover {
+    background: url(../../assets/images/entranceImgs/navItemActiveBg.png) no-repeat center center;
+    color: #dfc303;
+  }
+
+  .honeBack {
+    top: 35px;
+    right: 70px;
+  }
+}

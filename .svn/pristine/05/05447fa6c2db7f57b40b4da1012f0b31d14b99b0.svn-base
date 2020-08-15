@@ -1,0 +1,52 @@
+import {
+  getScaleData,
+  getScaleDataWithName
+}
+from '@/api/api'
+export const ecologicaleResourcesMixin = {
+  data() {
+    return {}
+  },
+  mounted() {
+    // 0、获取某年某市管辖各县级城市森林覆盖率并绘制图表
+    getScaleData({
+      area: this.cityName,
+      zb: '森林覆盖率'
+    }).then(res => {
+      let data = res.data
+      this.chartArr.sideItem2_0.title = `${data.yAxis.year}年${this.cityName}各县、市森林覆盖率`
+      this.chartArr.sideItem2_0.name = `${data.yAxis.name}(${data.yAxis.unit})`
+      this.chartArr.sideItem2_0.dataSource = data.yAxis.source
+      this.chartArr.sideItem2_0.xAxis = data.xAxis
+      this.chartArr.sideItem2_0.yAxis = data.yAxis.list
+      this.singleBarLineChart('sideItem2_0', this.chartArr.sideItem2_0)
+
+      let aaa = data.xAxis.indexOf(this.countyName)
+      if (aaa < 0) {
+        aaa = data.xAxis.indexOf(this.cityName + '区')
+      }
+      // 1、获取某年某市管辖各县级城市单位面积森林蓄积量并绘制图表
+      getScaleData({
+        area: this.cityName,
+        zb: '单位面积森林蓄积量'
+      }).then(resp => {
+        let data1 = resp.data
+        this.chartArr.sideItem2_1.title = `${data1.yAxis.year}${this.cityName}年各县、市单位面积森林蓄积量`
+        this.chartArr.sideItem2_1.name = `${data1.yAxis.name}(${data1.yAxis.unit})`
+        this.chartArr.sideItem2_1.dataSource = data1.yAxis.source
+        this.chartArr.sideItem2_1.xAxis = data1.xAxis
+        this.chartArr.sideItem2_1.yAxis = data1.yAxis.list
+        this.singleBarLineChart('sideItem2_1', this.chartArr.sideItem2_1)
+
+        let bbb = resp.data
+        let ccc = bbb.xAxis.indexOf(this.countyName)
+        if (ccc < 0) {
+          ccc = bbb.xAxis.indexOf(this.cityName + '区')
+        }
+        this.chartArr.sideItem2_0.result = `${this.countyName}森林覆盖率为<span class="light">${this.chartArr.sideItem2_0.yAxis[aaa]}</span>%，单位面积森林蓄积量<span class="light">${bbb.yAxis.list[ccc]}</span>立方米/公顷。`
+      })
+    })
+  },
+  methods: {
+  }
+}

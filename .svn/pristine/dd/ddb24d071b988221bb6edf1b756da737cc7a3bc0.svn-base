@@ -1,0 +1,2448 @@
+
+<template>
+  <div class="bodyMain">
+    <nav class="navTopArea">
+      <div class="navLeft">
+        <img src="@/assets/images/nav/logo.png">
+        <span v-show="routerActive === 1">{{cityName}}经济发展分析</span>
+        <span v-show="routerActive === 2">{{cityName}}科技创新</span>
+        <span v-show="routerActive === 3">{{cityName}}社会民生</span>
+        <span v-show="routerActive === 4">{{cityName}}生态环境</span>
+        <span v-show="routerActive === 5">{{cityName}}质量效益</span>
+        <span v-show="routerActive === 6">{{cityName}}综合评价</span>
+      </div>
+      <ul class="navRight">
+        <li :class="{navActive:routerActive === 1}" @click="routerFn(1)">
+          <el-tooltip class="item" effect="dark" content="经济发展" placement="top">
+            <div>
+              <img src="@/assets/images/citySynthesisAnalysis/navTopIcon1.png">
+              <span v-if="routerActive === 1">经济发展</span>
+            </div>
+          </el-tooltip>
+        </li>
+        <li :class="{navActive:routerActive === 2}" @click="routerFn(2)">
+          <el-tooltip class="item" effect="dark" content="科技创新" placement="top">
+            <div>
+              <img src="@/assets/images/citySynthesisAnalysis/navTopIcon2.png">
+              <span v-if="routerActive === 2">科技创新</span>
+            </div>
+          </el-tooltip>
+        </li>
+        <li :class="{navActive:routerActive === 3}" @click="routerFn(3)">
+          <el-tooltip class="item" effect="dark" content="社会民生" placement="top">
+            <div>
+              <img src="@/assets/images/citySynthesisAnalysis/navTopIcon3.png">
+              <span v-if="routerActive === 3">社会民生</span>
+            </div>
+          </el-tooltip>
+        </li>
+        <li :class="{navActive:routerActive === 4}" @click="routerFn(4)">
+          <el-tooltip class="item" effect="dark" content="生态环境" placement="top">
+            <div>
+              <img src="@/assets/images/citySynthesisAnalysis/navTopIcon4.png">
+              <span v-if="routerActive === 4">生态环境</span>
+            </div>
+          </el-tooltip>
+        </li>
+        <li :class="{navActive:routerActive === 5}" @click="routerFn(5)">
+          <el-tooltip class="item" effect="dark" content="质量效益" placement="top">
+            <div>
+              <img src="@/assets/images/citySynthesisAnalysis/navTopIcon5.png">
+              <span v-if="routerActive === 5">质量效益</span>
+            </div>
+          </el-tooltip>
+        </li>
+        <li :class="{navActive:routerActive === 6}" @click="routerFn(6)">
+          <el-tooltip class="item" effect="dark" content="综合评价" placement="top">
+            <div>
+              <img src="@/assets/images/citySynthesisAnalysis/navTopIcon6.png">
+              <span v-if="routerActive === 6">综合评价</span>
+            </div>
+          </el-tooltip>
+        </li>
+        <p class="navGap"></p>
+        <li class="optionNav">
+          <el-tooltip class="item" effect="dark" content="导出文档" placement="top">
+            <div>
+              <img src="@/assets/images/nav/navExportImg.png">
+              <span>导出文档</span>
+            </div>
+          </el-tooltip>
+        </li>
+        <li class="optionNav" @click="feedbackClick">
+          <el-tooltip class="item" effect="dark" content="意见反馈" placement="top">
+            <div>
+              <img src="@/assets/images/nav/navFeedBackImg.png">
+              <span>意见反馈</span>
+            </div>
+          </el-tooltip>
+        </li>
+        <li class="optionNav" @click="junpLink('http://118.190.204.249:8989/aiPage?tag=home&cityName=' + cityName)">
+          <el-tooltip class="item" effect="dark" content="回到总览" placement="top">
+            <div>
+              <img src="@/assets/images/nav/navOverviwImg.png">
+              <span>回到总览</span>
+            </div>
+          </el-tooltip>
+        </li>
+        <li class="optionNav" @click="junpLink('http://118.190.204.249:8989/aiPage')">
+          <el-tooltip class="item" effect="dark" content="返回首页" placement="top">
+            <div>
+              <img src="@/assets/images/nav/navBackHomeImg.png">
+              <span>返回首页</span>
+            </div>
+          </el-tooltip>
+        </li>
+      </ul>
+    </nav>
+    <div class="bottomMain">
+      <div class="mainWrap" v-show="routerActive === 1">
+        <div class="CuttingLine">
+          <p class="txtWrap">
+            <img src="@/assets/images/cuttingLine1.png">
+            <span class="txt">生产总值对比</span>
+            <img src="@/assets/images/cuttingLine2.png">
+          </p>
+        </div>
+        <div class="sideItem width1080 sideItem1_0">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem1_0.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem1_0',chartArr.sideItem1_0.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_0',['bar','line'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon1.png">
+                    <span class="txt">柱状+折线样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_0',['bar','bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_0',['line','line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width1080" id="sideItem1_0"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem1_0.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem1_0.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width740 sideItem1_1">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem1_1.title}}</span>
+            <p class="optionGroup" style="justify-content: flex-end;">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem1_1',chartArr.sideItem1_1.title,horizontalChart)"
+                src="@/assets/images/downImgIcon.png">
+            </p>
+          </h4>
+          <div class="sideItemChart width740" id="sideItem1_1"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem1_1.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem1_1.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="twoWrap">
+          <div class="sideItem width1080 sideItem1_2">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem1_2.title}}</span>
+              <p class="optionGroup">
+                <img class="optionImg" @click="imagesLoadOpenFn('sideItem1_2',chartArr.sideItem1_2.title,barLineChart)"
+                  src="@/assets/images/downImgIcon.png">
+                <el-dropdown class="chartDropdown" @command="chartTypeClick">
+                  <span class="el-dropdown-link">
+                    <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem1_2',['bar'],barLineChart)">
+                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                      <span class="txt">柱状图样式</span>
+                    </el-dropdown-item>
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem1_2',['line'],barLineChart)" divided>
+                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                      <span class="txt">折线图样式</span>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </p>
+            </h4>
+            <div class="sideItemChart width1080" id="sideItem1_2"></div>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem1_2.dataSource}}</h5>
+          </div>
+          <div class="sideItem width740 sideItem1_3">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem1_3.title}}</span>
+              <p class="optionGroup" style="justify-content: flex-end;">
+                <img class="optionImg" @click="imagesLoadOpenFn('sideItem1_3',chartArr.sideItem1_3.title,pieChart)"
+                  src="@/assets/images/downImgIcon.png">
+              </p>
+            </h4>
+            <div class="sideItemChart width740" id="sideItem1_3"></div>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem1_3.dataSource}}</h5>
+          </div>
+          <div class="resultWrap" style="width: 100%;">
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem1_2.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width1845 sideItem1_4">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem1_4.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem1_4',chartArr.sideItem1_4.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown class="chartDropdown" @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_4',['bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_4',['line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width1845" id="sideItem1_4"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem1_4.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem1_4.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="CuttingLine">
+          <p class="txtWrap">
+            <img src="@/assets/images/cuttingLine1.png">
+            <span class="txt">人均生产总值对比</span>
+            <img src="@/assets/images/cuttingLine2.png">
+          </p>
+        </div>
+        <div class="sideItem width910 sideItem1_5">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem1_5.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem1_5',chartArr.sideItem1_5.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_5',['bar','bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_5',['line','line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width910" id="sideItem1_5"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem1_5.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem1_5.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width910 sideItem1_6">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem1_6.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem1_6',chartArr.sideItem1_6.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown class="chartDropdown" @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_6',['bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_6',['line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width910" id="sideItem1_6"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem1_6.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem1_6.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="CuttingLine">
+          <p class="txtWrap">
+            <img src="@/assets/images/cuttingLine1.png">
+            <span class="txt">一般公共预算收入对比</span>
+            <img src="@/assets/images/cuttingLine2.png">
+          </p>
+        </div>
+        <div class="sideItem width910 sideItem1_7">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem1_7.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem1_7',chartArr.sideItem1_7.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_7',['bar','bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_7',['line','line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width910" id="sideItem1_7"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem1_7.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem1_7.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width910 sideItem1_8">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem1_8.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem1_8',chartArr.sideItem1_8.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown class="chartDropdown" @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_8',['bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_8',['line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width910" id="sideItem1_8"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem1_8.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem1_8.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width1845 sideItem1_9">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem1_9.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem1_9',chartArr.sideItem1_9.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown class="chartDropdown" @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_9',['bar','bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_9',['line','line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width1845" id="sideItem1_9"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem1_9.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem1_9.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="CuttingLine">
+          <p class="txtWrap">
+            <img src="@/assets/images/cuttingLine1.png">
+            <span class="txt">进出口总额对比</span>
+            <img src="@/assets/images/cuttingLine2.png">
+          </p>
+        </div>
+        <div class="sideItem width910 sideItem1_10">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem1_10.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem1_10',chartArr.sideItem1_10.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_10',['bar','bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_10',['line','line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width910" id="sideItem1_10"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem1_10.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem1_10.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width910 sideItem1_11">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem1_11.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem1_11',chartArr.sideItem1_11.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown class="chartDropdown" @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_11',['bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_11',['line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width910" id="sideItem1_11"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem1_11.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem1_11.result"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mainWrap" v-show="routerActive === 2">
+        <div class="CuttingLine">
+          <p class="txtWrap">
+            <img src="@/assets/images/cuttingLine1.png">
+            <span class="txt">发明专利授权量对比</span>
+            <img src="@/assets/images/cuttingLine2.png">
+          </p>
+        </div>
+        <div class="sideItem width910 sideItem2_0">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem2_0.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem2_0',chartArr.sideItem2_0.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_0',['bar','bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_0',['line','line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width910" id="sideItem2_0" style="height:300px;min-height:300px"></div>
+          <div class="sideItemChart width910" id="sideItem2_1" style="height:125px;min-height:125px"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem2_0.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem2_0.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width910 sideItem2_2">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem2_2.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem2_2',chartArr.sideItem2_2.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown class="chartDropdown" @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_2',['bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_2',['line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width910" id="sideItem2_2"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem2_2.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem2_2.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width910 sideItem2_3">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem2_3.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem2_3',chartArr.sideItem2_3.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_3',['bar','bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_3',['line','line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width910" id="sideItem2_3"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem2_3.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem2_3.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width910 sideItem2_4">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem2_4.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem2_4',chartArr.sideItem2_4.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown class="chartDropdown" @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_4',['bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_4',['line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width910" id="sideItem2_4"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem2_4.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem2_4.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="CuttingLine">
+          <p class="txtWrap">
+            <img src="@/assets/images/cuttingLine1.png">
+            <span class="txt">R&D经费投入占生产总值比重对比</span>
+            <img src="@/assets/images/cuttingLine2.png">
+          </p>
+        </div>
+        <div class="sideItem width910 sideItem2_5">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem2_5.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem2_5',chartArr.sideItem2_5.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_5',['bar','bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_5',['line','line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width910" id="sideItem2_5" style="height:300px;min-height:300px"></div>
+          <div class="sideItemChart width910" id="sideItem2_6" style="height:125px;min-height:125px"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem2_5.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem2_5.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width910 sideItem2_7">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem2_7.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem2_7',chartArr.sideItem2_7.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown class="chartDropdown" @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_7',['bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_7',['line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width910" id="sideItem2_7"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem2_7.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem2_7.result"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mainWrap" v-show="routerActive === 3">
+        <div class="CuttingLine">
+          <p class="txtWrap">
+            <img src="@/assets/images/cuttingLine1.png">
+            <span class="txt">城镇、农村常住居民人均可支配收入对比</span>
+            <img src="@/assets/images/cuttingLine2.png">
+          </p>
+        </div>
+        <div class="sideItem width740 sideItem3_0">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem3_0.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem3_0',chartArr.sideItem3_0.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem3_0',['bar','bar','line'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon1.png">
+                    <span class="txt">柱状+折线样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem3_0',['bar','bar','bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem3_0',['line','line','line'],barLineChart)"
+                    divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width740" id="sideItem3_0"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem3_0.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem3_0.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width1080 sideItem3_1">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem3_1.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem3_1',chartArr.sideItem3_1.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem3_1',['bar','bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem3_1',['line','line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width1080" id="sideItem3_1"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem3_1.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem3_1.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width1845 sideItem3_2">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem3_2.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem3_2',chartArr.sideItem3_2.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem3_2',['bar','bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem3_2',['line','line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width1845" id="sideItem3_2"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem3_2.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem3_2.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width910 sideItem3_3">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem3_3.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem3_3',chartArr.sideItem3_3.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem3_3',['bar','bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem3_3',['line','line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width910" id="sideItem3_3" style="height:300px;min-height:300px"></div>
+          <div class="sideItemChart width910" id="sideItem3_4" style="height:125px;min-height:125px"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem3_3.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem3_3.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width910 sideItem3_5">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem3_5.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem3_5',chartArr.sideItem3_5.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown class="chartDropdown" @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem3_5',['bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem3_5',['line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width910" id="sideItem3_5"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem3_5.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem3_5.result"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mainWrap" v-show="routerActive === 4">
+        <div class="CuttingLine">
+          <p class="txtWrap">
+            <img src="@/assets/images/cuttingLine1.png">
+            <span class="txt">生态环境状况指数（EI）对比</span>
+            <img src="@/assets/images/cuttingLine2.png">
+          </p>
+        </div>
+        <div class="sideItem width740 sideItem4_0">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem4_0.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem4_0',chartArr.sideItem4_0.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem4_0',['bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem4_0',['line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width740" id="sideItem4_0"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem4_0.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem4_0.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width1080 sideItem4_1">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem4_1.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem4_1',chartArr.sideItem4_1.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem4_1',['bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem4_1',['line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width1080" id="sideItem4_1"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem4_1.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem4_1.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="CuttingLine">
+          <p class="txtWrap">
+            <img src="@/assets/images/cuttingLine1.png">
+            <span class="txt">空气质量达到优良天数对比</span>
+            <img src="@/assets/images/cuttingLine2.png">
+          </p>
+        </div>
+        <div class="sideItem width910 sideItem4_2">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem4_2.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem4_2',chartArr.sideItem4_2.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem4_2',['bar','bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem4_2',['line','line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width910" id="sideItem4_2" style="height:300px;min-height:300px"></div>
+          <div class="sideItemChart width910" id="sideItem4_3" style="height:125px;min-height:125px"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem4_2.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem4_2.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width910 sideItem4_4">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem4_4.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem4_4',chartArr.sideItem4_4.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown class="chartDropdown" @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem4_4',['bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem4_4',['line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width910" id="sideItem4_4"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem4_4.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem4_4.result"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mainWrap" v-show="routerActive === 5">
+        <div class="CuttingLine">
+          <p class="txtWrap">
+            <img src="@/assets/images/cuttingLine1.png">
+            <span class="txt">规上工业亩均税收对比</span>
+            <img src="@/assets/images/cuttingLine2.png">
+          </p>
+        </div>
+        <div class="sideItem width740 sideItem5_0">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem5_0.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem5_0',chartArr.sideItem5_0.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem5_0',['bar','bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem5_0',['line','line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width740" id="sideItem5_0"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem5_0.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem5_0.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width1080 sideItem5_1">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem5_1.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem5_1',chartArr.sideItem5_1.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem5_1',['bar','bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem5_1',['line','line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width1080" id="sideItem5_1"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem5_1.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem5_1.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="CuttingLine">
+          <p class="txtWrap">
+            <img src="@/assets/images/cuttingLine1.png">
+            <span class="txt">单位建设用地生产总值对比</span>
+            <img src="@/assets/images/cuttingLine2.png">
+          </p>
+        </div>
+        <div class="sideItem width740 sideItem5_2">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem5_2.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem5_2',chartArr.sideItem5_2.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem5_2',['bar','bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem5_2',['line','line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width740" id="sideItem5_2"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem5_2.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem5_2.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width1080 sideItem5_3">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem5_3.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem5_3',chartArr.sideItem5_3.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem5_3',['bar','bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem5_3',['line','line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width1080" id="sideItem5_3"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem5_3.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem5_3.result"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mainWrap" v-show="routerActive === 6">
+        <div class="CuttingLine">
+          <p class="txtWrap">
+            <img src="@/assets/images/cuttingLine1.png">
+            <span class="txt">综合评价</span>
+            <img src="@/assets/images/cuttingLine2.png">
+          </p>
+        </div>
+        <div class="sideItem width1845 sideItem6_0">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem6_0.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem6_0',chartArr.sideItem6_0.title,radarChart)"
+                src="@/assets/images/downImgIcon.png">
+              <img class="optionImg" src="@/assets/images/exportIcon.png">
+            </p>
+          </h4>
+          <div class="width1845" style="display:flex;">
+            <div class="width910">
+              <div class="sideItemChart width910" id="sideItem6_0"></div>
+              <div class="resultWrap">
+                <h5>数据来源：{{chartArr.sideItem6_0.dataSource}}</h5>
+                <div class="content">
+                  <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+                  <p v-html="chartArr.sideItem6_0.result"></p>
+                </div>
+              </div>
+            </div>
+            <div class="tableWrap width910">
+              <el-table :data="chartArr.sideItem6_0.list" fit height="632">
+                <el-table-column prop="title" label="主要指标" align="center" />
+                <el-table-column prop="endRank" label="2018年全省排名" align="center" />
+                <el-table-column prop="startRank" label="2015年全省排名" align="center" />
+                <el-table-column prop="changeVal" label="排名较15年变化" align="center" />
+              </el-table>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width1845 sideItem6_1">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem6_1.title}}</span>
+            <p class="optionGroup" style="justify-content: flex-end;">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem6_1',chartArr.sideItem6_1.title,horizontalChart)"
+                src="@/assets/images/downImgIcon.png">
+            </p>
+          </h4>
+          <div class="sideItemChart width1845" id="sideItem6_1"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem6_1.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem6_1.result"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ul class="navBottomArea">
+      <li :class="{active:routerActive === 1}" @click="routerFn(1)">
+        <img v-if="routerActive === 1" class="activeImg" src="@/assets/images/nav/navBottomActiveIcon.png">
+        <img v-if="routerActive === 1" src="@/assets/images/citySynthesisAnalysis/navBottomIcon1-1.png">
+        <img v-if="routerActive !== 1" src="@/assets/images/citySynthesisAnalysis/navBottomIcon1.png">
+        <span>经济发展</span>
+      </li>
+      <li :class="{active:routerActive === 2}" @click="routerFn(2)">
+        <img v-if="routerActive === 2" class="activeImg" src="@/assets/images/nav/navBottomActiveIcon.png">
+        <img v-if="routerActive === 2" src="@/assets/images/citySynthesisAnalysis/navBottomIcon2-1.png">
+        <img v-if="routerActive !== 2" src="@/assets/images/citySynthesisAnalysis/navBottomIcon2.png">
+        <span>科技创新</span>
+      </li>
+      <li :class="{active:routerActive === 3}" @click="routerFn(3)">
+        <img v-if="routerActive === 3" class="activeImg" src="@/assets/images/nav/navBottomActiveIcon.png">
+        <img v-if="routerActive === 3" src="@/assets/images/citySynthesisAnalysis/navBottomIcon3-1.png">
+        <img v-if="routerActive !== 3" src="@/assets/images/citySynthesisAnalysis/navBottomIcon3.png">
+        <span>社会民生</span>
+      </li>
+      <li :class="{active:routerActive === 4}" @click="routerFn(4)">
+        <img v-if="routerActive === 4" class="activeImg" src="@/assets/images/nav/navBottomActiveIcon.png">
+        <img v-if="routerActive === 4" src="@/assets/images/citySynthesisAnalysis/navBottomIcon4-1.png">
+        <img v-if="routerActive !== 4" src="@/assets/images/citySynthesisAnalysis/navBottomIcon4.png">
+        <span>生态环境</span>
+      </li>
+      <li :class="{active:routerActive === 5}" @click="routerFn(5)">
+        <img v-if="routerActive === 5" class="activeImg" src="@/assets/images/nav/navBottomActiveIcon.png">
+        <img v-if="routerActive === 5" src="@/assets/images/citySynthesisAnalysis/navBottomIcon5-1.png">
+        <img v-if="routerActive !== 5" src="@/assets/images/citySynthesisAnalysis/navBottomIcon5.png">
+        <span>质量效益</span>
+      </li>
+      <li :class="{active:routerActive === 6}" @click="routerFn(6)">
+        <img v-if="routerActive === 6" class="activeImg" src="@/assets/images/nav/navBottomActiveIcon.png">
+        <img v-if="routerActive === 6" src="@/assets/images/citySynthesisAnalysis/navBottomIcon6-1.png">
+        <img v-if="routerActive !== 6" src="@/assets/images/citySynthesisAnalysis/navBottomIcon6.png">
+        <span>综合评价</span>
+      </li>
+    </ul>
+    <el-dialog title="图片下载" :visible.sync="imagesVisi" width="60%" custom-class="imagesWrap" center
+      :close-on-click-modal="false" :close-on-press-escape="false" @close="imagesModalCloseFn">
+      <div class="imgModalBody">
+        <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+        <div class="sideItemChart" id="echartsWrap1"></div>
+        <div class="colorArea">
+          <p>
+            <span class="txt">背景颜色：</span>
+            <ColorPicker v-model="chartColor.backgroundColor" alpha :colors="predefineColors"
+              @on-active-change="bgColorChange"></ColorPicker>
+          </p>
+          <p>
+            <span class="txt">文字颜色：</span>
+            <ColorPicker v-model="chartColor.textColor" alpha :colors="predefineColors"
+              @on-active-change="txtColorChange"></ColorPicker>
+          </p>
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="exportPic">保 存</el-button>
+      </span>
+    </el-dialog>
+    <div class="fileLoadingModal" v-if="fullscreenLoading">
+      <div class="progressWrap">
+        <el-progress :text-inside="true" :stroke-width="15" :percentage="filePercentage"></el-progress>
+        <span class="downTxt">文件导出中</span>
+      </div>
+    </div>
+    <feedback :feedbackVisi="feedbackVisi" :feedForm="feedForm" @feedbackDialog="feedbackDialog"></feedback>
+  </div>
+</template>
+<script>
+import { getStore } from '@/utils/mUtils'
+import { finishMixin } from '@/utils/finishMixin.js'
+import { economicsMixin } from '@/utils/citySynthesisAnalysis/economics.js'
+import { scienceMixin } from '@/utils/citySynthesisAnalysis/science.js'
+import { societyMixin } from '@/utils/citySynthesisAnalysis/society.js'
+import { evnvironmentalMixin } from '@/utils/citySynthesisAnalysis/evnvironmental.js'
+import { benefitMixin } from '@/utils/citySynthesisAnalysis/benefit.js'
+import { synthesisMixin } from '@/utils/citySynthesisAnalysis/synthesis.js'
+export default {
+  mixins: [finishMixin, economicsMixin, scienceMixin, societyMixin, evnvironmentalMixin, benefitMixin, synthesisMixin],
+  data() {
+    return {
+      cityName: this.$route.query.cityName,
+      routerActive: 1, // 选中模块
+      chartArr: {
+        sideItem1_0: {
+          id: 'sideItem1_0',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '统计年鉴',
+          result: '',
+          xAxis: [],
+          barWidth: '25px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#f51b68',
+              yAxis: [],
+            },
+            {
+              name: '',
+              chartType: 'line',
+              color: '#00fffc',
+              yAxisIndex: 1,
+              yAxis: [],
+            },
+          ],
+        },
+        sideItem1_1: {
+          id: 'sideItem1_1',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '统计年鉴',
+          result: '',
+          xAxis: [],
+          barWidth: '35px',
+          rowMaxLength:2,
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#00ffb4',
+              yAxis: [],
+            },
+          ],
+        },
+        sideItem1_2: {
+          id: 'sideItem1_2',
+          picNum: 2,
+          infoNum: 2,
+          titleNum: 2,
+          title: '',
+          dataSource: '统计年鉴',
+          result: '',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#00825e',
+              lightColor: '#00ffb8',
+              yAxis: [],
+            },
+            {
+              name: '',
+              type: 'line',
+              color: '#ff5975',
+              yAxisIndex: 0,
+              markLine: {
+                data: [
+                  {
+                    name: '',
+                    itemStyle: {
+                      normal: {
+                        color: '#ff5975',
+                      },
+                    },
+                    label: {
+                      normal: {
+                        formatter: '',
+                        position: 'end',
+                      },
+                    },
+                    yAxis: null,
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        sideItem1_3: {
+          id: 'sideItem1_3',
+          picNum: 11,
+          infoNum: 11,
+          titleNum: 12,
+          title: '',
+          dataSource: '统计年鉴',
+          chartArr: [
+            {
+              name: '',
+              unit: '',
+              selectFan: this.$route.query.cityName,
+              list: [],
+            },
+          ],
+        },
+        sideItem1_4: {
+          id: 'sideItem1_4',
+          picNum: 2,
+          infoNum: 2,
+          titleNum: 2,
+          title: '',
+          dataSource: '统计年鉴',
+          result: '',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#ae7300',
+              lightColor: '#ffba35',
+              yAxis: [],
+            },
+            {
+              name: '',
+              type: 'line',
+              color: '#ff5975',
+              yAxisIndex: 0,
+              markLine: {
+                data: [
+                  {
+                    name: '',
+                    itemStyle: {
+                      normal: {
+                        color: '#ff5975',
+                      },
+                    },
+                    label: {
+                      normal: {
+                        formatter: '',
+                        position: 'end',
+                      },
+                    },
+                    yAxis: null,
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        sideItem1_5: {
+          id: 'sideItem1_5',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '统计年鉴',
+          result: '',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'line',
+              color: '#f51b68',
+              yAxis: [],
+            },
+            {
+              name: '',
+              chartType: 'line',
+              color: '#00fffc',
+              yAxis: [],
+            },
+          ],
+        },
+        sideItem1_6: {
+          id: 'sideItem1_6',
+          picNum: 2,
+          infoNum: 2,
+          titleNum: 2,
+          title: '',
+          dataSource: '统计年鉴',
+          result: '',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#7b0054',
+              lightColor: '#ff00ae',
+              yAxis: [],
+            },
+            {
+              name: '',
+              type: 'line',
+              color: '#ff5975',
+              yAxisIndex: 0,
+              markLine: {
+                data: [
+                  {
+                    name: '',
+                    itemStyle: {
+                      normal: {
+                        color: '#ff5975',
+                      },
+                    },
+                    label: {
+                      normal: {
+                        formatter: '', 
+                        position: 'end',
+                      },
+                    },
+                    yAxis: null,
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        sideItem1_7: {
+          id: 'sideItem1_7',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '统计年鉴',
+          result: '',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'line',
+              color: '#d8ca09',
+              yAxis: [],
+            },
+            {
+              name: '',
+              chartType: 'line',
+              color: '#00fffc',
+              yAxis: [],
+            },
+          ],
+        },
+        sideItem1_8: {
+          id: 'sideItem1_8',
+          picNum: 2,
+          infoNum: 2,
+          titleNum: 2,
+          title: '',
+          dataSource: '统计年鉴',
+          result: '',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#00746d',
+              lightColor: '#00fff0',
+              yAxis: [],
+            },
+          ],
+        },
+        sideItem1_9: {
+          id: 'sideItem1_9',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '统计年鉴',
+          result:'',
+          xAxis: [],
+          barWidth: '35px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'line',
+              color: '#59f2a8',
+              yAxis: [],
+            },
+            {
+              name: '',
+              chartType: 'line',
+              color: '#f2de59',
+              yAxis: [],
+            },
+            {
+              name: '',
+              chartType: 'line',
+              color: '#f51b68',
+              yAxis: [],
+            },
+          ],
+        },
+        sideItem1_10: {
+          id: 'sideItem1_10',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '浙江商务年鉴',
+          result: '',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'line',
+              color: '#f51b68',
+              yAxis: [],
+            },
+            {
+              name: '',
+              chartType: 'line',
+              color: '#00fffc',
+              yAxis: [],
+            },
+            {
+              name: '',
+              chartType: 'line',
+              color: '#f2de59',
+              yAxis: [],
+            },
+          ],
+        },
+        sideItem1_11: {
+          id: 'sideItem1_11',
+          picNum: 2,
+          infoNum: 2,
+          titleNum: 2,
+          title: '',
+          dataSource: '浙江商务年鉴',
+          result: '',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#00a698',
+              lightColor: '#00ffea',
+              yAxis: [],
+            },
+          ],
+        },
+        sideItem2_0: {
+          id: 'sideItem2_0',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '统计年鉴、统计公报',
+          result:
+            '2018年，杭州市发明专利授权量达到10267件， 较上年同比增加395件。十三五”时期，杭州市发明专利授权量进度滞后。',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'line',
+              color: '#2f4554',
+              yAxis: [],
+            },
+            {
+              name: '',
+              chartType: 'line',
+              color: '#8d2a2e',
+              yAxis: [],
+            },
+            {
+              name: '',
+              chartType: 'line',
+              color: '#00a698',
+              yAxis: [],
+            },
+          ],
+        },
+        sideItem2_1: {
+          id: 'sideItem2_1',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '',
+          result: '',
+          xAxis: [],
+          barWidth: '35px',
+          rowMaxLength:4,
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#00ffb4',
+              yAxis: [],
+            },
+          ],
+        },
+        sideItem2_2: {
+          id: 'sideItem2_2',
+          picNum: 2,
+          infoNum: 2,
+          titleNum: 2,
+          title: '',
+          dataSource: '统计年鉴、统计公报',
+          result:
+            '2018年，杭州市发明专利授权量高于全市平均水平，在全省排第 1位，排名上升 0位。',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#810086',
+              lightColor: '#f500ff',
+              yAxis: [],
+            },
+            {
+              name: '',
+              type: 'line',
+              color: '#ff5975',
+              yAxisIndex: 0,
+              markLine: {
+                data: [
+                  {
+                    name: '',
+                    itemStyle: {
+                      normal: {
+                        color: '#ff5975',
+                      },
+                    },
+                    label: {
+                      normal: {
+                        formatter: '',
+                        position: 'end',
+                      },
+                    },
+                    yAxis: null,
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        sideItem2_3: {
+          id: 'sideItem2_3',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '统计年鉴、统计公报',
+          result:
+            '2018年，杭州市每万人发明专利授权量达到10.47件， 较上年同比增加0.04件。',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '杭州市',
+              chartType: 'line',
+              color: '#ffea00',
+              yAxis: [],
+            },
+            {
+              name: '',
+              chartType: 'line',
+              color: '#8d2a2e',
+              yAxis: [],
+            },
+            {
+              name: '',
+              chartType: 'line',
+              color: '#f51b68',
+              yAxis: [],
+            },
+          ],
+        },
+        sideItem2_4: {
+          id: 'sideItem2_4',
+          picNum: 2,
+          infoNum: 2,
+          titleNum: 2,
+          title: '',
+          dataSource: '统计年鉴、统计公报',
+          result:
+            '2018年，杭州市每万人发明专利授权量高于全市平均水平，在全省排第 1位，排名上升 0位。',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#936f00',
+              lightColor: '#ffc000',
+              yAxis: [],
+            },
+            {
+              name: '',
+              type: 'line',
+              color: '#ff5975',
+              yAxisIndex: 0,
+              markLine: {
+                data: [
+                  {
+                    name: '',
+                    itemStyle: {
+                      normal: {
+                        color: '#ff5975',
+                      },
+                    },
+                    label: {
+                      normal: {
+                        formatter: '', 
+                        position: 'end',
+                      },
+                    },
+                    yAxis: null,
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        sideItem2_5: {
+          id: 'sideItem2_5',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '统计年鉴、科技进步统计监测评价报告',
+          result:
+            '2018年，杭州市R&D经费投入占生产总值比重达到 3.44%，较上年同比增加 0.29个百分点。“十三五”时期，杭州市R&D经费投入占生产总值比重进度良好。',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'line',
+              color: '#ffea00',
+              yAxis: [],
+            },
+            {
+              name: '',
+              chartType: 'line',
+              color: '#8d2a2e',
+              yAxis: [],
+            },
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#00ffb4',
+              yAxis: [],
+            },
+          ],
+        },
+        sideItem2_6: {
+          id: 'sideItem2_6',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '',
+          result: '',
+          xAxis: [],
+          barWidth: '35px',
+          rowMaxLength:5,
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#00ffb4',
+              yAxis: [],
+            },
+          ],
+        },
+        sideItem2_7: {
+          id: 'sideItem2_7',
+          picNum: 2,
+          infoNum: 2,
+          titleNum: 2,
+          title: '',
+          dataSource: '统计年鉴、科技进步统计监测评价报告',
+          result:
+            '2018年，杭州市R&D经费投入占生产总值比重高于全市平均水平，在全省排第 1位，排名上升 0位。',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#00862c',
+              lightColor: '#00ff54',
+              yAxis: [],
+            },
+            {
+              name: '',
+              type: 'line',
+              color: '#ff5975',
+              yAxisIndex: 0,
+              markLine: {
+                data: [
+                  {
+                    name: '',
+                    itemStyle: {
+                      normal: {
+                        color: '#ff5975',
+                      },
+                    },
+                    label: {
+                      normal: {
+                        formatter: '',
+                        position: 'end',
+                      },
+                    },
+                    yAxis: null,
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        sideItem3_0: {
+          id: 'sideItem3_0',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '统计年鉴',
+          result:
+            '2018年，杭州市城镇常住居民人均可支配收入达到61172万元， 较上年同比增长4896万元， 杭州市农村常住居民人均可支配收入达到33193万元， 较上年同比增长2796万元， 城乡居民收入比下降为0.01， 城乡居民收入差距进一步减小。',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#00ffde',
+              yAxis: [],
+            },
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#f2596f',
+              yAxis: [],
+            },
+            {
+              name: '',
+              chartType: 'line',
+              yAxisIndex: 1,
+              color: '#e9ff00',
+              yAxis: [],
+            },
+          ],
+        },
+        sideItem3_1: {
+          id: 'sideItem3_1',
+          picNum: 2,
+          infoNum: 2,
+          titleNum: 2,
+          title: '',
+          dataSource: '统计年鉴',
+          result:
+            '2018年，杭州市城镇常住居民人均可支配收入高于全省平均水平， 在全省排第1位， 排名上升0位， 杭州市农村常住居民人均可支配收入低于全省平均水平， 在全省排第1位， 排名上升3位。',
+          xAxis: [],
+          barWidth: '25px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#7f6000',
+              lightColor: '#ffc000',
+              yAxis: [],
+            },
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#5f2c79',
+              lightColor: '#be59f2',
+              yAxis: [],
+            },
+          ],
+        },
+        sideItem3_2: {
+          id: 'sideItem3_2',
+          picNum: 2,
+          infoNum: 2,
+          titleNum: 2,
+          title: '',
+          dataSource: '统计年鉴',
+          result:
+            '2018年，杭州市城乡居民收入比低于全省平均水平，在全省排第 6位， 排名上升0位。',
+          xAxis: [],
+          barWidth: '35px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#00681d',
+              lightColor: '#35ff6e',
+              yAxis: [],
+            },
+            {
+              name: '',
+              type: 'line',
+              color: '#ff5975',
+              yAxisIndex: 0,
+              markLine: {
+                data: [
+                  {
+                    name: '',
+                    itemStyle: {
+                      normal: {
+                        color: '#ff5975',
+                      },
+                    },
+                    label: {
+                      normal: {
+                        formatter: '',
+                        position: 'end',
+                      },
+                    },
+                    yAxis: null,
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        sideItem3_3: {
+          id: 'sideItem3_3',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '统计年鉴',
+          result:
+            '2018年，杭州市常住城镇化率达到77.4%， 较上年同比增加0.6个百分点。 “十三五”时期，杭州市常住城镇化率进度良好。',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'line',
+              color: '#ff0039',
+              yAxis: [],
+            },
+            {
+              name: '',
+              chartType: 'line',
+              color: '#ffea00',
+              yAxis: [],
+            },
+            {
+              name: '',
+              chartType: 'line',
+              color: '#00fffc',
+              yAxisIndex: 1,
+              yAxis: [],
+            },
+          ],
+        },
+        sideItem3_4: {
+          id: 'sideItem3_4',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '',
+          result: '',
+          xAxis: [],
+          barWidth: '35px',
+          rowMaxLength:2,
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#00ffb4',
+              yAxis: [],
+            },
+          ],
+        },
+        sideItem3_5: {
+          id: 'sideItem3_5',
+          picNum: 2,
+          infoNum: 2,
+          titleNum: 2,
+          title: '',
+          dataSource: '统计年鉴',
+          result:
+            '2018年，杭州市常住城镇化率高于全省平均水平，在全省排第 1位， 排名上升0位。',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#7f6000',
+              lightColor: '#ffc000',
+              yAxis: [],
+            },
+            {
+              name: '',
+              type: 'line',
+              color: '#ff5975',
+              yAxisIndex: 0,
+              markLine: {
+                data: [
+                  {
+                    name: '',
+                    itemStyle: {
+                      normal: {
+                        color: '#ff5975',
+                      },
+                    },
+                    label: {
+                      normal: {
+                        formatter: '',
+                        position: 'end',
+                      },
+                    },
+                    yAxis: null,
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        sideItem4_0: {
+          id: 'sideItem4_0',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '省生态环境厅',
+          result:
+            '2018年，杭州市生态环境状况指数（EI）达到78.6， 较上年同比下降0.4。',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'line',
+              color: '#da0237',
+              yAxis: [],
+            },
+          ],
+        },
+        sideItem4_1: {
+          id: 'sideItem4_1',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '省生态环境厅',
+          result:
+            '2018年，杭州市生态环境状况指数（EI）低于全省平均水平， 在全省排第7位， 排名上升1位。',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#810086',
+              lightColor: '#f500ff',
+              yAxis: [],
+            },
+          ],
+        },
+        sideItem4_2: {
+          id: 'sideItem4_2',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '统计年鉴、统计公报',
+          result:
+            '2018年，杭州市空气质量达到优良天数比例达到73.7%， 较上年同比下降0.5个百分点。“十三五”时期，杭州市空气质量达到优良天数比例进度良好。',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'line',
+              color: '#ff0039',
+              yAxis: [],
+            },
+            {
+              name: '',
+              chartType: 'line',
+              color: '#ffea00',
+              yAxis: [],
+            },
+            {
+              name: '',
+              chartType: 'line',
+              color: '#00fffc',
+              yAxisIndex: 1,
+              yAxis: [],
+            },
+          ],
+        },
+        sideItem4_3: {
+          id: 'sideItem4_3',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '',
+          result: '',
+          xAxis: [],
+          barWidth: '35px',
+          rowMaxLength:6,
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#00ffb4',
+              yAxis: [],
+            },
+          ],
+        },
+        sideItem4_4: {
+          id: 'sideItem4_4',
+          picNum: 2,
+          infoNum: 2,
+          titleNum: 2,
+          title: '',
+          dataSource: '统计年鉴、统计公报',
+          result:
+            '2018年，杭州市空气质量达到优良天数的比例低于全省平均水平， 在全省排第10位， 排名下降 2位。',
+          xAxis: [],
+          barWidth: '25px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#00862c',
+              lightColor: '#00ff54',
+              yAxis: [],
+            },
+            {
+              name: '）',
+              type: 'line',
+              color: '#ff5975',
+              yAxisIndex: 0,
+              markLine: {
+                data: [
+                  {
+                    name: '',
+                    itemStyle: {
+                      normal: {
+                        color: '#ff5975',
+                      },
+                    },
+                    label: {
+                      normal: {
+                        formatter: '',
+                        position: 'end',
+                      },
+                    },
+                    yAxis: null,
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        sideItem5_0: {
+          id: 'sideItem5_0',
+          picNum: 2,
+          infoNum: 2,
+          titleNum: 2,
+          title: '',
+          dataSource: '统计年鉴',
+          result:
+            '2018年，杭州市规上工业亩均税收达到39.4（万元/亩）， 较上年同比增长2.5（万元/亩）。',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#ff0039',
+              yAxis: [],
+            },
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#ffea00',
+              yAxis: [],
+            },
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#00fffc',
+              yAxis: [],
+            },
+          ],
+        },
+        sideItem5_1: {
+          id: 'sideItem5_1',
+          picNum: 2,
+          infoNum: 2,
+          titleNum: 2,
+          title: '',
+          dataSource: '统计年鉴',
+          result:
+            '2018年，杭州市规上工业亩均税收高于全市平均水平，在全省排第 2位， 排名上升0位。',
+          xAxis: [],
+          barWidth: '25px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#810086',
+              lightColor: '#f500ff',
+              yAxis: [],
+            }
+          ],
+        },
+        sideItem5_2: {
+          id: 'sideItem5_2',
+          picNum: 2,
+          infoNum: 2,
+          titleNum: 2,
+          title: '',
+          dataSource: '全省及设区市“亩均效益”有关情况',
+          result:
+            '2018年，杭州市单位建设用地生产总值达到37.4（万元/亩）， 较上年同比上升2.4（万元/亩）。',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#ff0039',
+              yAxis: [],
+            },
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#ffea00',
+              yAxis: [],
+            },
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#00fffc',
+              yAxis: [],
+            },
+          ],
+        },
+        sideItem5_3: {
+          id: 'sideItem5_3',
+          picNum: 2,
+          infoNum: 2,
+          titleNum: 2,
+          title: '',
+          dataSource: '全省及设区市“亩均效益”有关情况',
+          result:
+            '2018年，杭州市规上工业亩均税收高于全市平均水平，在全省排第 2位， 排名上升0位。',
+          xAxis: [],
+          barWidth: '25px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#9f6100',
+              lightColor: '#ff8800',
+              yAxis: [],
+            },
+            {
+              name: '',
+              type: 'line',
+              color: '#ff5975',
+              yAxisIndex: 0,
+              markLine: {
+                data: [
+                  {
+                    name: '',
+                    itemStyle: {
+                      normal: {
+                        color: '#ff5975',
+                      },
+                    },
+                    label: {
+                      normal: {
+                        formatter: '',
+                        position: 'end',
+                      },
+                    },
+                    yAxis: null,
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        sideItem6_0: {
+          id: 'sideItem6_0',
+          picNum: 2,
+          infoNum: 2,
+          titleNum: 2,
+          title: '',
+          dataSource: '统计年鉴、统计公报、浙江商务年鉴、省生态环境厅',
+          result:
+            '2018年，杭州市的优势指标有生产总值，一般公共预算收入， 劣势指标有空气质量达到优良天数的比率，生产总值增长率。',
+          barWidth: '25px',
+          list: [],
+          chartArr: [
+            {
+              name: '指标排名对比',
+              chartType: 'bar',
+              color: '#9f6100',
+              legends: ['指标排名对比'],
+              indicator: [],
+              seriesData:[]
+            },
+          ],
+        },
+        sideItem6_1: {
+          id: 'sideItem6_1',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '统计年鉴、统计公报、浙江商务年鉴、省生态环境厅、科技进步统计监测评价报告、全省及设区市“亩均效益”有关情况',
+          result: '2018年，杭州市进度良好的指标有空气质量达到优良天数的比率，R&D经费投入占生产总值比重，生产总值，常住城镇化率， 进度滞后的指标有，指标总体进度良好。',
+          xAxis: [],
+          barWidth: '35px',
+          rowMaxLength:6,
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#00ffb4',
+              yAxis: [],
+            },
+          ],
+        },
+      },
+    }
+  },
+}
+</script>
+<style lang="scss" scoped>
+@import './citySynthesisAnalysis.scss';
+</style>

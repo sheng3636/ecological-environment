@@ -1,0 +1,199 @@
+import {
+  getStructuralData1,
+  getScaleData1,
+  getMultiZoneData,
+  getScaleDataMultiZb
+}
+from '@/api/environmentalQuality'
+export const structuraMixin = {
+  data() {
+    return {}
+  },
+  mounted() {
+    // 0、获取某年限某地区与与全省常住人口出生率比较数据并绘制图表
+    getMultiZoneData({
+      areas: [this.cityName, '浙江省'].join(),
+      zb: '常住出生率'
+    }).then(res => {
+      let data = res.data
+      this.chartArr.sideItem2_0.chartArr[0].name = `${data.yAxis[0].area}${data.yAxis[0].name}(${data.yAxis[0].unit})`
+      this.chartArr.sideItem2_0.chartArr[1].name = `${data.yAxis[1].area}${data.yAxis[1].name}(${data.yAxis[1].unit})`
+      this.chartArr.sideItem2_0.dataSource = data.yAxis[0].source
+      this.chartArr.sideItem2_0.xAxis = data.xAxis
+      this.chartArr.sideItem2_0.chartArr[0].yAxis = data.yAxis[0].list
+      this.chartArr.sideItem2_0.chartArr[1].yAxis = data.yAxis[1].list
+      this.barLineChart('sideItem2_0', this.chartArr.sideItem2_0)
+
+      let aaa = this.returnArrLast(this.chartArr.sideItem2_0.xAxis)
+      let ccc = this.returnArrFirst(this.chartArr.sideItem2_0.xAxis)
+      this.chartArr.sideItem2_0.title = `${ccc}年-${aaa}年${this.cityName}与与全省常住人口出生率比较`
+    })
+    // 1、获取某年限某地区户籍劳动年龄（18-59岁）人数和占比数据并绘制图表
+    // 2、获取某年限某地区各年龄段户籍人数数据并绘制图表
+    getStructuralData1({
+      area: this.cityName,
+      zbs: '户籍18岁以下人数,户籍18-35岁人数,户籍35-60岁人数,户籍60岁及以上人数'
+    }).then(res => {
+      let data = res.data      
+      this.chartArr.sideItem2_1.chartArr[0].name = `户籍18-35岁人数(${data.yAxis[1].unit})`
+      this.chartArr.sideItem2_1.chartArr[1].name = `户籍18-35岁人数占比(%)`
+      this.chartArr.sideItem2_2.chartArr[0].name = `${data.yAxis[0].name}(${data.yAxis[0].unit})`
+      this.chartArr.sideItem2_2.chartArr[1].name = `${data.yAxis[1].name}(${data.yAxis[1].unit})`
+      this.chartArr.sideItem2_2.chartArr[2].name = `${data.yAxis[2].name}(${data.yAxis[2].unit})`
+      this.chartArr.sideItem2_2.chartArr[3].name = `${data.yAxis[3].name}(${data.yAxis[3].unit})`
+      this.chartArr.sideItem2_2.dataSource = data.yAxis[0].source
+      this.chartArr.sideItem2_2.xAxis = data.xAxis
+      this.chartArr.sideItem2_2.chartArr[0].yAxis = data.yAxis[0].list
+      this.chartArr.sideItem2_2.chartArr[1].yAxis = data.yAxis[1].list
+      this.chartArr.sideItem2_2.chartArr[2].yAxis = data.yAxis[2].list
+      this.chartArr.sideItem2_2.chartArr[3].yAxis = data.yAxis[3].list
+      this.barLineChart('sideItem2_2', this.chartArr.sideItem2_2)
+      let aaa = this.returnArrLast(this.chartArr.sideItem2_2.xAxis)
+      let ccc = this.returnArrFirst(this.chartArr.sideItem2_2.xAxis)
+      this.chartArr.sideItem2_1.title = `${ccc}年-${aaa}年${this.cityName}户籍劳动年龄（18-59岁）人数和占比`
+
+      let peopleTotal = []
+      let labourArr = []
+      let labourPreArr = []
+      for (let i = 0; i < data.yAxis[0].list.length; i++) {
+        labourArr.push((data.yAxis[1].list[i] + data.yAxis[2].list[i]).toFixed(1))
+        peopleTotal.push((data.yAxis[0].list[i] + data.yAxis[1].list[i] + data.yAxis[2].list[i] + data.yAxis[3].list[i]).toFixed(1))
+        labourPreArr.push(((labourArr[i] / peopleTotal[i]) * 100).toFixed(1))
+      }
+      this.chartArr.sideItem2_1.dataSource = data.yAxis[0].source
+      this.chartArr.sideItem2_1.xAxis = data.xAxis
+      this.chartArr.sideItem2_1.chartArr[0].yAxis = labourArr
+      this.chartArr.sideItem2_1.chartArr[1].yAxis = labourPreArr
+      this.chartArr.sideItem2_2.title = `${ccc}年-${aaa}年${this.cityName}各年龄段户籍人数`
+      this.barLineChart('sideItem2_1', this.chartArr.sideItem2_1)
+      
+
+
+
+    })
+    // 3、获取某年限某地区户籍老年人口规模及程度数据并绘制图表
+    getStructuralData1({
+      area: this.cityName,
+      zbs: '户籍60岁及以上人数,户籍60岁及以上人数比重'
+    }).then(res => {
+      let data = res.data
+      this.chartArr.sideItem2_3.chartArr[0].name = `${data.yAxis[0].name}(${data.yAxis[0].unit})`
+      this.chartArr.sideItem2_3.chartArr[1].name = `${data.yAxis[1].name}(${data.yAxis[1].unit})`
+      this.chartArr.sideItem2_3.dataSource = data.yAxis[0].source
+      this.chartArr.sideItem2_3.xAxis = data.xAxis
+      this.chartArr.sideItem2_3.chartArr[0].yAxis = data.yAxis[0].list
+      this.chartArr.sideItem2_3.chartArr[1].yAxis = data.yAxis[1].list
+      this.barLineChart('sideItem2_3', this.chartArr.sideItem2_3)
+      let aaa = this.returnArrLast(this.chartArr.sideItem2_3.xAxis)
+      let ccc = this.returnArrFirst(this.chartArr.sideItem2_3.xAxis)
+      this.chartArr.sideItem2_3.title = `${ccc}年-${aaa}年${this.cityName}户籍老年人口规模及程度`
+
+    })
+    // 4、获取某年某地区户籍人口人口总量及占比数据并绘制图表
+    getScaleDataMultiZb({
+      area: '浙江省',
+      zbs: '户籍60岁及以上人数,户籍60岁及以上人数比重'
+    }).then(res => {
+      let data = res.data
+      this.chartArr.sideItem2_4.chartArr[0].name = `${data.yAxis[0].name}(${data.yAxis[0].unit})`
+      this.chartArr.sideItem2_4.chartArr[1].name = `${data.yAxis[1].name}(${data.yAxis[1].unit})`
+      this.chartArr.sideItem2_4.dataSource = data.yAxis[0].source
+      this.chartArr.sideItem2_4.xAxis = data.xAxis
+      this.chartArr.sideItem2_4.chartArr[0].yAxis = data.yAxis[0].list
+      this.chartArr.sideItem2_4.chartArr[1].yAxis = data.yAxis[1].list
+      this.barLineChart('sideItem2_4', this.chartArr.sideItem2_4)
+      this.chartArr.sideItem2_4.title = `${data.yAxis[0].year}年${this.cityName}户籍人口人口及占比`
+
+
+    })
+    // 5、获取某年某地区各区县户籍人口人口及占比数据并绘制图表
+    getScaleDataMultiZb({
+      area: this.cityName,
+      zbs: '户籍60岁及以上人数,户籍60岁及以上人数比重'
+    }).then(res => {
+      let data = res.data
+      this.chartArr.sideItem2_5.chartArr[0].name = `${data.yAxis[0].name}(${data.yAxis[0].unit})`
+      this.chartArr.sideItem2_5.chartArr[1].name = `${data.yAxis[1].name}(${data.yAxis[1].unit})`
+      this.chartArr.sideItem2_5.dataSource = data.yAxis[0].source
+      this.chartArr.sideItem2_5.xAxis = data.xAxis
+      this.chartArr.sideItem2_5.chartArr[0].yAxis = data.yAxis[0].list
+      this.chartArr.sideItem2_5.chartArr[1].yAxis = data.yAxis[1].list
+      this.barLineChart('sideItem2_5', this.chartArr.sideItem2_5)
+      this.chartArr.sideItem2_5.title = `${data.yAxis[0].year}年${this.cityName}各区县户籍人口人口及占比`
+
+
+    })
+    // 6、获取某年某地区各区县常驻人口数量及占比数据并绘制图表
+    getScaleDataMultiZb({
+      area: this.cityName,
+      zbs: '常驻60岁及以上人数,常驻总人口'
+    }).then(res => {
+      let data = res.data
+      this.chartArr.sideItem2_6.chartArr[0].name = `${data.yAxis[0].name}(${data.yAxis[0].unit})`
+      this.chartArr.sideItem2_6.chartArr[1].name = `常驻60岁及以上人数占比（%）`
+      this.chartArr.sideItem2_6.dataSource = data.yAxis[0].source
+      this.chartArr.sideItem2_6.xAxis = data.xAxis
+      this.chartArr.sideItem2_6.chartArr[0].yAxis = data.yAxis[0].list
+      for (let i = 0; i < data.yAxis[0].list.length; i++) {
+        this.chartArr.sideItem2_6.chartArr[1].yAxis.push(((data.yAxis[0].list[i] / data.yAxis[1].list[i]) * 100).toFixed(1))
+      }
+      this.barLineChart('sideItem2_6', this.chartArr.sideItem2_6)
+      this.chartArr.sideItem2_6.title = `${data.yAxis[0].year}年${this.cityName}常驻人口数量及占比`
+    })
+    // 7、获取某年限内某市常住城镇人口和城镇化率数据并绘制图表
+    getStructuralData1({
+      area: this.cityName,
+      zbs: '常住城镇人口,常住城镇化率'
+    }).then(res => {
+      let data = res.data
+      this.chartArr.sideItem2_7.chartArr[0].name = `常住城镇人口(${data.yAxis[0].unit})`
+      this.chartArr.sideItem2_7.chartArr[1].name = `常住城镇化率(%)`
+      this.chartArr.sideItem2_7.dataSource = data.yAxis[0].source
+      this.chartArr.sideItem2_7.xAxis = data.xAxis
+      this.chartArr.sideItem2_7.chartArr[0].yAxis = data.yAxis[0].list
+      for (let i = 0; i < data.yAxis[0].list.length; i++) {
+        this.chartArr.sideItem2_7.chartArr[1].yAxis.push(((data.yAxis[0].list[i] / data.yAxis[0].total) * 100).toFixed(1))
+      }
+      this.barLineChart('sideItem2_7', this.chartArr.sideItem2_7)
+      let aaa = this.returnArrLast(this.chartArr.sideItem2_7.xAxis)
+      let ccc = this.returnArrFirst(this.chartArr.sideItem2_7.xAxis)
+
+      this.chartArr.sideItem2_7.title = `${ccc}年-${aaa}年${this.cityName}常住城镇人口和城镇化率`
+    })
+    // 7、获取某年限内某市常住城镇人口和城镇化率数据并绘制图表
+    getStructuralData1({
+      area: this.cityName,
+      zbs: '常住城镇人口,常住城镇化率'
+    }).then(res => {
+      let data = res.data
+      this.chartArr.sideItem2_7.chartArr[0].name = `常住城镇人口(${data.yAxis[0].unit})`
+      this.chartArr.sideItem2_7.chartArr[1].name = `常住城镇化率(%)`
+      this.chartArr.sideItem2_7.dataSource = data.yAxis[0].source
+      this.chartArr.sideItem2_7.xAxis = data.xAxis
+      this.chartArr.sideItem2_7.chartArr[0].yAxis = data.yAxis[0].list
+      this.chartArr.sideItem2_7.chartArr[1].yAxis = data.yAxis[1].list
+      this.barLineChart('sideItem2_7', this.chartArr.sideItem2_7)
+      let aaa = this.returnArrLast(this.chartArr.sideItem2_7.xAxis)
+      let ccc = this.returnArrFirst(this.chartArr.sideItem2_7.xAxis)
+
+      this.chartArr.sideItem2_7.title = `${ccc}年-${aaa}年${this.cityName}常住城镇人口和城镇化率`
+    })
+    // 8、获取某年限内某市常住城镇人口和城镇化率数据并绘制图表
+    getScaleData1({
+      area: this.cityName,
+      zb: '常住城镇化率'
+    }).then(res => {
+      let data = res.data
+      this.chartArr.sideItem2_8.chartArr[0].name = `常住城镇化率(%)`
+      this.chartArr.sideItem2_8.dataSource = data.yAxis[0].source
+      this.chartArr.sideItem2_8.xAxis = data.xAxis
+      this.chartArr.sideItem2_8.chartArr[0].yAxis = data.yAxis[0].list
+      this.barLineChart('sideItem2_8', this.chartArr.sideItem2_8)
+
+      this.chartArr.sideItem2_8.title = `${data.yAxis[0].year}年${this.cityName}常住城镇人口和城镇化率`
+    })
+
+  },
+  methods: {
+  }
+}

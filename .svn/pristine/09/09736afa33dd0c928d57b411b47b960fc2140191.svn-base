@@ -1,0 +1,44 @@
+import {
+  apiGet
+}
+from '@/api/api'
+export const threeIndustrialMixin = {
+  data() {
+    return {}
+  },
+  mounted() {
+    // 0、 获取某年限内某地区生产总值对并绘制图表
+    apiGet(
+      '/statistics/getStructuralData', {
+        area: this.cityName,
+        zbs: '生产总值, 生产总值增长率'
+      }).then(res => {
+        let data = res.data
+        this.chartArr.sideItem1_0.chartArr[0].name = `${data.yAxis[0].name}(${data.yAxis[0].unit})`
+        this.chartArr.sideItem1_0.chartArr[1].name = `${data.yAxis[1].name}(${data.yAxis[1].unit})`
+        this.chartArr.sideItem1_0.dataSource = data.yAxis[0].sourcethis.chartArr.sideItem1_0.xAxis = data.xAxis
+        this.chartArr.sideItem1_0.chartArr[0].yAxis = data.yAxis[0].list
+        this.chartArr.sideItem1_0.chartArr[1].yAxis = data.yAxis[1].list
+        this.barLineChart('sideItem1_0', this.chartArr.sideItem1_0)
+    })
+    this.pieChart('sideItem1_1', this.chartArr.sideItem1_1)
+    this.barLineChart('sideItem1_2', this.chartArr.sideItem1_2)
+    this.barLineChart('sideItem1_3', this.chartArr.sideItem1_3)
+    this.barLineChart('sideItem1_4', this.chartArr.sideItem1_4)
+    this.barLineChart('sideItem1_5', this.chartArr.sideItem1_5)
+    this.barLineChart('sideItem1_6', this.chartArr.sideItem1_6)
+
+    this.textTopHorizontalChart('sideItem2_0', this.chartArr.sideItem2_0)
+    this.barLineChart('sideItem2_1', this.chartArr.sideItem2_1)
+    this.barLineChart('sideItem2_2', this.chartArr.sideItem2_2)
+    this.textTopHorizontalChart('sideItem2_4', this.chartArr.sideItem2_4)
+    this.barLineChart('sideItem2_5', this.chartArr.sideItem2_5)
+    this.barLineChart('sideItem2_6', this.chartArr.sideItem2_6)
+    this.barLineChart('sideItem2_7', this.chartArr.sideItem2_7)
+    this.barLineChart('sideItem3_0', this.chartArr.sideItem3_0)
+    this.barLineChart('sideItem3_1', this.chartArr.sideItem3_1)
+    this.barLineChart('sideItem3_3', this.chartArr.sideItem3_3)
+    this.barLineChart('sideItem3_4', this.chartArr.sideItem3_4)
+  },
+  methods: {}
+}

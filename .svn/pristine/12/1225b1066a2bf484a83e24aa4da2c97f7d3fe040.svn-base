@@ -1,0 +1,47 @@
+import {
+  getScaleDataMultiZb,
+  getIncrementMultiZb
+}
+from '@/api/environmentalQuality'
+export const migrationMixin = {
+  data() {
+    return {}
+  },
+  mounted() {
+      // 0、获取某年某地区各地市常住和户籍人口增量（万人）数据并绘制图表
+      getIncrementMultiZb({
+        area: this.cityName,
+        zbs: '户籍人口,年末常住人口'
+      }).then(res => {
+        let data = res.data
+        this.chartArr.sideItem3_0.title = `2015年-2018年${this.cityName}常住和户籍人口增量（万人）`
+        this.chartArr.sideItem3_0.xAxis = data.xAxis
+        this.chartArr.sideItem3_0.chartArr[0].name = `${data.yAxis[0].name}(${data.yAxis[0].unit})`
+        this.chartArr.sideItem3_0.chartArr[1].name = `${data.yAxis[1].name}(${data.yAxis[1].unit})`
+        this.chartArr.sideItem3_0.dataSource = data.yAxis[0].source
+        this.chartArr.sideItem3_0.chartArr[0].yAxis = data.yAxis[0].list
+        this.chartArr.sideItem3_0.chartArr[1].yAxis = data.yAxis[1].list
+        this.barLineChart('sideItem3_0', this.chartArr.sideItem3_0)
+      })
+      // 1、获取某年各县（市，区）人口机械变动数据并绘制图表
+      getScaleDataMultiZb({
+        area: this.cityName,
+        zbs: '迁入人数,迁出人数,净迁入人数'
+      }).then(res => {
+        let data = res.data
+        this.chartArr.sideItem3_1.title = `${data.yAxis[0].year}${this.cityName}各县（市，区）人口机械变动`
+        this.chartArr.sideItem3_1.xAxis = data.xAxis
+        this.chartArr.sideItem3_1.chartArr[0].name = `${data.yAxis[0].name}(${data.yAxis[0].unit})`
+        this.chartArr.sideItem3_1.chartArr[1].name = `${data.yAxis[1].name}(${data.yAxis[1].unit})`
+        this.chartArr.sideItem3_1.chartArr[2].name = `${data.yAxis[2].name}(${data.yAxis[2].unit})`
+        this.chartArr.sideItem3_1.dataSource = data.yAxis[0].source
+        this.chartArr.sideItem3_1.chartArr[0].yAxis = data.yAxis[0].list
+        this.chartArr.sideItem3_1.chartArr[1].yAxis = data.yAxis[1].list
+        this.chartArr.sideItem3_1.chartArr[2].yAxis = data.yAxis[2].list
+        this.barLineChart('sideItem3_1', this.chartArr.sideItem3_1)
+      })
+  },
+  methods: {
+    
+  }
+}

@@ -1,0 +1,53 @@
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+
+Vue.use(VueRouter)
+
+  const routes = [
+  {
+    path: '/',
+    redirect: '/countyPeopleAnalyze'
+  },
+  {
+    path: '/cityEnvironmental',
+    name: 'CityEnvironmental',
+    component: () => import('@/views/cityEnvironmental/cityEnvironmental.vue'),
+    meta: {
+      moudleSystem: '生态环境',
+      title: '生态环境市级'
+    }
+  },
+  {
+    path: '/countyEnvironmental',
+    name: 'CountyEnvironmental',
+    component: () => import('@/views/countyEnvironmental/countyEnvironmental.vue'),
+    meta: {
+      moudleSystem: '生态环境',
+      title: '生态环境县级'
+    }
+  },
+  {
+    path: '/peopleAnalyze',
+    name: 'PeopleAnalyze',
+    component: () => import('@/views/cityPeopleAnalyze/cityPeopleAnalyze.vue'),
+    meta: {
+      moudleSystem: '人口分析',
+      title: '人口分析市级'
+    }
+  },
+  {
+    path: '/countyPeopleAnalyze',
+    name: 'CountyPeopleAnalyze',
+    component: () => import('@/views/countyPeopleAnalyze/countyPeopleAnalyze.vue'),
+    meta: {
+      moudleSystem: '人口分析',
+      title: '人口分析县级'
+    }
+  }
+]
+
+const router = new VueRouter({
+  routes
+})
+
+export default router

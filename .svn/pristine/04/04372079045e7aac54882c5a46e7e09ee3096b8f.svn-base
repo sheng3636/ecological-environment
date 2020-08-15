@@ -1,0 +1,212 @@
+import {
+  apiGet,
+  axiosAll
+}
+from '@/api/api'
+import {
+  getArrFirst,
+  getArrLast,
+  getArrAvg
+}
+from '@/utils/mUtils.js'
+export const evnvironmentalMixin = {
+  data() {
+    return {}
+  },
+  mounted() {
+    // 0、 获取某年限内某地区生态环境状况指数（EI）变化并绘制图表
+    apiGet(
+      '/statistics/getStructuralData', {
+        startYear: 2015,
+        endYear: 2018,
+        area: this.cityName,
+        zbs: '生态环境指数'
+      }).then(res => {
+      let data = res.data
+      let aaa = getArrFirst(data.xAxis)
+      let ccc = getArrLast(data.xAxis)
+      let list = data.yAxis[0].list
+
+      this.chartArr.sideItem4_0.title = `${aaa}-${ccc}年${this.cityName}生态环境状况指数（EI）变化`
+      this.chartArr.sideItem4_0.chartArr[0].name = `${data.yAxis[0].name}`
+      this.chartArr.sideItem4_0.xAxis = data.xAxis
+      this.chartArr.sideItem4_0.chartArr[0].yAxis = list
+      this.barLineChart('sideItem4_0', this.chartArr.sideItem4_0)
+
+      let lastIndex = list.length - 1
+      let value1 = list[lastIndex]
+      let valueOld = list[lastIndex -1]
+      let diff = (value1 - valueOld).toFixed(1)
+
+      let change1 = (diff == 0) ? `维持不变` : diff > 0 ? `同比增长<span class="light">${diff}</span>` : `同比下降<span class="light">${Math.abs(diff)}</span>`
+
+      this.chartArr.sideItem4_0.result = `${ccc}年，${this.cityName}生态环境状况指数（EI）达到<span class="light">${value1}</span>， 较上年${change1}。`
+    })
+    // 1、 获取某年某地区全省各地市生态环境状况指数（EI）对比并绘制图表
+
+    axiosAll([this.getCityEnvData1(),this.getCityEnvData2()]).then(res => {
+      let data1 = res[0].data
+      let year = data1.yAxis[0].year
+      let list = data1.yAxis[0].list
+      this.chartArr.sideItem4_1.title = `2018年全省各地市生态环境状况指数（EI）对比`
+      this.chartArr.sideItem4_1.chartArr[0].name = `${data1.yAxis[0].name}`
+      this.chartArr.sideItem4_1.xAxis = data1.xAxis
+      this.chartArr.sideItem4_1.chartArr[0].yAxis = list
+      this.barLineChart('sideItem4_1', this.chartArr.sideItem4_1)
+     
+      let index = data1.xAxis.indexOf(this.cityName)
+      let value = list[index]
+      let avg = getArrAvg(list)
+      let diff = (value - avg).toFixed(2)
+      let avgStr = (diff == 0) ? `与全省平均水平持平` : diff > 0 ? `高于全省平均水平` : `低于全省平均水平`
+
+      let data2 = res[1].data
+      let rank = data2.table[0]
+      let rankStr = ''
+
+      if(rank.changeVal === undefined){
+        rankStr = `暂无上年排名数据`
+      }else{
+        rankStr = rank.changeVal == 0 ? `排名较上年维持不变` : rank.changeVal > 0 ? `排名较上年上升<span class="light">${rank.changeVal}</span>位` : `排名较上年下降<span class="light">${Math.abs(rank.changeVal)}</span>位`
+      }
+
+      this.chartArr.sideItem4_1.result = `${year}年，${this.cityName}生态环境状况指数（EI）${avgStr}，在全省排第<span class="light">${index + 1}</span>位， ${rankStr}。`
+    })
+
+
+    axiosAll([this.getCityEnvData3(),this.getCityEnvData4()]).then(res => {
+      let data1 = res[0].data
+      let aaa = getArrFirst(data1.xAxis)
+      let ccc = getArrLast(data1.xAxis)
+      let list = data1.yAxis[0].list
+
+      this.chartArr.sideItem4_2.title = `${aaa}-${ccc}年${this.cityName}空气质量达到优良天数比例变化`
+      this.chartArr.sideItem4_2.chartArr[0].name = `${this.cityName}(${data1.yAxis[0].unit})`
+      this.chartArr.sideItem4_2.chartArr[1].name = `全省地市平均值(${data1.yAxis[1].unit})`
+      // this.chartArr.sideItem4_2.chartArr[2].name = `全国${data1.yAxis[2].name}(${data1.yAxis[2].unit})`
+      this.chartArr.sideItem4_2.xAxis = data1.xAxis
+      this.chartArr.sideItem4_2.chartArr[0].yAxis = list
+      this.chartArr.sideItem4_2.chartArr[1].yAxis = data1.yAxis[1].list
+      this.chartArr.sideItem4_2.chartArr[2].yAxis = data1.yAxis[2].list
+      this.barLineChart('sideItem4_2', this.chartArr.sideItem4_2)
+
+      let lastIndex = list.length - 1
+      let value1 = list[lastIndex]
+      let valueOld = list[lastIndex -1]
+      let diff = (value1 - valueOld).toFixed(1)
+
+      let change1 = (diff == 0) ? `维持不变` : diff > 0 ? `同比增长<span class="light">${diff}</span>个百分点` : `同比下降<span class="light">${Math.abs(diff)}</span>个百分点`
+
+      let data2 = res[1].data
+      for (const key in data2) {
+        if (data2.hasOwnProperty(key)) {
+          let value = !isNaN(data2[key]) ? data2[key] * 100 : 0
+          this.chartArr.sideItem4_3.xAxis.push(key)
+          this.chartArr.sideItem4_3.chartArr[0].yAxis.push(value)
+        }
+      }
+      this.horizontalChart('sideItem4_3', this.chartArr.sideItem4_3)
+
+      let expect = (ccc - 2016 + 1) * 0.2
+      let bbb = this.chartArr.sideItem4_3.chartArr[0].yAxis[0] >= expect ? '良好' : '滞后'
+
+      this.chartArr.sideItem4_2.result = `${ccc}年，${this.cityName}空气质量达到优良天数比例达到<span class="light">${value1}</span>%， 较上年${change1}。“十三五”时期，${this.cityName}空气质量达到优良天数比例进度<span class="light">${bbb}</span>。`
+    })
+
+
+    // 4、 获取某年某地区全省各地市空气质量达到优良天数比例并绘制图表
+    axiosAll([this.getCityEnvData5(),this.getCityEnvData6()]).then(res => {
+      let data1 = res[0].data
+      let year = data1.yAxis[0].year
+      let list = data1.yAxis[0].list
+      let avg = getArrAvg(list)
+      this.chartArr.sideItem4_4.title = `${year}年全省各地市空气质量达到优良天数比例对比`
+      this.chartArr.sideItem4_4.chartArr[0].name = `${data1.yAxis[0].name}(${data1.yAxis[0].unit})`
+      this.chartArr.sideItem4_4.xAxis = data1.xAxis
+      this.chartArr.sideItem4_4.chartArr[0].yAxis = list
+      this.chartArr.sideItem4_4.chartArr[1].name = `全省平均值(${avg}${data1.yAxis[0].unit})`
+      this.chartArr.sideItem4_4.chartArr[1].markLine.data[0].yAxis = avg
+      this.barLineChart('sideItem4_4', this.chartArr.sideItem4_4)
+
+
+      let index = data1.xAxis.indexOf(this.cityName)
+      let value = list[index]
+      let diff = (value - avg).toFixed(2)
+      let avgStr = (diff == 0) ? `与全省平均水平持平` : diff > 0 ? `高于全省平均水平` : `低于全省平均水平`
+
+      let data2 = res[1].data
+      let rank = data2.table[0]
+      let rankStr = ''      
+      if(rank.changeVal === undefined){
+        rankStr = `暂无上年排名数据`
+      }else{
+        rankStr = rank.changeVal == 0 ? `排名较上年维持不变` : rank.changeVal > 0 ? `排名较上年上升<span class="light">${rank.changeVal}</span>位` : `排名较上年下降<span class="light">${Math.abs(rank.changeVal)}</span>位`
+      }
+
+      this.chartArr.sideItem4_4.result = `${year}年，${this.cityName}空气质量达到优良天数的比例${avgStr}，在全省排第<span class="light">${index + 1}</span>位，${rankStr}。`
+    })
+
+
+  },
+  methods: {
+    //2018年全省各地市生态环境状况指数（EI）对比
+    getCityEnvData1(){
+      return  apiGet(
+        '/statistics/getScaleData', {
+          year: 2018,
+          area: '浙江省',
+          zb: '生态环境指数'
+        })
+    },
+    getCityEnvData2() {
+      return apiGet(
+        '/statistics/getRank', {
+          startYear: 2017,
+          endYear: 2018,
+          areas: '浙江省',
+          area: this.cityName,
+          zbs: '生态环境指数',
+          model: 'city'
+        })
+    },
+    // 2、 获取某年限内某地区空气质量达到优良天数比例并绘制图表
+    getCityEnvData3(){
+      return  apiGet(
+        '/statistics/getMultiZoneData', {
+          startYear: 2015,
+          endYear: 2018,
+          areas: [this.cityName, '浙江省', '全国'].join(','),
+          zb: '空气质量达到优良天数的比率'
+        })
+    },
+    // 3、 获取某年某地区空气质量达到优良天数的比率进度评价图并绘制图表
+    getCityEnvData4(){
+      return apiGet(
+        '/statistics/getProgressStatusData', {
+          year: 2018,
+          area: this.cityName,
+          zbs: '空气质量达到优良天数的比率'
+        })
+    },
+    // 4、 获取某年某地区全省各地市空气质量达到优良天数比例并绘制图表
+    getCityEnvData5(){
+      return  apiGet(
+        '/statistics/getScaleData', {
+          year: 2018,
+          area: '浙江省',
+          zb: '空气质量达到优良天数的比率'
+        })
+    },
+    getCityEnvData6() {
+      return apiGet(
+        '/statistics/getRank', {
+          startYear: 2017,
+          endYear: 2018,
+          areas: '浙江省',
+          area: this.cityName,
+          zbs: '空气质量达到优良天数的比率',
+          model: 'city'
+        })
+    },
+  }
+}

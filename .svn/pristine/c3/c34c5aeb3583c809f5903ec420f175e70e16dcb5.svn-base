@@ -1,0 +1,482 @@
+import {
+  apiGet,
+  axiosAll
+}
+from '@/api/api'
+import {
+  getArrFirst,
+  getArrLast,
+  getArrAvg
+}
+from '@/utils/mUtils.js'
+export const economicsMixin = {
+  data() {
+    return {}
+  },
+  mounted() {
+    // 0、 获取某年限内某地区生产总值对并绘制图表
+    apiGet(
+      '/statistics/getStructuralData', {
+        area: this.cityName,
+        zbs: '生产总值,生产总值增长率'
+      }).then(res => {
+      let data = res.data
+      this.chartArr.sideItem1_0.title = `${getArrFirst(data.xAxis)}-${getArrLast(data.xAxis)}年${this.cityName}生产总值对比`
+      this.chartArr.sideItem1_0.chartArr[0].name = `${data.yAxis[0].name}(${data.yAxis[0].unit})`
+      this.chartArr.sideItem1_0.chartArr[1].name = `${data.yAxis[1].name}(${data.yAxis[1].unit})`
+      this.chartArr.sideItem1_0.xAxis = data.xAxis
+      this.chartArr.sideItem1_0.chartArr[0].yAxis = data.yAxis[0].list
+      this.chartArr.sideItem1_0.chartArr[1].yAxis = data.yAxis[1].list
+      this.barLineChart('sideItem1_0', this.chartArr.sideItem1_0)
+      let aaa = getArrLast(data.yAxis[0].list)
+      let bbb = getArrLast(data.yAxis[1].list)
+      let ccc = (bbb - data.yAxis[1].list[data.yAxis[1].list.length - 2]).toFixed(1)
+      let ddd = ccc > 0 ? `同比提高<span class="light">${Math.abs(ccc)}</span>个%` : (ccc < 0 ? `同比下降<span class="light">${Math.abs(ccc)}</span>个%` : '维持不变')
+      this.chartArr.sideItem1_0.result = `${getArrLast(data.xAxis)}年，${this.cityName}生产总值达到<span class="light">${aaa}</span>万元， 增长率为<span class="light">${bbb}</span>%， 增速较上年${ddd}。`
+    })
+    // 1、 获取某年某地区生产总值进度评价图并绘制图表
+    apiGet(
+      '/statistics/getProgressStatusData', {
+        year: 2018,
+        area: this.cityName,
+        zbs: '生产总值'
+      }).then(res => {
+      let data = res.data
+      for (const key in data) {
+        if (data.hasOwnProperty(key)) {
+          let value = isNaN(data[key]) ? 0 : (data[key] * 100 > 100 ? 100 : data[key] * 100)
+          this.chartArr.sideItem1_1.xAxis.push(key)
+          this.chartArr.sideItem1_1.chartArr[0].yAxis.push(value)
+        }
+      }
+      this.chartArr.sideItem1_1.title = `2018年${this.cityName}生产总值进度评价图`
+      this.horizontalChart('sideItem1_1', this.chartArr.sideItem1_1)
+      let aaa = (2018 - 2016 + 1) * 0.2
+      let bbb = this.chartArr.sideItem1_1.chartArr[0].yAxis[0] >= aaa ? '良好' : '滞后'
+      this.chartArr.sideItem1_1.result = `“十三五”时期，${this.cityName}${this.chartArr.sideItem1_1.xAxis[0]}进度<span class="light">${bbb}</span>。`
+    })
+
+    // 2、 获取某年某地区全省各地市生产总值对比并绘制图表
+    // 3、 获取某年某地区与全省生产总值对比并绘制图表
+    axiosAll([this.ecnomicsAll1(), this.ecnomicsAll2(), this.ecnomicsAll3(), this.ecnomicsAll4()]).then(res => {
+      let data0 = res[0].data
+      this.chartArr.sideItem1_2.title = `2018年全省各地市生产总值对比`
+      this.chartArr.sideItem1_2.chartArr[0].name = `${data0.yAxis[0].name}(${data0.yAxis[0].unit})`
+      this.chartArr.sideItem1_2.xAxis = data0.xAxis
+      this.chartArr.sideItem1_2.chartArr[0].yAxis = data0.yAxis[0].list
+      this.chartArr.sideItem1_2.chartArr[1].name = `全省平均值(${getArrAvg(data0.yAxis[0].list)}${data0.yAxis[0].unit})`
+      let avg = getArrAvg(data0.yAxis[0].list)
+      this.chartArr.sideItem1_2.chartArr[1].markLine.data[0].yAxis = avg
+      this.barLineChart('sideItem1_2', this.chartArr.sideItem1_2)
+
+      let data2 = res[2].data[0]
+      this.chartArr.sideItem1_3.title = `2018年${this.cityName}与全省生产总值对比`
+      this.chartArr.sideItem1_3.chartArr[0].unit = data2.unit
+      this.chartArr.sideItem1_3.xAxis = data2.xAxis
+      this.chartArr.sideItem1_3.chartArr[0].name = `${data2.name}(${data2.unit})`
+      this.chartArr.sideItem1_3.chartArr[0].list = data2.list
+      this.pieChart('sideItem1_3', this.chartArr.sideItem1_3)
+
+
+      let data1 = res[1].data
+      let index = data0.xAxis.indexOf(this.cityName)
+      let rank = data1.table[0]
+      let rankStr = ''
+      rankStr = rank.changeVal == 0 ? `维持不变` : rank.changeVal > 0 ? `上升 ${rank.changeVal}位` : `下降 ${rank.changeVal}位`
+
+      let data3 = res[3].data[0]
+      let aaa = data2.list.findIndex(item => {
+        return item.name === this.cityName
+      })
+      let bbb = data3.list.findIndex(item => {
+        return item.name === this.cityName
+      })
+      let ccc = ((data2.list[aaa].value / data2.total) * 100).toFixed(2)
+      let ddd = ((data3.list[bbb].value / data3.total) * 100).toFixed(2)
+      let ggg = (ccc - ddd).toFixed(2)
+      let fff = ''
+      if (ggg > 0) {
+        fff = `占比较上年上升<span class="light">${Math.abs(ggg)}</span>%`
+      } else if (ggg < 0) {
+        fff = `占比较上年下降<span class="light">${Math.abs(ggg)}</span>%`
+      } else {
+        fff = `占比较上年<span class="light">持平</span>`
+      }
+
+      let cityValue = data0.yAxis[0].list[index]
+      let eee = ''
+      if (cityValue > avg) {
+        eee = `<span class="light">高于</span>全省平均水平`
+      } else if (cityValue < avg) {
+        eee = `<span class="light">低于</span>全省平均水平`
+      } else {
+        eee = `与全省平均水平<span class="light">持平</span>`
+      }
+
+      this.chartArr.sideItem1_2.result = `2018年，${this.cityName}生产总值${eee}，在全省排第<span class="light">${index + 1}</span>位，排名较上年<span class="light">${rankStr}</span>，占全省<span class="light">${ccc}</span>% ，${fff}。`
+
+    })
+    // 4、 获取某年全省各地市生产总值增长率对比并绘制图表
+    axiosAll([this.ecnomicsAll5(), this.ecnomicsAll6()]).then(res => {
+      let data0 = res[0].data
+      this.chartArr.sideItem1_4.title = `2018年全省各地市生产总值增长率对比`
+      this.chartArr.sideItem1_4.chartArr[0].name = `${data0.yAxis[0].name}(${data0.yAxis[0].unit})`
+      this.chartArr.sideItem1_4.xAxis = data0.xAxis
+      this.chartArr.sideItem1_4.chartArr[0].yAxis = data0.yAxis[0].list
+      this.chartArr.sideItem1_4.chartArr[1].name = `全省平均值(${getArrAvg(data0.yAxis[0].list)}${data0.yAxis[0].unit})`
+      this.chartArr.sideItem1_4.chartArr[1].markLine.data[0].yAxis = getArrAvg(data0.yAxis[0].list)
+      this.barLineChart('sideItem1_4', this.chartArr.sideItem1_4)
+
+      let aaa = data0.xAxis.indexOf(this.cityName)
+      let bbb = data0.yAxis[0].list[aaa] - getArrAvg(data0.yAxis[0].list)
+      let ccc = ''
+      if (bbb > 0) {
+        ccc = `<span class="light">高于</span>全市平均水平`
+      } else if (bbb < 0) {
+        ccc = `<span class="light">低于</span>全市平均水平`
+      } else {
+        ccc = `与全市平均水平<span class="light">持平</span>`
+      }
+
+      let ddd = res[1].data.table[0]
+      let eee = ddd.changeVal == 0 ? `<span class="light">维持不变</span>` : ddd.changeVal > 0 ? `上升<span class="light">${Math.abs(ddd.changeVal)}</span>位` : `下降<span class="light">${Math.abs(ddd.changeVal)}</span>位`
+      this.chartArr.sideItem1_4.result = `2018年，${this.cityName}生产总值增速${ccc}， 在全省排第<span class="light">${ddd.endRank}</span>位， 排名较上年${eee}。`
+
+    })
+    // 5、 获取某年限内某地区人均生产总值变化并绘制图表
+    apiGet(
+      '/statistics/getMultiZoneData', {
+        startYear: 2015,
+        endYear: 2018,
+        areas: [this.cityName, '浙江省'].join(','),
+        zb: '人均生产总值（按常住人口）'
+      }).then(res => {
+      let data = res.data
+      this.chartArr.sideItem1_5.title = `${getArrFirst(data.xAxis)}-${getArrLast(data.xAxis)}年${this.cityName}人均生产总值变化`
+      this.chartArr.sideItem1_5.chartArr[0].name = `${data.yAxis[0].name}(${data.yAxis[0].unit})`
+      this.chartArr.sideItem1_5.chartArr[1].name = `浙江省${data.yAxis[1].name}(${data.yAxis[1].unit})`
+      this.chartArr.sideItem1_5.xAxis = data.xAxis
+      this.chartArr.sideItem1_5.chartArr[0].yAxis = data.yAxis[0].list
+      this.chartArr.sideItem1_5.chartArr[1].yAxis = data.yAxis[1].list
+      this.barLineChart('sideItem1_5', this.chartArr.sideItem1_5)
+
+      let aaa = getArrLast(data.yAxis[0].list)
+      let ccc = data.yAxis[0].list[data.yAxis[0].list.length - 1 - 1]
+      let ddd = aaa - ccc
+      let eee = ''
+      if (ddd > 0) {
+        eee = `增加<span class="light">${Math.abs(ddd)}</span>`
+      } else if (ddd < 0) {
+        eee = `减少<span class="light">${Math.abs(ddd)}</span>`
+      } else {
+        eee = `<span class="light">持平</span>`
+      }
+      this.chartArr.sideItem1_5.result = `${getArrLast(data.xAxis)}年，${this.cityName}人均生产总值达到<span class="light">${aaa}</span>元，较上年${eee}元。`
+
+    })
+    // 6、 获取某年全省各地市人均生产总值对比并绘制图表
+    axiosAll([this.ecnomicsAll7(), this.ecnomicsAll8()]).then(res => {
+      let data0 = res[0].data
+      this.chartArr.sideItem1_6.title = `2018年全省各地市人均生产总值对比`
+      this.chartArr.sideItem1_6.chartArr[0].name = `${data0.yAxis[0].name}(${data0.yAxis[0].unit})`
+      this.chartArr.sideItem1_6.xAxis = data0.xAxis
+      this.chartArr.sideItem1_6.chartArr[0].yAxis = data0.yAxis[0].list
+      this.chartArr.sideItem1_6.chartArr[1].name = `全省平均值(${getArrAvg(data0.yAxis[0].list)}${data0.yAxis[0].unit})`
+      this.chartArr.sideItem1_6.chartArr[1].markLine.data[0].yAxis = getArrAvg(data0.yAxis[0].list)
+      this.barLineChart('sideItem1_6', this.chartArr.sideItem1_6)
+
+      let aaa = data0.xAxis.indexOf(this.cityName)
+      let bbb = data0.yAxis[0].list[aaa] - getArrAvg(data0.yAxis[0].list)
+      let ddd = ''
+      if (bbb > 0) {
+        ddd = `<span class="light">高于</span>全省平均水平`
+      } else if (bbb < 0) {
+        ddd = `<span class="light">低于</span>全省平均水平`
+      } else {
+        ddd = `与全省平均水平<span class="light">持平</span>`
+      }
+      let eee = res[1].data.table[0]
+      let fff = ''
+      if (eee.changeVal > 0) {
+        fff = `上升<span class="light">${Math.abs(eee.changeVal)}位</span>`
+      } else if (eee.changeVal < 0) {
+        fff = `下降<span class="light">${Math.abs(eee.changeVal)}位</span>`
+      } else {
+        fff = `<span class="light">维持不变</span>`
+      }
+      this.chartArr.sideItem1_6.result = `2018年，${this.cityName}人均生产总值${ddd}，在全省排第<span class="light">${eee.endRank}</span>位，排名较上年${fff}。`
+    })
+    // 7、 获取某年限内某地区人均生产总值变化并绘制图表
+    apiGet(
+      '/statistics/getMultiZoneData', {
+        startYear: 2015,
+        endYear: 2018,
+        areas: [this.cityName, '浙江省'].join(','),
+        zb: '一般公共预算收入'
+      }).then(res => {
+      let data = res.data
+
+      this.chartArr.sideItem1_7.title = `${getArrFirst(data.xAxis)}-${getArrLast(data.xAxis)}年${this.cityName}一般公共预算收入变化`
+      this.chartArr.sideItem1_7.chartArr[0].name = `${data.yAxis[0].name}(${data.yAxis[0].unit})`
+      this.chartArr.sideItem1_7.chartArr[1].name = `浙江省${data.yAxis[1].name}(${data.yAxis[1].unit})`
+      this.chartArr.sideItem1_7.xAxis = data.xAxis
+      this.chartArr.sideItem1_7.chartArr[0].yAxis = data.yAxis[0].list
+      this.chartArr.sideItem1_7.chartArr[1].yAxis = data.yAxis[1].list
+      this.barLineChart('sideItem1_7', this.chartArr.sideItem1_7)
+
+      let aaa = getArrLast(data.yAxis[0].list)
+      let ccc = data.yAxis[0].list[data.yAxis[0].list.length - 1 - 1]
+      let ddd = (aaa - ccc).toFixed(2)
+      let eee = ''
+      if (ddd > 0) {
+        eee = `增加<span class="light">${Math.abs(ddd)}</span>`
+      } else if (ddd < 0) {
+        eee = `减少<span class="light">${Math.abs(ddd)}</span>`
+      } else {
+        eee = `<span class="light">持平</span>`
+      }
+      this.chartArr.sideItem1_7.result = `${getArrLast(data.xAxis)}年，${this.cityName}一般公共预算收入达到<span class="light">${aaa}</span>元，较上年${eee}元。`
+    })
+    // 8、 获取某年全省各地市一般公共预算收入对比并绘制图表
+    axiosAll([this.ecnomicsAll9(), this.ecnomicsAll10()]).then(res => {
+      console.log(res);
+      let data0 = res[0].data
+      this.chartArr.sideItem1_8.title = `2018年全省各地市一般公共预算收入对比`
+      this.chartArr.sideItem1_8.chartArr[0].name = `${data0.yAxis[0].name}(${data0.yAxis[0].unit})`
+      this.chartArr.sideItem1_8.xAxis = data0.xAxis
+      this.chartArr.sideItem1_8.chartArr[0].yAxis = data0.yAxis[0].list
+      this.barLineChart('sideItem1_8', this.chartArr.sideItem1_8)
+
+      let aaa = data0.xAxis.indexOf(this.cityName)
+      let bbb = data0.yAxis[0].list[aaa] - getArrAvg(data0.yAxis[0].list)
+      let ddd = ''
+      if (bbb > 0) {
+        ddd = `<span class="light">高于</span>全省平均水平`
+      } else if (bbb < 0) {
+        ddd = `<span class="light">低于</span>全省平均水平`
+      } else {
+        ddd = `与全省平均水平<span class="light">持平</span>`
+      }
+      let eee = res[1].data.table[0]
+      let fff = ''
+      if (eee.changeVal > 0) {
+        fff = `上升<span class="light">${Math.abs(eee.changeVal)}位</span>`
+      } else if (eee.changeVal < 0) {
+        fff = `下降<span class="light">${Math.abs(eee.changeVal)}位</span>`
+      } else {
+        fff = `<span class="light">维持不变</span>`
+      }
+      this.chartArr.sideItem1_8.result = `2018年，${this.cityName}一般公共预算收入${ddd}，在全省排第<span class="light">${eee.endRank}</span>位，排名较上年${fff}。`
+    })
+    // 9、 获取某年限内某地区一般公共预算收入增长率对比并绘制图表
+    apiGet(
+      '/statistics/getMultiZoneData', {
+        startYear: 2015,
+        endYear: 2018,
+        areas: [this.cityName, '浙江省', '全国'].join(','),
+        zb: '一般公共预算收入增长率'
+      }).then(res => {
+      let data = res.data
+
+      this.chartArr.sideItem1_9.title = `${getArrFirst(data.xAxis)}-${getArrLast(data.xAxis)}年${this.cityName}一般公共预算收入增长率对比`
+      this.chartArr.sideItem1_9.chartArr[0].name = `${data.yAxis[0].name}(${data.yAxis[0].unit})`
+      this.chartArr.sideItem1_9.chartArr[1].name = `浙江省${data.yAxis[1].name}(${data.yAxis[1].unit})`
+      this.chartArr.sideItem1_9.chartArr[2].name = `全国${data.yAxis[1].name}(${data.yAxis[2].unit})`
+      this.chartArr.sideItem1_9.xAxis = data.xAxis
+      this.chartArr.sideItem1_9.chartArr[0].yAxis = data.yAxis[0].list
+      this.chartArr.sideItem1_9.chartArr[1].yAxis = data.yAxis[1].list
+      this.chartArr.sideItem1_9.chartArr[2].yAxis = data.yAxis[2].list
+      this.barLineChart('sideItem1_9', this.chartArr.sideItem1_9)
+
+      let aaa = getArrLast(data.yAxis[0].list)
+      let ccc = data.yAxis[0].list[data.yAxis[0].list.length - 1 - 1]
+      let ddd = (aaa - ccc).toFixed(2)
+      let eee = ''
+      if (ddd > 0) {
+        eee = `增加<span class="light">${Math.abs(ddd)}</span>`
+      } else if (ddd < 0) {
+        eee = `减少<span class="light">${Math.abs(ddd)}</span>`
+      } else {
+        eee = `<span class="light">持平</span>`
+      }
+      this.chartArr.sideItem1_9.result = `${getArrLast(data.xAxis)}年，${this.cityName}一般公共预算收入增长率达到<span class="light">${aaa}</span>%，较上年${eee}%。`
+    })
+    // 10、 获取某年限内某地区一般公共预算收入增长率对比并绘制图表
+    apiGet(
+      '/statistics/getMultiZoneData', {
+        startYear: 2015,
+        endYear: 2018,
+        areas: [this.cityName, '浙江省', '全国'].join(','),
+        zb: '进出口总值'
+      }).then(res => {
+      let data = res.data
+
+      this.chartArr.sideItem1_10.title = `${getArrFirst(data.xAxis)}-${getArrLast(data.xAxis)}年${this.cityName}进出口总额变化对比`
+      this.chartArr.sideItem1_10.chartArr[0].name = `${data.yAxis[0].name}(${data.yAxis[0].unit})`
+      this.chartArr.sideItem1_10.chartArr[1].name = `浙江省${data.yAxis[1].name}(${data.yAxis[1].unit})`
+      this.chartArr.sideItem1_10.chartArr[2].name = `全国${data.yAxis[1].name}(${data.yAxis[2].unit})`
+      this.chartArr.sideItem1_10.xAxis = data.xAxis
+      this.chartArr.sideItem1_10.chartArr[0].yAxis = data.yAxis[0].list
+      this.chartArr.sideItem1_10.chartArr[1].yAxis = data.yAxis[1].list
+      this.chartArr.sideItem1_10.chartArr[2].yAxis = data.yAxis[2].list
+      this.barLineChart('sideItem1_10', this.chartArr.sideItem1_10)
+
+      let aaa = getArrLast(data.yAxis[0].list)
+      let ccc = data.yAxis[0].list[data.yAxis[0].list.length - 1 - 1]
+      let ddd = (aaa - ccc).toFixed(2)
+      let eee = ''
+      if (ddd > 0) {
+        eee = `增加<span class="light">${Math.abs(ddd)}</span>`
+      } else if (ddd < 0) {
+        eee = `减少<span class="light">${Math.abs(ddd)}</span>`
+      } else {
+        eee = `<span class="light">维持不变</span>`
+      }
+      this.chartArr.sideItem1_10.result = `${getArrLast(data.xAxis)}年，${this.cityName}进出口总额达到<span class="light">${aaa}</span>万元，较上年${eee}万元。`
+    })
+    // 11、 获取某年全省各地市进出口总额对比并绘制图表
+    axiosAll([this.ecnomicsAll11(), this.ecnomicsAll12()]).then(res => {
+      let data0 = res[0].data
+      this.chartArr.sideItem1_11.title = `2018年全省各地市进出口总额对比`
+      this.chartArr.sideItem1_11.chartArr[0].name = `${data0.yAxis[0].name}(${data0.yAxis[0].unit})`
+      this.chartArr.sideItem1_11.xAxis = data0.xAxis
+      this.chartArr.sideItem1_11.chartArr[0].yAxis = data0.yAxis[0].list
+      this.barLineChart('sideItem1_11', this.chartArr.sideItem1_11)
+
+      let aaa = data0.xAxis.indexOf(this.cityName)
+      let bbb = data0.yAxis[0].list[aaa] - getArrAvg(data0.yAxis[0].list)
+      let ddd = ''
+      if (bbb > 0) {
+        ddd = `<span class="light">高于</span>全省平均水平`
+      } else if (bbb < 0) {
+        ddd = `<span class="light">低于</span>全省平均水平`
+      } else {
+        ddd = `与全省平均水平<span class="light">持平</span>`
+      }
+      let eee = res[1].data.table[0]
+      let fff = ''
+      if (eee.changeVal > 0) {
+        fff = `上升<span class="light">${Math.abs(eee.changeVal)}位</span>`
+      } else if (eee.changeVal < 0) {
+        fff = `下降<span class="light">${Math.abs(eee.changeVal)}位</span>`
+      } else {
+        fff = `<span class="light">维持不变</span>`
+      }
+      this.chartArr.sideItem1_11.result = `2018年，${this.cityName}进出口总额${ddd}，在全省排第<span class="light">${eee.endRank}</span>位，排名较上年${fff}。`
+    })
+  },
+  methods: {
+    ecnomicsAll1() {
+      return apiGet(
+        '/statistics/getScaleData', {
+          year: 2018,
+          area: '浙江省',
+          zb: '生产总值'
+        })
+    },
+    ecnomicsAll2() {
+      return apiGet(
+        '/statistics/getRank', {
+          startYear: 2017,
+          endYear: 2018,
+          areas: '浙江省',
+          area: this.cityName,
+          zbs: '生产总值',
+          model: 'city'
+        })
+    },
+    ecnomicsAll3() {
+      return apiGet(
+        '/statistics/getScaleDataWithName', {
+          year: 2018,
+          area: '浙江省',
+          zbs: '生产总值'
+        })
+    },
+    ecnomicsAll4() {
+      return apiGet(
+        '/statistics/getScaleDataWithName', {
+          year: 2017,
+          area: '浙江省',
+          zbs: '生产总值'
+        })
+    },
+    ecnomicsAll5() {
+      return apiGet(
+        '/statistics/getScaleData', {
+          year: 2018,
+          area: '浙江省',
+          zb: '生产总值增长率'
+        })
+    },
+    ecnomicsAll6() {
+      return apiGet(
+        '/statistics/getRank', {
+          startYear: 2017,
+          endYear: 2018,
+          areas: '浙江省',
+          area: this.cityName,
+          zbs: '生产总值增长率',
+          model: 'city'
+        })
+    },
+    ecnomicsAll7() {
+      return apiGet(
+        '/statistics/getScaleData', {
+          year: 2018,
+          area: '浙江省',
+          zb: '人均生产总值（按常住人口）'
+        })
+    },
+    ecnomicsAll8() {
+      return apiGet(
+        '/statistics/getRank', {
+          startYear: 2017,
+          endYear: 2018,
+          areas: '浙江省',
+          area: this.cityName,
+          zbs: '人均生产总值（按常住人口）',
+          model: 'city'
+        })
+    },
+    ecnomicsAll9() {
+      return apiGet(
+        '/statistics/getScaleData', {
+          year: 2018,
+          area: '浙江省',
+          zb: '一般公共预算收入'
+        })
+    },
+    ecnomicsAll10() {
+      return apiGet(
+        '/statistics/getRank', {
+          startYear: 2017,
+          endYear: 2018,
+          areas: '浙江省',
+          area: this.cityName,
+          zbs: '一般公共预算收入',
+          model: 'city'
+        })
+    },
+    ecnomicsAll11() {
+      return apiGet(
+        '/statistics/getScaleData', {
+          year: 2018,
+          area: '浙江省',
+          zb: '进出口总值'
+        })
+    },
+    ecnomicsAll12() {
+      return apiGet(
+        '/statistics/getRank', {
+          startYear: 2017,
+          endYear: 2018,
+          areas: '浙江省',
+          area: this.cityName,
+          zbs: '进出口总值',
+          model: 'city'
+        })
+    },
+
+  }
+}

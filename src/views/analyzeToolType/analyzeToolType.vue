@@ -1,0 +1,214 @@
+<template>
+  <div class="areaSelect">
+    <header class="header">
+      <span class="logotxt">快速导览</span>
+      <i class="el-icon-s-home" @click="jumpUrl('AreaSelect')"></i>
+    </header>
+    <div class="cityName">{{analyzeArea}}</div>
+    <div class="mapContent">
+      <div id="aaa"></div>
+      <div id="aiMap"></div>
+      <div class="navItme navItme1 aaa" @click="moduleClick1">
+        <span class="txt">综合分析</span>
+      </div>
+      <div class="navItme navItme2 aaa" @click="moduleClick2">
+        <span class="txt">产业发展</span>
+      </div>
+      <div class="navItme navItme3 noActive">
+        <span class="txt">综合交通</span>
+      </div>
+      <div class="navItme navItme4 noActive">
+        <span class="txt">区域空间</span>
+      </div>
+      <div class="navItme navItme5 noActive">
+        <span class="txt">城镇发展</span>
+      </div>
+      <div class="navItme navItme6 noActive">
+        <span class="txt">能源发展</span>
+      </div>
+      <div class="navItme navItme7 aaa" @click="moduleClick7">
+        <span class="txt">人口社会</span>
+      </div>
+      <div class="navItme navItme8 aaa" @click="moduleClick8">
+        <span class="txt">生态环境</span>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+import cityTown from '@/utils/cityTown'
+import { apiGet, getSuperior } from '@/api/api'
+import { finishMixin } from '@/utils/finishMixin.js'
+export default {
+  mixins: [finishMixin],
+  data() {
+    return {}
+  },
+  mounted() {
+    let map = new AMap.Map('aaa', {
+      resizeEnable: true,
+      center: [120.200268, 30.241793],
+      zoom: 7
+    })
+    //行政区划查询
+    var opts = {
+      subdistrict: 1, //返回下一级行政区
+      showbiz: true //最后一级返回街道信息
+    }
+    AMapUI.loadUI(['geo/DistrictExplorer'], DistrictExplorer => {
+      let districtExplorer = (window.districtExplorer = new DistrictExplorer({
+        eventSupport: true, // 打开事件支持
+        map: map
+      }))
+      // 创建一个实例
+      districtExplorer.loadAreaNode(
+        cityTown[this.analyzeArea].code,
+        (error, areaNode) => {
+          if (error) {
+            console.error(error)
+            return
+          }
+          let mapJson = {}
+          let mapJson1 = {}
+          // 特别注意这里哦，如果查看过正常的geojson文件，都会发现，文件都是以features 字段开头的，所以这里要记得加上
+          mapJson1.features = [areaNode.getParentFeature()]
+          mapJson.features = areaNode.getSubFeatures()
+          if (cityTown[this.analyzeArea].level === 'county') {
+            this.drawEchartMap(mapJson1)
+          } else {
+            this.drawEchartMap(mapJson)
+          }
+        }
+      )
+    })
+  },
+  methods: {
+    //  获取所选地区geoJson并绘制地图
+    drawEchartMap(geoJson) {
+      this.echartsMap = this.$echarts.init(document.getElementById('aiMap'))
+      let mapJsonList = geoJson.features
+      let mapJson = {}
+      this.echartsMap.showLoading()
+      this.$echarts.registerMap('浙江省', geoJson)
+      this.echartsMap.hideLoading()
+      let option = {
+        tooltip: {
+          show: false
+        },
+        series: [
+          {
+            name: '',
+            type: 'map',
+            mapType: '浙江省',
+            roam: false, // 是否开启平游或缩放
+            aspectScale: 0.9, // 长宽比
+            label: {
+              normal: {
+                show: true,
+                textStyle: {
+                  color: '#fff'
+                }
+              },
+              emphasis: {
+                show: true,
+                textStyle: {
+                  color: '#fff'
+                }
+              }
+            },
+            itemStyle: {
+              normal: {
+                areaColor: '#00c0ff',
+                borderColor: '#0488b6',
+                borderWidth: 0.5,
+                label: {
+                  show: true,
+                  textStyle: {
+                    color: 'rgb(249, 249, 249)'
+                  }
+                }
+              },
+              emphasis: {
+                // 鼠标经过区域样式
+                areaColor: '#00394c',
+                borderColor: 'rgba(11,234,235)',
+                areaStyle: {
+                  color: 'rgba(11,55,98)'
+                },
+                label: {
+                  show: true,
+                  textStyle: {
+                    color: 'rgb(249, 249, 249)'
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+      this.echartsMap.clear()
+      this.echartsMap.setOption(option)
+      this.echartsMap.on('click', this.echartsMapClick)
+    },
+    moduleClick1() {
+      if (cityTown[this.analyzeArea].level === 'city') {
+        this.jumpUrl('CitySynthesisAnalysis', {
+          cityName: this.analyzeArea
+        })
+      } else {
+        getSuperior({ area: this.analyzeArea }).then(res => {
+          this.jumpUrl('CountySynthesisAnalysis', {
+            cityName: res.data,
+            countyName: this.analyzeArea
+          })
+        })
+      }
+    },
+    moduleClick2() {
+      if (cityTown[this.analyzeArea].level === 'city') {
+        this.jumpUrl('CityIndustrialDev', {
+          cityName: this.analyzeArea
+        })
+      } else {
+        getSuperior({ area: this.analyzeArea }).then(res => {
+          this.jumpUrl('CountyIndustrialDev', {
+            cityName: res.data,
+            countyName: this.analyzeArea
+          })
+        })
+      }
+    },
+    moduleClick7() {
+      if (cityTown[this.analyzeArea].level === 'city') {
+        this.jumpUrl('CityPeopleAnalyze', {
+          cityName: this.analyzeArea
+        })
+      } else {
+        getSuperior({ area: this.analyzeArea }).then(res => {
+          this.jumpUrl('CountyPeopleAnalyze', {
+            cityName: res.data,
+            countyName: this.analyzeArea
+          })
+        })
+      }
+    },
+    moduleClick8() {
+      if (cityTown[this.analyzeArea].level === 'city') {
+        this.jumpUrl('CityEnvironmental', {
+          cityName: this.analyzeArea
+        })
+      } else {
+        getSuperior({ area: this.analyzeArea }).then(res => {
+          this.jumpUrl('CountyEnvironmental', {
+            cityName: res.data,
+            countyName: this.analyzeArea
+          })
+        })
+      }
+    }
+  }
+}
+</script>
+<style lang="scss" scoped>
+@import './analyzeToolType.scss';
+</style>

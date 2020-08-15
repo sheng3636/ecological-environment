@@ -1,0 +1,136 @@
+.systemWrap {
+  padding-top: 50px;
+  .header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 61px;
+    background: url(../../assets/images/entranceImgs/logo.png) no-repeat 50px center;
+    background-size: 470px 61px;
+
+    .logoutIcon {
+      margin-right: 50px;
+      font-size: 24px;
+      color: #00e9ff;
+      cursor: pointer;
+
+      img {
+        vertical-align: middle;
+      }
+    }
+  }
+
+  width: 100%;
+  height: 1080px;
+  background: url(../../assets/images/entranceImgs/systemBg.png) no-repeat center center;
+  background-size: 100% 100%;
+  .navWrap {
+    margin: 20px auto;
+    width: 660px;
+    height: 760px;
+
+    .systemNavItem {
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      font-size: 42px;
+      font-weight: bold;
+      color: #fff;
+
+      li {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 210px;
+        height: 100%;
+        writing-mode: horizontal-tb; //默认：水平方向，从上到下 
+        writing-mode: vertical-rl; //垂直方向，从右向左
+        writing-mode: vertical-lr; //垂直方向，从左向右
+        letter-spacing: 10px;
+        cursor: pointer;
+
+        &:hover {
+          color: #00eaff;
+        }
+
+        &:nth-child(1) {
+          background: url(../../assets/images/entranceImgs/nav1.png) no-repeat center bottom;
+          background-size: 207px 663px;
+
+          &:hover {
+            background: url(../../assets/images/entranceImgs/nav1-2.png) no-repeat center bottom;
+            background-size: 207px 663px;
+          }
+        }
+
+        &:nth-child(2) {
+          background: url(../../assets/images/entranceImgs/nav2.png) no-repeat center center;
+          background-size: 198px 665px;
+
+          &:hover {
+            background: url(../../assets/images/entranceImgs/nav2-2.png) no-repeat center center;
+            background-size: 207px 663px;
+          }
+        }
+
+        &:nth-child(3) {
+          background: url(../../assets/images/entranceImgs/nav3.png) no-repeat center top;
+          background-size: 203px 661px;
+
+          &:hover {
+            background: url(../../assets/images/entranceImgs/nav3-2.png) no-repeat center top;
+            background-size: 207px 663px;
+          }
+        }
+      }
+    }
+  }
+
+  .systemBotm {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    margin-top: 60px;
+    line-height: 50px;
+    font-size: 20px;
+    color: #00eaff;
+
+    .systemInfo {
+      display: flex;
+      justify-content: space-around;
+      width: 850px;
+      border: 2px solid #002d57;
+      box-shadow: 0 0 5px 0px #12f1ff inset;
+
+      .name {
+        display: flex;
+        align-items: center;
+        padding-left: 25px;
+
+        &::before {
+          content: '';
+          display: block;
+          margin-right: 5px;
+          width: 5px;
+          height: 5px;
+          border-radius: 50%;
+          background: #12f1ff;
+        }
+      }
+
+      .dataCount {
+        color: #ff9c00;
+      }
+    }
+
+    .systemSettingIcon {
+      position: absolute;
+      right: 50px;
+      cursor: pointer;
+      img {
+        vertical-align: middle;
+      }
+    }
+  }
+}

@@ -1,0 +1,440 @@
+import {
+  apiGet,
+  axiosAll
+}
+from '@/api/api'
+import {
+  getArrFirst,
+  getArrLast,
+  getArrAvg
+}
+from '@/utils/mUtils.js'
+export const societyMixin = {
+  data() {
+    return {}
+  },
+  mounted() {
+    // 0、 获取某年限内某地区城镇、 农村常住居民人均可支配收入变化并绘制图表
+    apiGet(
+      '/statistics/getStructuralData', {
+        startYear: 2015,
+        endYear: 2018,
+        area: this.countyName,
+        zbs: '城镇居民人均可支配收入,农村居民人均可支配收入,城乡居民收入比'
+      }).then(res => {
+      let data = res.data
+      let aaa = getArrFirst(data.xAxis)
+      let ccc = getArrLast(data.xAxis) 
+
+      this.chartArr.sideItem3_0.title = `${aaa}年-${ccc}年${this.countyName}城镇、 农村常住居民人均可支配收入变化`
+      this.chartArr.sideItem3_0.chartArr[0].name = `${data.yAxis[0].name}(${data.yAxis[0].unit})`
+      this.chartArr.sideItem3_0.chartArr[1].name = `${data.yAxis[1].name}(${data.yAxis[1].unit})`
+      this.chartArr.sideItem3_0.chartArr[2].name = `${data.yAxis[2].name}(${data.yAxis[2].unit})`
+      this.chartArr.sideItem3_0.xAxis = data.xAxis
+      this.chartArr.sideItem3_0.chartArr[0].yAxis = data.yAxis[0].list
+      this.chartArr.sideItem3_0.chartArr[1].yAxis = data.yAxis[1].list
+      this.chartArr.sideItem3_0.chartArr[2].yAxis = data.yAxis[2].list
+      this.barLineChart('sideItem3_0', this.chartArr.sideItem3_0)
+
+      let list1 = data.yAxis[0].list
+      let lastIndex1 = list1.length - 1
+      let value1 = list1[lastIndex1]
+      let valueOld = list1[lastIndex1 - 1]
+      let diff = (value1 - valueOld)
+
+      let change1 = (diff == 0) ? `<span class="light">维持不变</span>` : diff > 0 ? `同比增长<span class="light">${diff}</span>万元` : `同比下降<span class="light">${Math.abs(diff)}</span>万元`
+
+      let list2 = data.yAxis[1].list
+      let lastIndex2 = list2.length - 1
+      let value2 = list2[lastIndex2]
+      let valueOl2 = list2[lastIndex2 - 1]
+      let diff2 = (value2 - valueOl2)
+
+      let change2 = (diff2 == 0) ? `<span class="light">维持不变</span>` : diff2 > 0 ? `同比增长<span class="light">${diff2}</span>万元` : `同比下降<span class="light">${Math.abs(diff2)}</span>万元`
+
+      let list3 = data.yAxis[2].list
+      let lastIndex3 = list3.length - 1
+      let value3 = list3[lastIndex3]
+      let valueOl3 = list3[lastIndex3 - 1]
+      let diff3 = (value3 - valueOl3).toFixed(2)
+
+      let change3 = diff3 >= 0 ? `增大` : `减小`
+      
+      this.chartArr.sideItem3_0.result = `${ccc}年，${this.countyName}城镇常住居民人均可支配收入达到<span class="light">${value1}</span>万元， 较上年${change1}，${this.countyName}农村常住居民人均可支配收入达到<span class="light">${value2}</span>万元， 较上年${change2}，城乡居民收入比下降为<span class="light">${Math.abs(diff3)}</span>，城乡居民收入差距进一步<span class="light">${change3}</span>。`
+    })
+    // 1、 获取某年某市各县（市、区）城镇、农村常住居民人均可支配收入对比并绘制图表
+    axiosAll([this.getCountySociData1(),this.getCountySociData2()]).then(res => {
+      let data1 = res[0].data
+      let year = data1.yAxis[0].year
+      this.chartArr.sideItem3_1.title = `${year}年${this.cityName}各县（市、区）城镇、农村常住居民人均可支配收入对比`
+      this.chartArr.sideItem3_1.chartArr[0].name = `${data1.yAxis[0].name}(${data1.yAxis[0].unit})`
+      this.chartArr.sideItem3_1.chartArr[1].name = `${data1.yAxis[1].name}(${data1.yAxis[1].unit})`
+      this.chartArr.sideItem3_1.xAxis = data1.xAxis
+      this.chartArr.sideItem3_1.chartArr[0].yAxis = data1.yAxis[0].list
+      this.chartArr.sideItem3_1.chartArr[1].yAxis = data1.yAxis[1].list
+      this.barLineChart('sideItem3_1', this.chartArr.sideItem3_1)
+
+      let index = data1.xAxis.indexOf(this.countyName)
+
+      let list1 = data1.yAxis[0].list
+      let avg1 = getArrAvg(list1)
+      let value1 = list1[index]
+      let diff1 = (value1 - avg1).toFixed(2)
+      let avgStr1 = (diff1 == 0) ? `与全市平均水平持平` : diff1 > 0 ? `高于全市平均水平` : `低于全市平均水平`
+
+      let list2 = data1.yAxis[1].list
+      let avg2 = getArrAvg(list2)
+      let value2 = list2[index]
+      let diff2 = (value2 - avg2).toFixed(2)
+      let avgStr2 = (diff2 == 0) ? `与全市平均水平持平` : diff2 > 0 ? `高于全市平均水平` : `低于全市平均水平`
+
+      let data2 = res[1].data
+      let rank1 = data2.table[0]
+      let rankStr1 = ''
+      if(rank1.changeVal === undefined){
+        rankStr1 = `暂无上年排名数据`
+      }else{
+        rankStr1 = rank1.changeVal == 0 ? `排名较上年<span class="light">维持不变</span>` : rank1.changeVal > 0 ? `排名较上年上升<span class="light">${rank1.changeVal}</span>位` : `排名较上年下降<span class="light">${Math.abs(rank1.changeVal)}</span>位`
+      }
+
+      let rank2 = data2.table[1]
+      let rankValue = rank2.endRank
+      let rankStr2 = ''
+      if(rank2.changeVal === undefined){
+        rankStr2 = `暂无上年排名数据`
+      }else{
+        rankStr2 = rank2.changeVal == 0 ? `排名较上年<span class="light">维持不变</span>` : rank2.changeVal > 0 ? `排名较上年上升<span class="light">${rank2.changeVal}</span>位` : `排名较上年下降<span class="light">${Math.abs(rank2.changeVal)}</span>位`
+      }
+
+      this.chartArr.sideItem3_1.result = `${year}年，${this.countyName}城镇常住居民人均可支配收入${avgStr1}， 在全市排第<span class="light">${index + 1}</span>位，${rankStr1}， ${this.countyName}农村常住居民人均可支配收入${avgStr2}， 在全市排第<span class="light">${rankValue}</span>位， ${rankStr2}。`
+    })
+
+    // 2、 获取某年某市各县（市、区）城乡居民收入比对比并绘制图表
+    axiosAll([this.getCountySociData3(), this.getCountySociData4()]).then(res => {
+
+      let data1 = res[0].data
+      let year = data1.yAxis[0].year
+      let list = data1.yAxis[0].list
+      let avg = getArrAvg(list)
+
+      this.chartArr.sideItem3_2.title = `${year}年${this.cityName}各县（市、区）城乡居民收入比`
+      this.chartArr.sideItem3_2.chartArr[0].name = `${data1.yAxis[0].name}(${data1.yAxis[0].unit})`
+      this.chartArr.sideItem3_2.xAxis = data1.xAxis
+      this.chartArr.sideItem3_2.chartArr[0].yAxis = list
+      this.chartArr.sideItem3_2.chartArr[1].name = `全市平均值(${avg}${data1.yAxis[0].unit})`
+      this.chartArr.sideItem3_2.chartArr[1].markLine.data[0].yAxis = avg
+      this.barLineChart('sideItem3_2', this.chartArr.sideItem3_2)
+
+      let index = data1.xAxis.indexOf(this.countyName)
+      let value = list[index]
+      let diff = (value - avg).toFixed(2)
+      let avgStr = (diff == 0) ? `与全市平均水平持平` : diff > 0 ? `高于全市平均水平` : `低于全市平均水平`
+
+      let data2 = res[1].data
+      let rank = data2.table[0]
+      let rankStr = ''
+      if(rank.changeVal === undefined){
+        rankStr = `暂无上年排名数据`
+      }else{
+        rankStr = rank.changeVal == 0 ? `排名较上年<span class="light">维持不变</span>` : rank.changeVal > 0 ? `排名较上年上升<span class="light">${rank.changeVal}</span>位` : `排名较上年下降<span class="light">${Math.abs(rank.changeVal)}</span>位`
+      }
+
+      this.chartArr.sideItem3_2.result = `${year}年，${this.countyName}城乡居民收入比${avgStr}，在全市排第<span class="light">${index + 1}</span>位，${rankStr}。`
+    })
+    // 3、 获取某年全省各县（市、区）城镇，农村居民人均可支配收入对比并绘制图表
+    axiosAll([this.getCountySociData5(), this.getCountySociData6()]).then(res => {
+      let data1 = res[0].data
+      this.chartArr.sideItem3_3.title = `2018年全省各县（市、区）城镇，农村居民人均可支配收入对比`
+      this.chartArr.sideItem3_3.xAxis = data1.xData
+      this.chartArr.sideItem3_3.chartArr[0].yAxis = data1.yData
+      this.chartArr.sideItem3_3.list = data1.yData
+      this.chartArr.sideItem3_3.list = data1.Table
+      this.dataZoomChart('sideItem3_3', this.chartArr.sideItem3_3)
+
+      let list = data1.yData
+      let index = data1.xData.indexOf(this.countyName)
+      let value = list[index]
+      let avg = getArrAvg(list) 
+      let diff = (value - avg).toFixed(2)
+      let avgStr = (diff == 0) ? `与全省平均水平持平` : diff > 0 ? `高于全省平均水平` : `低于全省平均水平`
+      
+      let data2 = res[1].data
+      let rank = data2.table[0]
+      let rankStr = ''
+      if(rank.changeVal === undefined){
+        rankStr = `暂无上年排名数据`
+      }else{
+        rankStr = rank.changeVal == 0 ? `排名较上年<span class="light">维持不变</span>` : rank.changeVal > 0 ? `排名较上年上升<span class="light">${rank.changeVal}</span>位` : `排名较上年下降<span class="light">${Math.abs(rank.changeVal)}</span>位`
+      }
+
+      this.chartArr.sideItem3_3.result = `2018年，${this.countyName}城镇常住居民人均可支配收入${avgStr}，在全省排第<span class="light">${index + 1}</span>位，${rankStr}。`
+    })
+
+    // 4、 获取某年全省各县（市、区）城乡居民收入比对比并绘制图表
+    axiosAll([this.getCountySociData7(), this.getCountySociData8()]).then(res => {
+      let data1 = res[0].data
+      this.chartArr.sideItem3_4.title = `2018年全省各县（市、区）城乡居民收入比对比`
+      this.chartArr.sideItem3_4.xAxis = data1.xData
+      this.chartArr.sideItem3_4.chartArr[0].yAxis = data1.yData
+      this.chartArr.sideItem3_4.list = data1.yData
+      this.chartArr.sideItem3_4.list = data1.Table
+      this.dataZoomChart('sideItem3_4', this.chartArr.sideItem3_4)
+
+      let list = data1.yData
+      let index = data1.xData.indexOf(this.countyName)
+      let value = list[index]
+      let avg = getArrAvg(list) 
+      let diff = (value - avg).toFixed(2)
+      let avgStr = (diff == 0) ? `与全省平均水平持平` : diff > 0 ? `高于全省平均水平` : `低于全省平均水平`
+      
+      let data2 = res[1].data
+      let rank = data2.table[0]
+      let rankStr = ''
+      if(rank.changeVal === undefined){
+        rankStr = `暂无上年排名数据`
+      }else{
+        rankStr = rank.changeVal == 0 ? `排名较上年<span class="light">维持不变</span>` : rank.changeVal > 0 ? `排名较上年上升<span class="light">${rank.changeVal}</span>位` : `排名较上年下降<span class="light">${Math.abs(rank.changeVal)}</span>位`
+      }
+
+      this.chartArr.sideItem3_4.result = `2018年，${this.countyName}城乡居民收入比${avgStr}，在全省排第<span class="light">${index + 1}</span>位，${rankStr}。`
+    })
+    // 5、 获取某年限内某地区常住城镇化率变化并绘制图表
+    // 6、 获取某年某地区常住城镇化率评价图并绘制图表
+    axiosAll([this.getCountySociData9(), this.getCountySociData10()]).then(res => {
+      let data1 = res[0].data
+      let aaa = getArrFirst(data1.xAxis)
+      let ccc = getArrLast(data1.xAxis)
+      this.chartArr.sideItem3_5.title = `${aaa}-${ccc}年${this.countyName}常住城镇化率变化`
+      this.chartArr.sideItem3_5.chartArr[0].name = `${data1.yAxis[0].name}(${data1.yAxis[0].unit})`
+      this.chartArr.sideItem3_5.chartArr[1].name = `${this.cityName}${data1.yAxis[1].name}(${data1.yAxis[1].unit})`
+      this.chartArr.sideItem3_5.xAxis = data1.xAxis
+      this.chartArr.sideItem3_5.chartArr[0].yAxis = data1.yAxis[0].list
+      this.chartArr.sideItem3_5.chartArr[1].yAxis = data1.yAxis[1].list
+      this.barLineChart('sideItem3_5', this.chartArr.sideItem3_5)
+
+      let list = data1.yAxis[0].list
+      let lastIndex = list.length - 1
+      let value1 = list[lastIndex]
+      let valueOld = list[lastIndex - 1]
+      let diff = (value1 - valueOld).toFixed(2)
+      let change1 = (diff == 0) ? `<span class="light">维持不变</span>` : diff > 0 ? `同比增加<span class="light">${diff}</span>个百分点` : `同比减少<span class="light">${Math.abs(diff)}</span>个百分点`
+
+
+
+      let data2 = res[1].data
+      for (const key in data2) {
+        if (data2.hasOwnProperty(key)) {
+          let value = isNaN(data2[key]) ? 0 : (data2[key] * 100 > 100 ? 100 : data2[key] * 100)
+          this.chartArr.sideItem3_6.xAxis.push(key)
+          this.chartArr.sideItem3_6.chartArr[0].yAxis.push(value)
+        }
+      }
+      this.horizontalChart('sideItem3_6', this.chartArr.sideItem3_6)
+
+      let fff = (ccc - 2016 + 1) * 0.2 * 100
+      let ggg = this.chartArr.sideItem3_6.chartArr[0].yAxis[0] >= fff ? '良好' : '滞后'
+
+      this.chartArr.sideItem3_5.result = `${ccc}年，${this.countyName}常住城镇化率达到<span class="light">${value1}</span>%，较上年${change1}。“十三五”时期，${this.countyName}常住城镇化率进度<span class="light">${ggg}</span>。`
+    })
+
+    // 7、 获取某年某市县（市、区）常住城镇化率对比并绘制图表
+    axiosAll([this.getCountySociData11(), this.getCountySociData12()]).then(res => {
+      let data1 = res[0].data
+      let year = data1.yAxis[0].year
+      let list = data1.yAxis[0].list
+      let avg = getArrAvg(list)
+
+      this.chartArr.sideItem3_7.title = `${year}年${this.cityName}各县（市、区）常住城镇化率对比`
+      this.chartArr.sideItem3_7.chartArr[0].name = `${data1.yAxis[0].name}(${data1.yAxis[0].unit})`
+      this.chartArr.sideItem3_7.xAxis = data1.xAxis
+      this.chartArr.sideItem3_7.chartArr[0].yAxis = list
+      this.chartArr.sideItem3_7.chartArr[1].name = `全市平均值(${avg}${data1.yAxis[0].unit})`
+      this.chartArr.sideItem3_7.chartArr[1].markLine.data[0].yAxis = avg
+      this.barLineChart('sideItem3_7', this.chartArr.sideItem3_7)
+
+      
+      let index = data1.xAxis.indexOf(this.countyName)
+      let value = list[index]
+      let diff = (value - avg).toFixed(2)
+      let avgStr = (diff == 0) ? `与全市平均水平持平` : diff > 0 ? `高于全市平均水平` : `低于全市平均水平`
+
+
+      let data2 = res[1].data
+      let rank = data2.table[0]
+      let rankStr = ''
+      if(rank.changeVal === undefined){
+        rankStr = `暂无上年排名数据`
+      }else{
+        rankStr = rank.changeVal == 0 ? `排名较上年<span class="light">维持不变</span>` : rank.changeVal > 0 ? `排名较上年上升<span class="light">${rank.changeVal}</span>位` : `排名较上年下降<span class="light">${Math.abs(rank.changeVal)}</span>位`
+      }
+
+      this.chartArr.sideItem3_7.result = `${year}年，${this.countyName}常住城镇化率${avgStr}，在全市排第<span class="light">${index + 1}</span>位， ${rankStr}。`
+    })
+    // 8、 获取某年全省各县（市、区）常住城镇化率对比并绘制图表
+    axiosAll([this.getCountySociData13(),this.getCountySociData14()]).then(res => {
+      let data1 = res[0].data
+      this.chartArr.sideItem3_8.title = `2018年全省各县（市、区）常住城镇化率对比`
+      this.chartArr.sideItem3_8.xAxis = data1.xData
+      this.chartArr.sideItem3_8.chartArr[0].yAxis = data1.yData
+      this.chartArr.sideItem3_8.list = data1.yData
+      this.chartArr.sideItem3_8.list = data1.Table
+      this.dataZoomChart('sideItem3_8', this.chartArr.sideItem3_8)
+
+      let list = data1.yData
+      let index = data1.xData.indexOf(this.countyName)
+      let value = list[index]
+      let avg = getArrAvg(list)
+      let diff = (value - avg).toFixed(2)
+      let avgStr = (diff == 0) ? `与全省平均水平持平` : diff > 0 ? `高于全省平均水平` : `低于全省平均水平`
+
+      let data2 = res[1].data
+      let rank = data2.table[0]
+      let rankStr = ''
+      if(rank.changeVal === undefined){
+        rankStr = `暂无上年排名数据`
+      }else{
+        rankStr = rank.changeVal == 0 ? `排名较上年<span class="light">维持不变</span>` : rank.changeVal > 0 ? `排名较上年上升<span class="light">${rank.changeVal}</span>位` : `排名较上年下降<span class="light">${Math.abs(rank.changeVal)}</span>位`
+      }
+
+      this.chartArr.sideItem3_8.result = `2018年，${this.countyName}常住城镇化率${avgStr}，在全省排第<span class="light">${index + 1}</span>位，${rankStr}。`
+    })
+.then(res => {
+    
+    })
+  },
+  methods: {
+    getCountySociData1(){
+      return apiGet(
+        '/statistics/getScaleDataMultiZb', {
+          year: 2018,
+          area: this.cityName,
+          zbs: '城镇居民人均可支配收入,农村居民人均可支配收入'
+        })
+    },
+    getCountySociData2(){
+      return  apiGet(
+        '/statistics/getRank', {
+          startYear: 2017,
+          endYear: 2018,
+          areas: this.cityName,
+          area: this.countyName,
+          zbs: '城镇居民人均可支配收入,农村居民人均可支配收入',
+          model: 'town'
+        })
+    },
+    getCountySociData3(){
+      return apiGet(
+        '/statistics/getScaleData', {
+          year: 2018,
+          area: this.cityName,
+          zb: '城乡居民收入比'
+        })
+    },
+    getCountySociData4(){
+      return  apiGet(
+        '/statistics/getRank', {
+          startYear: 2017,
+          endYear: 2018,
+          areas: this.cityName,
+          area: this.countyName,
+          zbs: '城乡居民收入比',
+          model: 'town'
+        })
+    },
+    getCountySociData5(){
+      return  apiGet(
+        '/statistics/getAllRanking', {
+          year: 2018,
+          zb: '城镇居民人均可支配收入'
+        })
+    },
+    getCountySociData6(){
+      return  apiGet(
+        '/statistics/getRank', {
+          startYear: 2017,
+          endYear: 2018,
+          areas: '浙江省',
+          area: this.countyName,
+          zbs: '城镇居民人均可支配收入',
+          model: 'town'
+        })
+    },
+    getCountySociData7(){
+      return apiGet(
+        '/statistics/getAllRanking', {
+          year: 2018,
+          zb: '城乡居民收入比'
+        })
+    },
+    getCountySociData8(){
+      return  apiGet(
+        '/statistics/getRank', {
+          startYear: 2017,
+          endYear: 2018,
+          areas: '浙江省',
+          area: this.countyName,
+          zbs: '城乡居民收入比',
+          model: 'town'
+        })
+    },
+    // 5、 获取某年限内某地区常住城镇化率变化并绘制图表
+    getCountySociData9(){
+      return  apiGet(
+        '/statistics/getMultiZoneData', {
+          startYear: 2015,
+          endYear: 2018,
+          areas: [this.countyName, this.cityName].join(','),
+          zb: '常住城镇化率'
+        })
+    },
+    // 6、 获取某年某地区常住城镇化率评价图并绘制图表
+    getCountySociData10(){
+      return  apiGet(
+        '/statistics/getProgressStatusData', {
+          year: 2018,
+          area: this.countyName,
+          zbs: '常住城镇化率'
+        })
+    },
+    getCountySociData11(){
+      return  apiGet(
+        '/statistics/getScaleData', {
+          year: 2018,
+          area: this.cityName,
+          zb: '常住城镇化率'
+        })
+    },
+    getCountySociData12(){
+      return apiGet(
+        '/statistics/getRank', {
+          startYear: 2017,
+          endYear: 2018,
+          areas: this.cityName,
+          area: this.countyName,
+          zbs: '常住城镇化率',
+          model: 'town'
+        })
+    },
+    getCountySociData13(){
+      return  apiGet(
+        '/statistics/getAllRanking', {
+          year: 2018,
+          zb: '常住城镇化率'
+        })
+    },
+    getCountySociData14(){
+      return apiGet(
+        '/statistics/getRank', {
+          startYear: 2017,
+          endYear: 2018,
+          areas: '浙江省',
+          area: this.countyName,
+          zbs: '常住城镇化率',
+          model: 'town'
+        })
+    }
+
+    },
+
+
+}

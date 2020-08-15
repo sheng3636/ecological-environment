@@ -1,0 +1,187 @@
+@import '@/assets/styles/mixin.scss';
+
+.bodyMain {
+  margin: 0 auto;
+  width: 1845px;
+}
+
+.mainWrap {
+  flex-wrap: wrap;
+  @include fj();
+
+  .sideItem {
+    position: relative;
+    margin-bottom: 20px;
+    width: 910px;
+    border: 1px solid #448fe4;
+    background: radial-gradient(circle, rgba(18, 69, 113, 0) 0, rgba(18, 69, 113, 1) 160%);
+
+    .markLineArea {
+      position: absolute;
+      top: 70px;
+      right: 25px;
+      display: flex;
+      align-items: center;
+
+      .colorLine {
+        display: inline-block;
+        margin-right: 12px;
+        width: 30px;
+        border-bottom: 1px dashed #ff5975;
+      }
+    }
+
+    .peopleTip {
+      position: absolute;
+      top: 65px;
+      left: 15px;
+      display: flex;
+      color: #00edff;
+      &::before {
+        content: '!';
+        display: block;
+        margin-right: 10px;
+        width:23px;
+        height: 23px;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 23px;
+        background-color: #00edff;
+        color: #000;
+      }
+    }
+  }
+  .width600 {
+    width: 600px;
+  }
+  .width740 {
+    width: 740px;
+  }
+
+  .width800 {
+    width: 800px;
+  }
+
+  .width910 {
+    width: 910px;
+  }
+
+  .width1020 {
+    width: 1020px;
+  }
+
+  .width1080 {
+    width: 1080px;
+  }
+
+  .width1845 {
+    width: 1845px;
+  }
+
+  .sideItemChart {
+    height: 425px;
+  }
+}
+
+.twoWrap {
+  flex-wrap: wrap;
+  @include fj();
+  margin-bottom: 15px;
+  width: 100%;
+  border: 1px solid #448fe4;
+}
+
+
+.tableWrap,
+.tableWrap1 {
+  padding: 5px;
+  @include sc(20px, #fff);
+
+  li {
+    display: flex;
+    font-size: 20px;
+    text-align: center;
+
+    p {
+      flex: 1;
+      line-height: 45px;
+
+      &.yellow {
+        color: #ffba00;
+      }
+    }
+
+    &:nth-child(odd) {
+      background: #0b274a;
+    }
+  }
+}
+
+.tableWrap1 {
+  margin-top: 10px;
+  border: 2px solid #007e7d;
+}
+
+.imgModalBody {
+  position: relative;
+  @include fj(center);
+
+  #echartsWrap1 {
+    @include wh(95%, 415px);
+  }
+
+  .colorArea {
+    margin: 10px 0 0 5px;
+
+    p {
+      margin-bottom: 5px;
+
+      .txt {
+        display: block;
+        margin-bottom: 5px;
+        white-space: nowrap;
+        color: #fff;
+      }
+    }
+  }
+}
+
+.fileLoadingModal {
+  position: fixed;
+  text-align: center;
+  @include wh(100%, 100%);
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+
+  .progressWrap {
+    width: 50%;
+    @include center()
+  }
+
+  .downTxt {
+
+    display: block;
+    margin-top: 10px;
+  }
+}
+
+.classColor1 {
+  color: #00f082;
+}
+
+.classColor2 {
+  color: #00d7e9;
+}
+
+.classColor3 {
+  color: #f09800;
+}
+
+.classColor4 {
+  color: rgba(243, 213, 8, 1);
+}
+
+.classColor5 {
+  color: #bb0000;
+}

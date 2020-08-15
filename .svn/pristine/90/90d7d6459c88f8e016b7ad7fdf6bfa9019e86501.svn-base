@@ -1,0 +1,201 @@
+<template>
+  <div class="areaSelect">
+    <header class="header">
+      <span class="logotxt">快速导览</span>
+      <i class="el-icon-s-home" @click="jumpUrl('SunNav')"></i>
+    </header>
+    <div class="searchWrap">
+      <div class="searchInput">
+        <el-input v-model="cityName" size="large"  placeholder="请输入区划，如台州"></el-input>
+      </div>
+      <div class="anlystBtn">分析</div>
+      <ul class="searchResult" v-if="cityAreaOpts.length > 1 && cityName !== ''">
+        <li v-for="(item, index) in cityAreaOpts" :key="index" class="cityNameItem" @click="changeArea(item)">{{ item }}</li>
+      </ul>
+    </div>
+    <div id="gaoGeiMap"></div>
+    <div id="selectMap"></div>
+    <span class="mapBackBtn" @click="mapBackClick" v-if="isMapBack">
+      <i class="el-icon-refresh-left"></i>
+      返回
+    </span>
+  </div>
+</template>
+<script>
+import cityTown from '@/utils/cityTown'
+import { apiGet } from '@/api/api'
+import axios from 'axios'
+export default {
+  data() {
+    return {
+      isCountyMap: true,
+      cityAreaOpts: [],
+      cityName: ''
+    }
+  },
+  watch: {
+    cityName: function(newData) {
+      this.cityAreaOpts = this.cityTownList.filter(city => {
+        return city.indexOf(newData.trim()) > -1
+      })
+      let flag = this.cityAreaOpts.includes(newData)
+      if (flag || newData === '') {
+        this.loadMapData(newData)
+      }
+    }
+  },
+  computed: {
+    isMapBack: function() {
+      for (const key in cityTown) {
+        if (cityTown.hasOwnProperty(this.cityName) && this.cityName !== '') {
+          return true
+        }
+      }
+    },
+    cityTownList: function() {
+      let aaa = []
+      for (const key in cityTown) {
+        if (cityTown.hasOwnProperty(key)) {
+          aaa.push(key)
+        }
+      }
+      return aaa
+    }
+  },
+  mounted() {
+    this.loadMapData(this.cityName)
+  },
+  methods: {
+    changeArea(areaName) {
+      this.cityName = areaName
+      this.cityAreaOpts = []
+    },
+    // 始化地图并获取geoJson
+    loadMapData(areaName) {
+      console.log(areaName);
+      
+      let map = null
+      let areaCode = ''
+      if (areaName) {
+        areaCode = cityTown[areaName].code
+      } else {
+        areaCode = '330000'
+      }
+      map = new AMap.Map('gaoGeiMap', {
+        resizeEnable: true,
+        center: [120.200268, 30.241793],
+        zoom: 7
+      })
+      AMapUI.loadUI(['geo/DistrictExplorer'], DistrictExplorer => {
+        let districtExplorer = (window.districtExplorer = new DistrictExplorer({
+          eventSupport: true, // 打开事件支持
+          map: map
+        }))
+        // 创建一个实例
+        districtExplorer.loadAreaNode(
+          areaCode || '330000',
+          (error, areaNode) => {
+            if (error) {
+              console.error(error)
+              return
+            }
+            let mapJson = {}
+            // 特别注意这里哦，如果查看过正常的geojson文件，都会发现，文件都是以features 字段开头的，所以这里要记得加上
+            let aaa = areaNode.getParentFeature()
+            mapJson.features = areaNode.getSubFeatures()
+            this.drawEchartMap(mapJson)
+          }
+        )
+      })
+    },
+    //  获取所选地区geoJson并绘制地图
+    drawEchartMap(geoJson) {
+      this.echartsMap = this.$echarts.init(document.getElementById('selectMap'))
+      this.echartsMap.showLoading()
+      this.$echarts.registerMap('浙江省', geoJson)
+      this.echartsMap.hideLoading()
+      let option = {
+        tooltip: {
+          show: false
+        },
+        series: [
+          {
+            name: '',
+            type: 'map',
+            mapType: '浙江省',
+            roam: false, // 是否开启平游或缩放
+            aspectScale: 1, // 长宽比
+            label: {
+              normal: {
+                show: true,
+                textStyle: {
+                  color: '#fff'
+                }
+              },
+              emphasis: {
+                show: true,
+                textStyle: {
+                  color: '#fff'
+                }
+              }
+            },
+            itemStyle: {
+              normal: {
+                areaColor: '#00c0ff',
+                borderColor: '#0488b6',
+                borderWidth: 0.5,
+                label: {
+                  show: true,
+                  textStyle: {
+                    color: 'rgb(249, 249, 249)'
+                  }
+                }
+              },
+              emphasis: {
+                // 鼠标经过区域样式
+                areaColor: '#00394c',
+                borderColor: 'rgba(11,234,235)',
+                areaStyle: {
+                  color: 'rgba(11,55,98)'
+                },
+                label: {
+                  show: true,
+                  textStyle: {
+                    color: 'rgb(249, 249, 249)'
+                  }
+                }
+              }
+            }
+            // data: data.list
+          }
+        ]
+      }
+      this.echartsMap.clear()
+      this.echartsMap.setOption(option)
+      this.echartsMap.on('click', this.echartsMapClick)
+    },
+    // 地图点击事件
+    echartsMapClick(params) {
+      this.cityName = params.name      
+      // if (cityTown[params.name].level === 'county') {
+      //   return 
+      // }
+      // this.loadMapData(params.name)
+    },
+    // 返回地图
+    mapBackClick() {
+      this.cityName = ''
+      this.loadMapData()
+    },
+    // 跳转路由
+    jumpUrl(path) {
+      this.$router.push({
+        name: path
+      })
+    }
+  }
+}
+</script>
+<style lang="scss" scoped>
+@import './areaSelect.scss';
+</style>

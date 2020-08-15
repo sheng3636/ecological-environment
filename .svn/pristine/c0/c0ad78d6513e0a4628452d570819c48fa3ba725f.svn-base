@@ -1,0 +1,245 @@
+import {
+  getStructuralData1,
+  getScaleData1,
+  getScaleDataWithName1,
+  getScaleDataMultiZb,
+  getMultiZoneData
+}
+from '@/api/environmentalQuality'
+import mUtilsFn from '@/utils/mUtils.js'
+export const peopleCountMixin = {
+  data() {
+    return {}
+  },
+  mounted() {
+      // 0、获取某年段某地区常住和户籍人口数量数据并绘制图表
+      getStructuralData1({
+        area: this.cityName,
+        zbs: '年末常住人口,户籍人口'
+      }).then(res => {
+        let data = res.data
+        this.chartArr.sideItem1_0.chartArr[0].name = `${data.yAxis[0].name}(${data.yAxis[0].unit})`
+        this.chartArr.sideItem1_0.chartArr[1].name = `${data.yAxis[1].name}(${data.yAxis[1].unit})`
+        this.chartArr.sideItem1_0.dataSource = data.yAxis[0].source
+        this.chartArr.sideItem1_0.xAxis = data.xAxis
+        this.chartArr.sideItem1_0.chartArr[0].yAxis = data.yAxis[0].list
+        this.chartArr.sideItem1_0.chartArr[1].yAxis = data.yAxis[1].list
+        this.barLineChart('sideItem1_0', this.chartArr.sideItem1_0)
+
+        let aaa = this.returnArrLast(this.chartArr.sideItem1_0.xAxis)
+        let ccc = this.returnArrFirst(this.chartArr.sideItem1_0.xAxis)
+        let bbb = this.returnArrLast(this.chartArr.sideItem1_0.chartArr[0].yAxis)
+        let ddd = this.returnArrFirst(this.chartArr.sideItem1_0.chartArr[0].yAxis)
+        let eee = bbb - ddd
+        let fff = eee >= 0 ? '增加' : '减少'
+        let ggg = (eee / this.chartArr.sideItem1_0.xAxis.length).toFixed(1)
+        let hhh = this.returnArrLast(this.chartArr.sideItem1_0.chartArr[1].yAxis)
+        let iii = this.returnArrFirst(this.chartArr.sideItem1_0.chartArr[1].yAxis)
+        let jjj = hhh - iii
+        let kkk = jjj >= 0 ? '增加' : '减少'
+        let lll = (jjj / this.chartArr.sideItem1_0.xAxis.length).toFixed(1)
+        this.chartArr.sideItem1_0.title = `${ccc}年-${aaa}年${this.cityName}常住和户籍人口数量`
+
+
+        this.chartArr.sideItem1_0.result = `${aaa}年末，${this.cityName}常住人口总量为<span class="light">${bbb}</span>万人，
+        与${ccc}年相比${fff}<span class="light">${Math.abs(eee)}</span>万人,年均人口增量为<span class="light">${ggg}</span>万人；,
+        ${this.cityName}户籍人口总量为<span class="light">${hhh}</span>万人，与${ccc}年相比${kkk}<span class="light">${jjj.toFixed(1)}</span>万人,年均人口增量为<span class="light">${lll}</span>万人；。`
+      })
+      // 1、获取某年某地区常驻人口分布情数据并绘制图表
+      getScaleDataWithName1({
+        area: '浙江省',
+        zbs: '常驻总人口'
+      }).then(res => {
+        let data = res.data[0]
+        this.chartArr.sideItem1_1.listObj.unit = '单位：' + data.unit
+        this.chartArr.sideItem1_1.listObj.data[data.year] = data.list
+        let aaa = data.list.filter(item => {
+          return item.name === this.cityName
+        })[0]
+        this.chartArr.sideItem1_1.title = `${data.year}年${this.cityName}常驻人口分布情况`
+        this.chartArr.sideItem1_1.dataSource = data.source
+        this.chartArr.sideItem1_1.result = `${this.cityName}常驻人口为<span class="light">${(aaa.value/10000).toFixed(1)}</span>万人`
+        this.createTimeMap('sideItem1_1', this.chartArr.sideItem1_1.listObj)
+      })
+      // 2、获取某年某地区与全省常住人口增长率比较数据并绘制图表
+      getMultiZoneData({
+        areas: this.cityName + ',浙江省',
+        zb: '常住人口增长率'
+      }).then(res => {
+        let data = res.data
+        this.chartArr.sideItem1_2.chartArr[0].name = `${data.yAxis[0].area}${data.yAxis[0].name}(${data.yAxis[0].unit})`
+        this.chartArr.sideItem1_2.chartArr[1].name = `${data.yAxis[1].area}${data.yAxis[1].name}(${data.yAxis[1].unit})`
+        this.chartArr.sideItem1_2.dataSource = data.yAxis[0].source
+        this.chartArr.sideItem1_2.xAxis = data.xAxis
+        this.chartArr.sideItem1_2.chartArr[0].yAxis = data.yAxis[0].list
+        this.chartArr.sideItem1_2.chartArr[1].yAxis = data.yAxis[1].list
+        this.barLineChart('sideItem1_2', this.chartArr.sideItem1_2)
+        let aaa = this.returnArrLast(this.chartArr.sideItem1_2.xAxis)
+        let ccc = this.returnArrFirst(this.chartArr.sideItem1_2.xAxis)
+        this.chartArr.sideItem1_2.title = `${ccc}年-${aaa}年${this.cityName}与全省常住人口增长率比较`     
+
+        let index16 = data.xAxis.indexOf(2016)
+        let arr1 = data.yAxis[0].list.slice(index16)
+        let arr2 = data.yAxis[1].list.slice(index16)
+
+        let index = mUtilsFn.getMinIndex(arr1)
+        
+        let dd = 2016 + index
+        
+        let v1 = arr1[index];
+        let v2 = arr2[index] || 0;
+        let ee = (v2 - v1).toFixed(2);
+
+        let ff = mUtilsFn.getDiff(arr1,arr2);
+        
+        this.chartArr.sideItem1_2.result = `<span class="light">${dd}</span> 年，${this.cityName}的常住人口增长率最小，与浙江省相差<span class="light"> ${ee}</span>个千分点；“十三五”以来，${this.cityName}常住人口增长率整体增幅<span class="light">${ff}</span>全省平均水平,`     
+
+      })
+      // 3、获取某年某地区与全省户籍人口人口规模比较数据并绘制图表
+      getMultiZoneData({
+        areas: this.cityName + ',浙江省',
+        zb: '户籍人口增长率'
+      }).then(res => {
+        let data = res.data
+        this.chartArr.sideItem1_3.chartArr[0].name = `${data.yAxis[0].area}${data.yAxis[0].name}(${data.yAxis[0].unit})`
+        this.chartArr.sideItem1_3.chartArr[1].name = `${data.yAxis[1].area}${data.yAxis[1].name}(${data.yAxis[1].unit})`
+        this.chartArr.sideItem1_3.dataSource = data.yAxis[0].source
+        this.chartArr.sideItem1_3.xAxis = data.xAxis
+        this.chartArr.sideItem1_3.chartArr[0].yAxis = data.yAxis[0].list
+        this.chartArr.sideItem1_3.chartArr[1].yAxis = data.yAxis[1].list
+        this.barLineChart('sideItem1_3', this.chartArr.sideItem1_3)
+        let aaa = this.returnArrLast(this.chartArr.sideItem1_3.xAxis)
+        let ccc = this.returnArrFirst(this.chartArr.sideItem1_3.xAxis)
+        this.chartArr.sideItem1_3.title = `${ccc}年-${aaa}年${this.cityName}与全省户籍人口增长率比较`
+
+       let index16 = data.xAxis.indexOf(2016)
+        let arr1 = data.yAxis[0].list.slice(index16)
+        let arr2 = data.yAxis[1].list.slice(index16)
+
+        let index = mUtilsFn.getMinIndex(arr1)
+        
+        let dd = 2016 + index
+        
+        let v1 = arr1[index];
+        let v2 = arr2[index] || 0;
+        let ee = (v2 - v1).toFixed(2);
+
+        let ff = mUtilsFn.getDiff(arr1,arr2);
+        
+        this.chartArr.sideItem1_3.result = `<span class="light">${dd}</span> 年，${this.cityName}的户籍人口增长率最小，与浙江省相差<span class="light"> ${ee}</span>个千分点；“十三五”以来，${this.cityName}户籍人口增长率整体增幅<span class="light">${ff}</span>全省平均水平,`     
+      })
+      // 4、获取某年段某地区与全省常住人口人口比较数据并绘制图表
+      getStructuralData1({
+        area: this.cityName,
+        zbs: '年末常住人口,户籍人口'
+      }).then(res => {
+        let data = res.data
+        this.chartArr.sideItem1_4.chartArr[0].name = `常住人口/户籍人口`
+        this.chartArr.sideItem1_4.dataSource = data.yAxis[0].source
+        this.chartArr.sideItem1_4.xAxis = data.xAxis
+        let objArr = []
+        for (let i = 0; i < data.xAxis.length; i++) {
+          objArr.push({
+            name: data.xAxis[i],
+            value: (data.yAxis[0].list[i] / data.yAxis[1].list[i]).toFixed(2)
+          })
+        }
+        for (let i = 0; i < objArr.length; i++) {
+          this.chartArr.sideItem1_4.chartArr[0].yAxis.push(objArr[i].value)
+        }
+        
+        this.barLineChart('sideItem1_4', this.chartArr.sideItem1_4)
+
+        let aaa = this.returnArrLast(this.chartArr.sideItem1_4.xAxis)
+        let ccc = this.returnArrFirst(this.chartArr.sideItem1_4.xAxis)
+        this.chartArr.sideItem1_4.title = `${ccc}年-${aaa}年${this.cityName}常住人口与户籍人口比值情况`
+
+
+        this.chartArr.sideItem1_4.result = `2015年、2016年、2017年、2018年，台州市常住人口总量大于户籍人口总量,说明人口呈流入状态。`
+      })
+      // 5、获取某年段各地市常住人口与户籍人口比值比较数据并绘制图表
+      getScaleDataMultiZb({
+        area: '浙江省',
+        zbs: '年末常住人口,户籍人口'
+      }).then(res => {
+        let data = res.data
+        this.chartArr.sideItem1_5.chartArr[0].name = `常住人口/户籍人口`
+        this.chartArr.sideItem1_5.dataSource = data.yAxis[0].source
+        this.chartArr.sideItem1_5.xAxis = data.xAxis
+        let objArr = []
+        for (let i = 0; i < data.xAxis.length; i++) {
+          objArr.push({
+            name: data.xAxis[i],
+            value: (data.yAxis[0].list[i] / data.yAxis[1].list[i]).toFixed(2)
+          })
+        }
+        objArr.sort(function (a, b) {
+          return b.value - a.value
+        })
+        for (let i = 0; i < objArr.length; i++) {
+          this.chartArr.sideItem1_5.chartArr[0].yAxis.push(objArr[i].value)
+        }
+
+        this.barLineChart('sideItem1_5', this.chartArr.sideItem1_5)
+        this.chartArr.sideItem1_5.title = `${data.yAxis[0].year}年${this.cityName}各地市常住人口与户籍人口比值比较`
+      })
+      // 6、获取某年各地市各地市常住人口数量及占比数据并绘制图表
+      getScaleData1({
+        area: '浙江省',
+        zb: '年末常住人口'
+      }).then(res => {
+        let data = res.data
+        this.chartArr.sideItem1_6.chartArr[0].name = `年末常住人口(${data.yAxis[0].unit})`
+        this.chartArr.sideItem1_6.chartArr[1].name = `年末常住人口占比(%)`
+        this.chartArr.sideItem1_6.dataSource = data.yAxis[0].source
+        this.chartArr.sideItem1_6.xAxis = data.xAxis
+        this.chartArr.sideItem1_6.chartArr[0].yAxis = data.yAxis[0].list
+        for (let i = 0; i < data.yAxis[0].list.length; i++) {
+          this.chartArr.sideItem1_6.chartArr[1].yAxis.push(((data.yAxis[0].list[i] / data.yAxis[0].total) * 100).toFixed(1))
+        }
+        this.barLineChart('sideItem1_6', this.chartArr.sideItem1_6)
+        
+        this.chartArr.sideItem1_6.title = `${data.yAxis[0].year}年${this.cityName}各地市常住人口数量及占比`
+      })
+      // 7、获取某年户籍人口人口及占比数据并绘制图表
+      getScaleData1({
+        area: '浙江省',
+        zb: '户籍人口'
+      }).then(res => {
+        let data = res.data
+
+        this.chartArr.sideItem1_7.chartArr[0].name = `户籍人口(${data.yAxis[0].unit})`
+        this.chartArr.sideItem1_7.chartArr[1].name = `户籍人口占比(%)`
+        this.chartArr.sideItem1_7.dataSource = data.yAxis[0].source
+        this.chartArr.sideItem1_7.xAxis = data.xAxis
+        this.chartArr.sideItem1_7.chartArr[0].yAxis = data.yAxis[0].list
+        for (let i = 0; i < data.yAxis[0].list.length; i++) {
+          this.chartArr.sideItem1_7.chartArr[1].yAxis.push(((data.yAxis[0].list[i] / data.yAxis[0].total) * 100).toFixed(1))
+        }
+        this.barLineChart('sideItem1_7', this.chartArr.sideItem1_7)
+
+        this.chartArr.sideItem1_7.title = `${data.yAxis[0].year}年${this.cityName}各地市户籍人口及占比`
+      })
+      // 8、获取某年各地市常驻人口数量及占比数据并绘制图表
+      getScaleData1({
+        area: '浙江省',
+        zb: '常驻总人口'
+      }).then(res => {
+        let data = res.data
+
+        this.chartArr.sideItem1_8.chartArr[0].name = `常驻总人口(${data.yAxis[0].unit})`
+        this.chartArr.sideItem1_8.chartArr[1].name = `常驻总人口占比(%)`
+        this.chartArr.sideItem1_8.dataSource = data.yAxis[0].source
+        this.chartArr.sideItem1_8.xAxis = data.xAxis
+        this.chartArr.sideItem1_8.chartArr[0].yAxis = data.yAxis[0].list
+        for (let i = 0; i < data.yAxis[0].list.length; i++) {
+          this.chartArr.sideItem1_8.chartArr[1].yAxis.push(((data.yAxis[0].list[i] / data.yAxis[0].total) * 100).toFixed(1))
+        }
+        this.barLineChart('sideItem1_8', this.chartArr.sideItem1_8)
+
+        this.chartArr.sideItem1_8.title = `${data.yAxis[0].year}年${this.cityName}各地市常驻总人口及占比`
+      })
+  },
+  methods: {
+  }
+}

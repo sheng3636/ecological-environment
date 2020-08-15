@@ -1,0 +1,131 @@
+import {
+  apiGet
+}
+from '@/api/api'
+import {
+  getArrFirst,
+  getArrLast,
+  getArrAvg
+}
+from '@/utils/mUtils.js'
+export const scienceMixin = {
+  data() {
+    return {}
+  },
+  mounted() {
+    // 0、 获取某年限内某地区发明专利授权量变化并绘制图表
+    apiGet(
+      '/statistics/getMultiZoneData', {
+        startYear: 2015,
+        endYear: 2018,
+        areas: [this.countyName, this.cityName].join(','),
+        zb: '发明专利授权量'
+      }).then(res => {
+      let data = res.data
+      this.chartArr.sideItem2_0.title = `${getArrFirst(data.xAxis)}-${getArrLast(data.xAxis)}年${this.countyName}发明专利授权量变化`
+      this.chartArr.sideItem2_0.chartArr[0].name = `${data.yAxis[0].name}(${data.yAxis[0].unit})`
+      this.chartArr.sideItem2_0.chartArr[1].name = `${this.countyName}${data.yAxis[1].name}(${data.yAxis[1].unit})`
+      this.chartArr.sideItem2_0.xAxis = data.xAxis
+      this.chartArr.sideItem2_0.chartArr[0].yAxis = data.yAxis[0].list
+      this.chartArr.sideItem2_0.chartArr[1].yAxis = data.yAxis[1].list
+      this.barLineChart('sideItem2_0', this.chartArr.sideItem2_0)
+    })
+    // 1、 获取某年某地区发明专利授权量评价图并绘制图表
+    apiGet(
+      '/statistics/getProgressStatusData', {
+        year: 2018,
+        area: this.countyName,
+        zbs: '发明专利授权量'
+      }).then(res => {
+      let data = res.data
+      for (const key in data) {
+        if (data.hasOwnProperty(key)) {
+          this.chartArr.sideItem2_1.xAxis.push(key)
+          this.chartArr.sideItem2_1.chartArr[0].yAxis.push(data[key] * 100)
+        }
+      }
+      this.horizontalChart('sideItem2_1', this.chartArr.sideItem2_1)
+    })
+    // 2、 获取某年某市各县（市、区）发明专利授权量对比并绘制图表
+    apiGet(
+      '/statistics/getScaleData', {
+        year: 2018,
+        area: this.cityName,
+        zb: '发明专利授权量'
+      }).then(res => {
+      let data = res.data
+      this.chartArr.sideItem2_2.title = `2018年${this.cityName}各县（市、区）发明专利授权量对比`
+      this.chartArr.sideItem2_2.chartArr[0].name = `${data.yAxis[0].name}(${data.yAxis[0].unit})`
+      this.chartArr.sideItem2_2.xAxis = data.xAxis
+      this.chartArr.sideItem2_2.chartArr[0].yAxis = data.yAxis[0].list
+      this.chartArr.sideItem2_2.chartArr[1].name = `全省平均值(${getArrAvg(data.yAxis[0].list)}${data.yAxis[0].unit})`
+      this.chartArr.sideItem2_2.chartArr[1].markLine.data[0].yAxis = getArrAvg(data.yAxis[0].list)
+
+      this.barLineChart('sideItem2_2', this.chartArr.sideItem2_2)
+    })
+    // 3、 获取某年全省各县（市、区）生产总值对比并绘制图表
+    apiGet(
+      '/statistics/getAllRanking', {
+        year: 2018,
+        zb: '发明专利授权量'
+      }).then(res => {
+      let data = res.data
+      this.chartArr.sideItem2_3.title = `2018年全省各县（市、区）发明专利授权量对比`
+      this.chartArr.sideItem2_3.xAxis = data.xData
+      this.chartArr.sideItem2_3.chartArr[0].yAxis = data.yData
+      this.chartArr.sideItem2_3.list = data.yData
+      this.chartArr.sideItem2_3.list = data.Table
+      this.dataZoomChart('sideItem2_3', this.chartArr.sideItem2_3)
+    })
+    // 4、 获取某年限内某地区每万人发明专利授权量变化并绘制图表
+    apiGet(
+      '/statistics/getMultiZoneData', {
+        startYear: 2015,
+        endYear: 2018,
+        areas: [this.countyName, this.cityName, '浙江省'].join(','),
+        zb: '每万人发明专利授权量'
+      }).then(res => {
+      let data = res.data
+      this.chartArr.sideItem2_4.title = `${getArrFirst(data.xAxis)}-${getArrLast(data.xAxis)}年${this.countyName}每万人发明专利授权量变化`
+      this.chartArr.sideItem2_4.chartArr[0].name = `${data.yAxis[0].name}(${data.yAxis[0].unit})`
+      this.chartArr.sideItem2_4.chartArr[1].name = `${this.cityName}${data.yAxis[1].name}(${data.yAxis[1].unit})`
+      this.chartArr.sideItem2_4.chartArr[2].name = `浙江省${data.yAxis[1].name}(${data.yAxis[2].unit})`
+      this.chartArr.sideItem2_4.xAxis = data.xAxis
+      this.chartArr.sideItem2_4.chartArr[0].yAxis = data.yAxis[0].list
+      this.chartArr.sideItem2_4.chartArr[1].yAxis = data.yAxis[1].list
+      this.chartArr.sideItem2_4.chartArr[2].yAxis = data.yAxis[2].list
+      this.barLineChart('sideItem2_4', this.chartArr.sideItem2_4)
+    })
+    // 5、 获取某年某市各县（市、区）每万人发明专利授权量对比并绘制图表
+    apiGet(
+      '/statistics/getScaleData', {
+        year: 2018,
+        area: this.cityName,
+        zb: '每万人发明专利授权量'
+      }).then(res => {
+      let data = res.data
+      this.chartArr.sideItem2_5.title = `2018年${this.cityName}各县（市、区）每万人发明专利授权量对比`
+      this.chartArr.sideItem2_5.chartArr[0].name = `${data.yAxis[0].name}(${data.yAxis[0].unit})`
+      this.chartArr.sideItem2_5.xAxis = data.xAxis
+      this.chartArr.sideItem2_5.chartArr[0].yAxis = data.yAxis[0].list
+      this.chartArr.sideItem2_5.chartArr[1].name = `全市平均值(${getArrAvg(data.yAxis[0].list)}${data.yAxis[0].unit})`
+      this.chartArr.sideItem2_5.chartArr[1].markLine.data[0].yAxis = getArrAvg(data.yAxis[0].list)
+      this.barLineChart('sideItem2_5', this.chartArr.sideItem2_5)
+    })
+    // 6、 获取某年全省各县（市、区）R&D经费投入占生产总值比重对比并绘制图表
+    apiGet(
+      '/statistics/getAllRanking', {
+        year: 2018,
+        zb: 'R&D经费投入占生产总值比重'
+      }).then(res => {
+      let data = res.data
+      this.chartArr.sideItem2_6.title = `2018年全省各县（市、区）R&D经费投入占生产总值比重对比`
+      this.chartArr.sideItem2_6.xAxis = data.xData
+      this.chartArr.sideItem2_6.chartArr[0].yAxis = data.yData
+      this.chartArr.sideItem2_6.list = data.yData
+      this.chartArr.sideItem2_6.list = data.Table
+      this.dataZoomChart('sideItem2_6', this.chartArr.sideItem2_6)
+    })
+  },
+  methods: {}
+}

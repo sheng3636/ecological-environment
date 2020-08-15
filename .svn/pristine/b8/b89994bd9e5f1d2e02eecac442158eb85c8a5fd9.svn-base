@@ -1,0 +1,194 @@
+// 存储localStorage
+const setStore = (name, content) => {
+  if (!name) return
+  if (typeof content !== 'string') {
+    content = JSON.stringify(content)
+  }
+  window.localStorage.setItem(name, content)
+}
+// 获取localStorage
+const getStore = name => {
+  if (!name) return
+  return window.localStorage.getItem(name)
+}
+// 删除localStorage
+export const removeStore = name => {
+  if (!name) return
+  window.localStorage.removeItem(name)
+}
+// 通过getDataURL()获取图片的base64编码字符；字符解码， 并转换成Blob对象；
+const base64ToBlob = code => {
+  let parts = code.split(';base64,')
+  let contentType = parts[0].split(':')[1]
+  let raw = window.atob(parts[1]);
+  let rawLength = raw.length;
+
+  let uInt8Array = new Uint8Array(rawLength)
+
+  for (let i = 0; i < rawLength; ++i) {
+    uInt8Array[i] = raw.charCodeAt(i)
+  }
+  return new Blob([uInt8Array], {
+    type: contentType
+  })
+}
+// 通过getDataURL将echarts图表导出为图片
+const saveAsImage = (chart) => {
+  let content = chart.getDataURL()
+  let aLink = document.createElement('a')
+  let blob = base64ToBlob(content)
+  let evt = document.createEvent("HTMLEvents")
+  evt.initEvent("click", true, true)
+  aLink.download = "mapChart.png"
+  aLink.href = URL.createObjectURL(blob)
+  aLink.dispatchEvent(new MouseEvent('click', {
+    bubbles: true,
+    cancelable: true,
+    view: window
+  }))
+}
+
+export const getJenksBreaks = function (lineListFilter, numclass) {
+  let data = lineListFilter.map(li => {
+    return li.num;
+  })
+  //在javascript里，Array的sort方法，必须用这个函数，否则不是按数字大小排序
+  function sortNumber(a, b) {
+    return a - b;
+  }
+
+  // int numclass;
+  var numdata = data.length;
+  data.sort(sortNumber); //先排序
+  var mat1 = new Array();
+  var mat2 = new Array();
+  var st = new Array();
+  var j = 0,
+    i = 0;
+  for (j = 0; j <= numdata; j++) {
+    mat1[j] = new Array();
+    mat2[j] = new Array();
+    st[j] = 0;
+    for (i = 0; i <= numclass; i++) {
+      mat1[j][i] = 0;
+      mat2[j][i] = 0;
+    }
+  }
+  for (i = 1; i <= numclass; i++) {
+    mat1[1][i] = 1;
+    mat2[1][i] = 0;
+    for (j = 2; j <= numdata; j++) {
+      mat2[j][i] = Number.MAX_VALUE;
+    }
+  }
+  var v = 0;
+  for (var l = 2; l <= numdata; l++) {
+    var s1 = 0;
+    var s2 = 0;
+    var w = 0;
+    var i3 = 0;
+    for (var m = 1; m <= l; m++) {
+      i3 = l - m + 1;
+      var val = parseInt(data[i3 - 1]);
+      s2 += val * val;
+      s1 += val;
+      w++;
+      v = s2 - (s1 * s1) / w;
+      var i4 = i3 - 1;
+      if (i4 != 0) {
+        for (j = 2; j <= numclass; j++) {
+          if (mat2[l][j] >= (v + mat2[i4][j - 1])) {
+            mat1[l][j] = i3;
+            mat2[l][j] = v + mat2[i4][j - 1];
+          }
+        }
+      }
+    }
+    mat1[l][1] = 1;
+    mat2[l][1] = v;
+  }
+  var k = numdata;
+  var kclass = new Array();
+  kclass[numclass - 1] = parseInt(data[data.length - 1]);
+  for (j = numclass; j >= 2; j--) {
+    var id = parseInt(mat1[k][j]) - 2;
+    kclass[j - 2] = parseInt(data[id]);
+    k = parseInt(mat1[k][j] - 1);
+  }
+  return kclass;
+};
+
+//获取最小值下标
+const getMinIndex = arr => {
+  var min = arr[0];
+  var index = 0;
+  for (var i = 0; i < arr.length; i++) {
+    if (parseFloat(min) > parseFloat(arr[i])) {
+      min = arr[i];
+      index = i;
+    }
+  }
+  return index;
+}
+
+const getMaxIndex = data => {
+  let max = data[0];
+  let index = 0;
+  data.forEach((d, i) => {
+    if (parseFloat(d)  >= parseFloat(max)) {
+      max = d;
+      index = i;
+    }
+  });
+  return index;
+}
+
+const getDiff = (arr1,arr2) => {
+  let sum1 = arr1.reduce((tol, cur) => {
+    return parseFloat(tol) + parseFloat(cur);
+  });
+  let sum2 = arr2.reduce((tol, cur) => {
+    return parseFloat(tol) + parseFloat(cur);
+  });
+
+  if (sum1 - sum2 >= 0) {
+    return "大于";
+  } else {
+    return "小于";
+  }
+}
+
+const compareData = (arr) => {
+  let len = arr.length;
+  let num1 = arr[0];
+  let num2 = arr[len -1];
+  if(num1 > num2) {
+    return "减少";
+  } else {
+    return "增加"
+  }
+}
+
+const getNumIndex =(num, arr) => {
+  num = parseFloat(num);
+  let index = 0
+  arr.forEach((a, i) => {
+    if(num < a) {
+      index = i + 1
+    }
+  })
+  return index
+}
+
+export default {
+  setStore,
+  getStore,
+  removeStore,
+  base64ToBlob,
+  saveAsImage,
+  getMinIndex,
+  getMaxIndex,
+  getDiff,
+  compareData,
+  getNumIndex
+}

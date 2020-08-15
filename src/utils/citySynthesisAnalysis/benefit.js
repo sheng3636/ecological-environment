@@ -1,0 +1,198 @@
+import {
+  apiGet,
+  axiosAll
+}
+from '@/api/api'
+import {
+  getArrFirst,
+  getArrLast,
+  getArrAvg
+}
+from '@/utils/mUtils.js'
+export const benefitMixin = {
+  data() {
+    return {}
+  },
+  mounted() {
+    // 1、 获取某年限内某地区规上工业亩均税收变化并绘制图表
+    apiGet(
+      '/statistics/getMultiZoneData', {
+        startYear: 2017,
+        endYear: 2018,
+        areas: [this.cityName, '浙江省', '全国'].join(','),
+        zb: '规上工业亩均税收（万元/亩）'
+      }).then(res => {
+      let data = res.data
+      let aaa = getArrFirst(data.xAxis)
+      let ccc = getArrLast(data.xAxis)
+      this.chartArr.sideItem5_0.title = `${aaa}年-${ccc}年${this.cityName}规上工业亩均税收变化`
+      this.chartArr.sideItem5_0.chartArr[0].name = `${this.cityName}（万元/亩）`
+      this.chartArr.sideItem5_0.chartArr[1].name = `浙江省（万元/亩）`
+      this.chartArr.sideItem5_0.chartArr[2].name = `全国（万元/亩）`
+      this.chartArr.sideItem5_0.xAxis = data.xAxis
+      this.chartArr.sideItem5_0.chartArr[0].yAxis = data.yAxis[0].list
+      this.chartArr.sideItem5_0.chartArr[1].yAxis = data.yAxis[1].list
+      this.chartArr.sideItem5_0.chartArr[2].yAxis = data.yAxis[2].list
+      this.chartArr.sideItem5_0.dataSource = data.yAxis[0].source
+    
+      this.barLineChart('sideItem5_0', this.chartArr.sideItem5_0)
+
+      let list = data.yAxis[0].list
+      let lastIndex = list.length - 1
+      let value1 = list[lastIndex]
+      let valueOld = list[lastIndex -1]
+      let diff = (value1 - valueOld).toFixed(2)
+
+      let change1 = (diff == 0) ? `维持不变` : diff > 0 ? `同比增长<span class="light">${diff}</span>（万元/亩）` : `同比下降<span class="light">${Math.abs(diff)}</span>（万元/亩）`
+
+      this.chartArr.sideItem5_0.result = `${ccc}年，${this.cityName}规上工业亩均税收达到<span class="light">${value1}</span>（万元/亩）， 较上年${change1}。`
+    })
+    // 2、 获取某年某地区全省各地市市规上工业亩均税收对比并绘制图表
+    let benefitFuncArr1 = []
+    benefitFuncArr1.push(this.getCityBenefit1())
+    benefitFuncArr1.push(this.getCityBenefit2())
+
+
+    axiosAll(benefitFuncArr1).then(res => {
+      let data1 = res[0].data
+      let year = data1.yAxis[0].year
+      this.chartArr.sideItem5_1.title = `${year}年全省各地市规上工业亩均税收对比`
+      this.chartArr.sideItem5_1.chartArr[0].name = `${data1.yAxis[0].name}`
+      this.chartArr.sideItem5_1.xAxis = data1.xAxis
+      this.chartArr.sideItem5_1.chartArr[0].yAxis = data1.yAxis[0].list
+      this.barLineChart('sideItem5_1', this.chartArr.sideItem5_1)
+
+      let list = data1.yAxis[0].list
+      let index = data1.xAxis.indexOf(this.cityName)
+      let value = list[index]
+      let avg = getArrAvg(list)
+      let diff = (value - avg).toFixed(2)
+      let avgStr = (diff == 0) ? `与全省平均水平持平` : diff > 0 ? `高于全省平均水平` : `低于全省平均水平`
+
+
+      let data2 = res[1].data
+      let rank = data2.table[0]
+      let rankStr = ''
+      
+      if(rank.changeVal === undefined){
+        rankStr = `暂无上年排名数据`
+      }else{
+        rankStr = rank.changeVal == 0 ? `排名较上年维持不变` : rank.changeVal > 0 ? `排名较上年上升<span class="light">${rank.changeVal}</span>位` : `排名较上年下降<span class="light">${Math.abs(rank.changeVal)}</span>位`
+      }
+
+      this.chartArr.sideItem5_1.result = `${year}年，杭州市规上工业亩均税收${avgStr}，在全省排第<span class="light">${index+1}</span>位， ${rankStr}。`
+    })
+
+    // 3、 获取某年限内某地区单位建设用地生产总值变化并绘制图表
+    apiGet(
+      '/statistics/getMultiZoneData', {
+        startYear: 2017,
+        endYear: 2018,
+        areas: [this.cityName, '浙江省', '全国'].join(','),
+        zb: '单位建设用地生产总值'
+      }).then(res => {
+      let data = res.data
+      let aaa = getArrFirst(data.xAxis)
+      let ccc = getArrLast(data.xAxis)
+      this.chartArr.sideItem5_2.title = `${aaa}年-${ccc}年${this.cityName}单位建设用地生产总值变化`
+      this.chartArr.sideItem5_2.chartArr[0].name = `${this.cityName}(${data.yAxis[0].unit})`
+      this.chartArr.sideItem5_2.chartArr[1].name = `浙江省(${data.yAxis[0].unit})`
+      this.chartArr.sideItem5_2.chartArr[2].name = `全国(${data.yAxis[0].unit})`
+      this.chartArr.sideItem5_2.xAxis = data.xAxis
+      this.chartArr.sideItem5_2.chartArr[0].yAxis = data.yAxis[0].list
+      this.chartArr.sideItem5_2.chartArr[1].yAxis = data.yAxis[1].list
+      this.chartArr.sideItem5_2.chartArr[2].yAxis = data.yAxis[2].list
+      this.barLineChart('sideItem5_2', this.chartArr.sideItem5_2)
+
+
+      let list = data.yAxis[0].list
+      let lastIndex = list.length - 1
+      let value1 = list[lastIndex]
+      let valueOld = list[lastIndex -1]
+      let diff = (value1 - valueOld).toFixed(2)
+
+      let change1 = (diff == 0) ? `维持不变` : diff > 0 ? `同比上升<span class="light">${diff}</span>（万元/亩）` : `同比下降<span class="light">${Math.abs(diff)}</span>（万元/亩）`
+
+
+      this.chartArr.sideItem5_2.result = `${ccc}年，${this.cityName}单位建设用地生产总值达到<span class="light">${value1}</span>（万元/亩）， 较上年${change1}。`
+    })
+    // 2、 获取某年某地区全省各地市市规上工业亩均税收对比并绘制图表
+
+    let cityBenefitFuncArr2 = []
+    cityBenefitFuncArr2.push(this.getCityBenefit3())
+    cityBenefitFuncArr2.push(this.getCityBenefit4())
+
+     axiosAll(cityBenefitFuncArr2).then(res => {
+      let data1 = res[0].data
+      let year = data1.yAxis[0].year
+      let list = data1.yAxis[0].list
+      let avg = getArrAvg(list)
+      this.chartArr.sideItem5_3.title = `${year}年全省各地市单位建设用地生产总值对比`
+      this.chartArr.sideItem5_3.chartArr[0].name = `${data1.yAxis[0].name}(${data1.yAxis[0].unit})`
+      this.chartArr.sideItem5_3.xAxis = data1.xAxis
+      this.chartArr.sideItem5_3.chartArr[0].yAxis = list
+      this.chartArr.sideItem5_3.chartArr[1].name = `全省平均值(${avg}${data1.yAxis[0].unit})`
+      this.chartArr.sideItem5_3.chartArr[1].markLine.data[0].yAxis = avg
+      this.barLineChart('sideItem5_3', this.chartArr.sideItem5_3)
+
+
+      let index = data1.xAxis.indexOf(this.cityName)
+      let value = list[index]
+      let diff = (value - avg).toFixed(2)
+      let avgStr = (diff == 0) ? `与全省平均水平持平` : diff > 0 ? `高于全省平均水平` : `低于全省平均水平`
+
+      let data2 = res[1].data
+      let rank = data2.table[0]
+      let rankStr = ''
+
+      if(rank.changeVal === undefined){
+        rankStr = `暂无上年排名数据`
+      }else{
+        rankStr = rank.changeVal == 0 ? `排名较上年维持不变` : rank.changeVal > 0 ? `排名较上年上升<span class="light">${rank.changeVal}</span>位` : `排名较上年下降<span class="light">${Math.abs(rank.changeVal)}</span>位`
+      }
+      this.chartArr.sideItem5_3.result = `2018年，${this.cityName}单位建设用地生产总值${avgStr}，在全省排第<span class="light">${index + 1}</span>位， ${rankStr}。`
+     })
+  },
+  methods: {
+    //规上工业亩均税收
+    getCityBenefit1(){
+      return  apiGet(
+        '/statistics/getScaleData', {
+          year: 2018,
+          area: '浙江省',
+          zb: '规上工业亩均税收（万元/亩）'
+        })
+    },
+    getCityBenefit2() {
+      return apiGet(
+        '/statistics/getRank', {
+          startYear: 2017,
+          endYear: 2018,
+          areas: '浙江省',
+          area: this.cityName,
+          zbs: '规上工业亩均税收（万元/亩）',
+          model: 'city'
+        })
+    },
+    //单位建设用地生产总值
+    getCityBenefit3(){
+      return   apiGet(
+        '/statistics/getScaleData', {
+          year: 2018,
+          area: '浙江省',
+          zb: '单位建设用地生产总值'
+        })
+    },
+    getCityBenefit4() {
+      return apiGet(
+        '/statistics/getRank', {
+          startYear: 2017,
+          endYear: 2018,
+          areas: '浙江省',
+          area: this.cityName,
+          zbs: '单位建设用地生产总值',
+          model: 'city'
+        })
+    },
+  }
+}

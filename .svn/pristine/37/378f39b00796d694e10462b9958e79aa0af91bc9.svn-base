@@ -1,0 +1,296 @@
+export const threeIndustrialMixin = {
+  data() {
+    return {}
+  },
+  mounted() {
+    this.barLineChart('sideItem1_0', this.chartArr.sideItem1_0)
+    this.pieChart('sideItem1_1', this.chartArr.sideItem1_1)
+    this.barLineChart('sideItem1_2', this.chartArr.sideItem1_2)
+    this.barLineChart('sideItem1_3', this.chartArr.sideItem1_3)
+    this.barLineChart('sideItem1_4', this.chartArr.sideItem1_4)
+    this.bothWayBarLineChart('sideItem1_5', this.chartArr.sideItem1_5)
+    this.bothWayBarLineChart('sideItem1_6', this.chartArr.sideItem1_6)
+    this.bothWayBarLineChart('sideItem1_7', this.chartArr.sideItem1_7)
+    this.textTopHorizontalChart('sideItem2_0', this.chartArr.sideItem2_0)
+    this.barLineChart('sideItem2_1', this.chartArr.sideItem2_1)
+    this.barLineChart('sideItem2_2', this.chartArr.sideItem2_2)
+    this.pieChart('sideItem2_3', this.chartArr.sideItem2_3)
+    this.pieChart('sideItem2_4', this.chartArr.sideItem2_4)
+    this.pieChart('sideItem2_5', this.chartArr.sideItem2_5)
+    this.barLineChart('sideItem2_6', this.chartArr.sideItem2_6)
+    this.textTopHorizontalChart('sideItem2_9', this.chartArr.sideItem2_9)
+    this.barLineChart('sideItem2_10', this.chartArr.sideItem2_10)
+    this.barLineChart('sideItem2_11', this.chartArr.sideItem2_11)
+    this.barLineChart('sideItem2_12', this.chartArr.sideItem2_12)
+    this.barLineChart('sideItem3_0', this.chartArr.sideItem3_0)
+    this.barLineChart('sideItem3_1', this.chartArr.sideItem3_1)
+    this.barLineChart('sideItem3_3', this.chartArr.sideItem3_3)
+    this.barLineChart('sideItem3_4', this.chartArr.sideItem3_4)
+  },
+  methods: {
+    bothWayBarLineChart(id, data) {
+      let chart = this.$echarts.init(document.getElementById(id))
+      let myData = [
+        '嘉兴市',
+        '宁波市',
+        '绍兴市',
+        '湖州市',
+        '衢州市',
+        '台州市',
+        '金华市',
+        '丽水市',
+        '温州市',
+        '杭州市',
+        '舟山市'
+      ]
+      let lineData = [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
+      let lastYearData = [305.9, 305.1, 264, 196.1,165.3,160.3,156.6,150.2, 142.6, 127, 94]
+      let thisYearData = [53.7, 78.5, 23.3, 45, 69.5, 46.4, 78.5, 79.5, 25.6, 56, 48.6]
+
+      let option = {
+        baseOption: {
+          backgroundColor: this.chartColor.backgroundColor,
+          timeline: {
+            show: false,
+            top: 0,
+            data: []
+          },
+          legend: {
+            top: '5%',
+            left: 'center',
+            icon: 'horizontal',
+            textStyle: {
+              fontSize: 14,
+              color: this.chartColor.textColor
+            },
+            data: ['第一产业增加值（万元）', '第一产业规模增速（%）']
+          },
+          grid: [{
+            show: false,
+            left: '5%',
+            top: '15%',
+            bottom: '8%',
+            containLabel: true,
+            width: '37%'
+          }, {
+            show: false,
+            left: '53%',
+            top: '15%',
+            bottom: '11%',
+            width: '0%'
+          }, {
+            show: false,
+            right: '2%',
+            top: '15%',
+            bottom: '8%',
+            containLabel: true,
+            width: '37%'
+          }],
+          xAxis: [{
+            type: 'value',
+            inverse: true,
+            axisLine: {
+              show: false
+            },
+            axisTick: {
+              show: false
+            },
+            position: 'bottom',
+            axisLabel: {
+              show: true,
+              textStyle: {
+                color: 'white'
+              }
+            },
+            splitLine: {
+              show: false
+            }
+          }, {
+            gridIndex: 1,
+            show: false,
+          }, {
+            gridIndex: 2,
+            axisLine: {
+              show: false
+            },
+            axisTick: {
+              show: false
+            },
+            position: 'bottom',
+            axisLabel: {
+              show: true,
+              interval: 0,
+              textStyle: {
+                color: 'white'
+              }
+            },
+            splitLine: {
+              show: false
+            }
+          }],
+          yAxis: [{
+            type: 'category',
+            inverse: true,
+            position: 'right',
+            axisLine: {
+              show: false
+            },
+            axisTick: {
+              show: false
+            },
+            axisLabel: {
+              show: false
+            },
+            data: myData
+          }, {
+            gridIndex: 1,
+            type: 'category',
+            inverse: true,
+            position: 'left',
+            axisLine: {
+              show: false
+            },
+            axisTick: {
+              show: false
+            },
+            axisLabel: {
+              show: true,
+              textStyle: {
+                color: '#ffffff',
+                fontSize: 14
+              }
+
+            },
+            data: myData.map(function (value) {
+              return {
+                value: value,
+                textStyle: {
+                  align: 'center'
+                }
+              }
+            })
+          }, {
+            gridIndex: 2,
+            type: 'category',
+            inverse: true,
+            position: 'left',
+            axisLine: {
+              show: false
+            },
+            axisTick: {
+              show: false
+            },
+            axisLabel: {
+              show: false
+
+            },
+            data: myData
+          }],
+          series: []
+
+        },
+        options: []
+      }
+      option.options.push({
+        series: [{
+            type: 'pictorialBar',
+            xAxisIndex: 0,
+            yAxisIndex: 0,
+            itemStyle: {
+              normal: {
+                color: 'rgba(0,0,0,0)'
+              }
+            },
+            barWidth: 10,
+            data: lineData,
+            barGap: '-100%',
+            barCategoryGap: 0,
+            label: {
+              normal: {
+                show: true,
+                formatter: (series) => {
+                  return lastYearData[series.dataIndex] + '万元'
+                },
+                position: 'insideBottomRight',
+                textStyle: {
+                  color: '#ffffff',
+                  fontSize: 14,
+                },
+                offset: [0, -10],
+              }
+            },
+            z: -100,
+            animationEasing: 'elasticOut',
+            animationDelay: function (dataIndex, params) {
+              return params.index * 30;
+            }
+          }, {
+            name: '第一产业增加值（万元）',
+            type: 'bar',
+            xAxisIndex: 0,
+            yAxisIndex: 0,
+            barWidth: 10,
+            itemStyle: {
+              normal: {
+                barBorderRadius: 5,
+                color: '#039372'
+              }
+            },
+            data: lastYearData
+          },
+          {
+            type: 'pictorialBar',
+            xAxisIndex: 2,
+            yAxisIndex: 2,
+            symbol: 'rect',
+            itemStyle: {
+              normal: {
+                color: 'rgba(0,0,0,0)'
+              }
+            },
+            barWidth: 10,
+            symbolRepeat: true,
+            symbolSize: 14,
+            data: lineData,
+            barGap: '-100%',
+            barCategoryGap: 0,
+            label: {
+              normal: {
+                show: true,
+                formatter: (series) => {
+                  return thisYearData[series.dataIndex] + '%'
+                },
+                position: 'insideBottomLeft',
+                textStyle: {
+                  color: '#ffffff',
+                  fontSize: 14,
+                },
+                offset: [0, -10],
+              }
+            },
+            z: -100,
+            animationEasing: 'elasticOut',
+            animationDelay: function (dataIndex, params) {
+              return params.index * 30;
+            }
+          }, {
+            name: '第一产业规模增速（%）',
+            type: 'bar',
+            xAxisIndex: 2,
+            yAxisIndex: 2,
+            barWidth: 10,
+            itemStyle: {
+              normal: {
+                barBorderRadius: 5,
+                color: '#36d7b6'
+              }
+            },
+            data: thisYearData
+          }
+        ]
+      })
+      chart.clear()
+      chart.setOption(option)
+    }
+  }
+}

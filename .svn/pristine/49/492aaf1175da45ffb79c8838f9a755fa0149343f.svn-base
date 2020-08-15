@@ -1,0 +1,514 @@
+import zhejiang from '../../../public/js/jsonData/zhejiang.json'
+import hangzhou from '../../../public/js/jsonData/hangzhou.json'
+import huzhou from '../../../public/js/jsonData/huzhou.json'
+import jiaxing from '../../../public/js/jsonData/jiaxing.json'
+import jinhua from '../../../public/js/jsonData/jinhua.json'
+import lishui from '../../../public/js/jsonData/lishui.json'
+import ningbo from '../../../public/js/jsonData/ningbo.json'
+import quzhou from '../../../public/js/jsonData/quzhou.json'
+import shaoxing from '../../../public/js/jsonData/shaoxing.json'
+import taizhou from '../../../public/js/jsonData/taizhou.json'
+import wenzhou from '../../../public/js/jsonData/wenzhou.json'
+import zhoushan from '../../../public/js/jsonData/zhoushan.json'
+import changsanjiao from '../../../public/js/jsonData/changsanjiao'
+import csjPnt from '../../../public/js/jsonData/csj_pnt.json'
+import {
+  getJenksBreaks
+} from '@/utils/mUtils.js'
+import axios from 'axios'
+export const contactMixin = {
+  data() {
+    return {
+      mapConfig: {
+        浙江省: zhejiang,
+        杭州市: hangzhou,
+        湖州市: huzhou,
+        嘉兴市: jiaxing,
+        金华市: jinhua,
+        丽水市: lishui,
+        宁波市: ningbo,
+        衢州市: quzhou,
+        绍兴市: shaoxing,
+        台州市: taizhou,
+        温州市: wenzhou,
+        舟山市: zhoushan,
+        长三角: changsanjiao,
+        长三角中心点: csjPnt
+      },
+    }
+  },
+  mounted() {
+    this.chartArr.sideItem5_1.title = `2018年手机信令${this.cityName}黄金周人口联系`
+    this.chartArr.sideItem5_2.title = `2018年手机信令${this.cityName}普通周人口联系`
+    this.chartArr.sideItem5_4.title = `2018年移动电话信令${this.cityName}与全省各区域间黄金周人口联系`
+    this.chartArr.sideItem5_5.title = `2018年移动手机信令${this.cityName}与全省各区域间普通周人口联系`
+    this.chartArr.sideItem5_6.title = `2018年联通手机信令${this.cityName}与长三角黄金周人口联系`
+    this.chartArr.sideItem5_7.title = `2018年联通手机信令${this.cityName}与长三角普通周人口联系`
+    // 2、 某年基于手机信令数据的台州市人口联系市内联系表格
+    axios({
+      url: 'http://118.190.204.249:8899/xboot/statistics/getFlowTable',
+      method: 'get',
+      params: {
+        year: 2018,
+        area: this.cityName,
+        type: 1,
+        sign: '地市'
+      }
+    }).then(res => {
+      let data = res.data.result
+      data.sort((a, b) => {
+        return b.frequency1 - a.frequency1
+      })
+      this.chartArr.sideItem5_2.title = `2018年基于手机信令数据的${this.cityName}人口联系市内联系表格`
+      this.chartArr.sideItem5_2.list = data
+      
+
+      this.chartArr.sideItem5_0.result = `2018年，在${this.cityName}内，<span class="light">${data[0].area}</span>人口流动最为频繁，
+      其中<span class="light">${data[0].area}</span>与<span class="light">${data[1].area}</span>的人口联系最为密切。`
+    })
+    // 5、 某年基于手机信令数据的各地市与台州市人口联系汇总占比表（％）
+    axios({
+      url: 'http://118.190.204.249:8899/xboot/statistics/getFlowTable',
+      method: 'get',
+      params: {
+        year: 2018,
+        area: this.cityName,
+        type: 2,
+        sign: '地市'
+      }
+    }).then(res => {
+      let data = res.data.result
+      this.chartArr.sideItem5_5.title = `2018年基于手机信令数据的各地市与${this.cityName}人口联系汇总占比表（％）`
+      this.chartArr.sideItem5_5.list = data
+
+      let aa = data.slice(0, 3)
+      let bb = aa.map(li => {
+        return li.area
+      })
+      this.chartArr.sideItem5_5.result = `2018年，${this.cityName}与<span class="light">${bb.join()}</span>的人口联系总量最高；
+      ${this.cityName}与<span class="light">${bb.join()}</span>的人口联系最为密切。`
+    })
+    // 8、 某年基于联通手机信令数据的长三角各省与台州市人口联系汇总占比表（％）
+    axios({
+      url: 'http://118.190.204.249:8899/xboot/statistics/getFlowTable',
+      method: 'get',
+      params: {
+        year: 2018,
+        area: this.cityName,
+        type: 3,
+        sign: '地市'
+      }
+    }).then(res => {
+      let data = res.data.result
+      data.sort((a, b) => {
+        return b.frequency1 - a.frequency1
+      })
+      this.chartArr.sideItem5_8.title = `2018年基于联通手机信令数据的长三角各省与${this.cityName}人口联系汇总占比表`
+      this.chartArr.sideItem5_8.list = data
+
+
+      let parcent1 = 0
+      let parcent2 = 0
+      if (data.length <= 0) {
+        return 0
+      }
+      if (data[0].frequency1 - data[0].frequency2 > 0) {
+        parcent1 = data[0].frequency2
+      } else {
+        parcent1 = data[0].frequency1
+      }
+      data.forEach(n => {
+        if (n.area == '上海市') {
+          parcent2 = n.frequency2
+        }
+      })
+
+      // 9、 某年基于联通手机信令数据的长三角各地区（除浙江省外TOP5）与台州市人口联系汇总占比表（％）
+      axios({
+        url: 'http://118.190.204.249:8899/xboot/statistics/getFlowTable',
+        method: 'get',
+        params: {
+          year: 2018,
+          area: this.cityName,
+          type: 4,
+          sign: '地市'
+        }
+      }).then(resp => {
+        let data1 = resp.data.result
+        this.chartArr.sideItem5_9.title = `2018年基于联通手机信令数据的长三角各地区（除浙江省外TOP5）与${this.cityName}人口联系汇总占比表（％）`
+        data1.sort((a, b) => {
+          return b.frequency1 - a.frequency1;
+        })
+        this.chartArr.sideItem5_9.list = data1.slice(0, 5)
+        this.chartArr.sideItem5_8.result = `2018年，在长三角范围内，${this.cityName}的人口联系以省内为主，
+       在省内的人口相互联系次数占整个长三角区域的人口相互联系总次数的<span class="light">${parcent1}</span>%以上；
+       与上海市的相互联系次数占比在普通周为<span class="light">${parcent2}</span>%； 
+       除浙江省外，台州市与<span class="light">${data1[0].area}</span>的人口联系最为密切。`
+      })
+
+    })
+    this.lineintervalMap('sideItem5_0', 'sideItem5_0')
+    this.lineintervalMap('sideItem5_1', 'sideItem5_1')
+    this.lineintervalMap('sideItem5_3', 'sideItem5_3')
+    this.lineintervalMap('sideItem5_4', 'sideItem5_4')
+    this.lineintervalMap('sideItem5_6', 'sideItem5_6')
+    this.lineintervalMap('sideItem5_7', 'sideItem5_7')
+  },
+  methods: {
+    lineintervalMap(id, key) {
+      let params = this.chartArr[key].configObj.params
+      let url = this.chartArr[key].configObj.url
+      axios({
+        url: 'http://118.190.204.249:8899/xboot' + url,
+        method: 'get',
+        params: params
+      }).then(res => {
+        let data = res.data.result
+        this.createContactMap(id, data, this.chartArr[key].configObj.curCity)
+      })
+    },
+    classifyNumber(arr) {
+      let list = []
+      for (let i = 0; i < arr.length; i++) {
+        let temp = {}
+        switch (i) {
+          case 0:
+            temp = {
+              lte: arr[0]
+            }
+            break
+          default:
+            temp = {
+              gt: arr[i - 1],
+              lte: arr[i]
+            }
+            break
+        }
+        list.push(temp)
+      }
+      return list
+    },
+    createContactMap(id, data, city) {
+      let nameList = []
+      let centerList = {}
+      let chart = this.$echarts.init(document.getElementById(id))
+      this.$echarts.registerMap(city, this.mapConfig[city])
+      let geojson = this.mapConfig[city]
+      let list = []
+      // 区<->区的数据
+      let listDirt = {}
+      // 市<->市的数据
+      let listDirt2 = {}
+      let listDirt3 = {}
+
+      for (let key in geojson) {
+        list = geojson[key]
+      }
+      list.forEach(l => {
+        nameList.push({
+          name: l.properties.name,
+          value: l.properties.center,
+          symbolSize: 0
+        })
+        centerList[l.properties.name] = l.properties.center.slice(0, 2)
+        listDirt[l.properties.name] = 0
+      })
+      let lineList = []
+      data.forEach(d => {
+        let name = d.LEAVE_NAME
+        let name1 = d.ARRIVE_NAME
+        listDirt[name] += parseFloat(d.TRIP_NUMBER)
+        listDirt[name1] += parseFloat(d.TRIP_NUMBER)
+        if (centerList[name] && centerList[name1]) {
+          lineList.push({
+            fromName: name,
+            toName: name1,
+            coords: [centerList[name], centerList[name1]],
+            num: d.TRIP_NUMBER,
+            value: d.TRIP_NUMBER
+          })
+
+          if (listDirt2.hasOwnProperty(d.ARRIVE_CITY)) {
+            listDirt2[d.ARRIVE_CITY] += parseFloat(d.TRIP_NUMBER)
+            listDirt3[d.ARRIVE_CITY] += parseFloat(d.TRIP_FREQUENCY)
+          } else {
+            listDirt2[d.ARRIVE_CITY] = parseFloat(d.TRIP_NUMBER)
+            listDirt3[d.ARRIVE_CITY] = parseFloat(d.TRIP_FREQUENCY)
+          }
+          if (listDirt2.hasOwnProperty(d.LEAVE_CITY)) {
+            listDirt2[d.LEAVE_CITY] += parseFloat(d.TRIP_NUMBER)
+            listDirt3[d.LEAVE_CITY] += parseFloat(d.TRIP_FREQUENCY)
+          } else {
+            listDirt2[d.LEAVE_CITY] = parseFloat(d.TRIP_NUMBER)
+            listDirt3[d.LEAVE_CITY] = parseFloat(d.TRIP_FREQUENCY)
+          }
+        }
+      })
+
+      lineList.sort((a, b) => {
+        return a.num - b.num
+      })
+
+      let lineListFilter = lineList.filter(li => {
+        return li.num !== 0
+      })
+      // 分级别区间范围
+      let linePeace = getJenksBreaks(lineListFilter, 5)
+      linePeace = linePeace.map(m => {
+        let val = 0
+        if (city == '长三角') {
+          val = Math.ceil(m / 100) * 100
+        } else {
+          val = Math.ceil(m / 1000) * 1000
+        }
+        return val
+      })
+      // 区间值
+      let linePeaces = this.classifyNumber(linePeace)
+      let scattList = nameList.map(li => {
+        let num = listDirt[li.name]
+        li.value.push(num)
+        li.num = num
+        if (num / 50000 > 15) {
+          li.symbolSize = 15
+        } else {
+          li.symbolSize = Math.ceil(num / 50000)
+        }
+        return li
+      })
+      scattList.sort((a, b) => {
+        return a.num - b.num
+      })
+      let scattListFilter = scattList.filter(sca => {
+        return sca.num !== 0
+      })
+      let min = scattListFilter[0].num
+      let max = scattListFilter[scattListFilter.length - 1].num
+      let scattPeace = getJenksBreaks(scattListFilter, 5)
+      scattPeace = scattPeace.map(m => {
+        let val = 0
+        if (city == '长三角') {
+          val = Math.ceil(m / 100) * 100
+        } else {
+          val = Math.ceil(m / 1000) * 1000
+        }
+        return val
+      })
+      let scattPeaces = this.classifyNumber(scattPeace)
+      let option = {
+        backgroundColor: this.chartColor.backgroundColor,
+        grid: {
+          top: 10,
+          bottom: 0,
+          right: 0,
+          left: 0
+        },
+        tooltip: {
+          trigger: 'item',
+          formatter: function (params) {
+            if (params.componentSubType == 'scatter') {
+              return params.data.name + ':\n' + params.data.num / 10000 + '万人'
+            } else {
+              return `${params.data.fromName} -> ${params.data.toName}为${params.data.value}次数`
+            }
+          }
+        },
+        itemStyle: {
+          opacity: 1,
+          borderWidth: 1,
+          borderColor: '#fff'
+        },
+        geo: {
+          map: city,
+          label: {
+            emphasis: {
+              show: false
+            }
+          },
+          roam: false,
+          itemStyle: {
+            normal: {
+              areaColor: '#142233',
+              borderWidth: 2,
+              borderColor: 'white'
+            }
+          }
+        },
+        visualMap: [{
+            type: 'piecewise',
+            text: ['单位:人数（点）'],
+            right: '2%',
+            calculable: true,
+            inRange: {
+              color: ['green', 'yellow', 'orange', 'red']
+            },
+            textStyle: {
+              color: this.chartColor.textColor
+            },
+            showLabel: true,
+            seriesIndex: 0,
+            pieces: scattPeaces
+          },
+          {
+            type: 'piecewise',
+            text: ['单位:次数（线）'],
+            left: '2%',
+            pieces: linePeaces,
+            calculable: true,
+            inRange: {
+              color: ['green', 'yellow', 'orange', 'red']
+            },
+            textStyle: {
+              color: this.chartColor.textColor
+            },
+            showLabel: true,
+            seriesIndex: 1
+          }
+        ],
+        series: [{
+            name: '地点',
+            type: 'scatter',
+            coordinateSystem: 'geo',
+            zlevel: 2,
+            rippleEffect: {
+              brushType: 'stroke'
+            },
+            symbolSize: (rawValue, params) => {
+              let num = params.data.symbolSize
+              let index = Math.ceil(num / min)
+              return 100
+            },
+            label: {
+              normal: {
+                show: true,
+                position: 'right', //显示位置
+                offset: [5, 0], //偏移设置
+                formatter: function (params) {
+                  //圆环显示文字
+                  return params.data.name
+                },
+                fontSize: 10
+              },
+              emphasis: {
+                show: true
+              }
+            },
+            data: scattListFilter
+          },
+          {
+            name: '线路',
+            type: 'lines',
+            coordinateSystem: 'geo',
+            zlevel: 2,
+            large: true,
+            lineStyle: {
+              normal: {
+                width: 1.5,
+                opacity: 0.6,
+                curveness: 0.1
+              }
+            },
+            data: lineListFilter
+          }
+        ]
+      }
+      chart.clear()
+      chart.setOption(option)
+    },
+
+    // 导出基于手机信令数据的台州市人口联系市内联系表格
+    phone1Export() {
+      import('@/vendor/Export2Excel').then(excel => {
+        const tHeader = ['', '出行次数', '出行人数', '出行次数', '出行人数']
+        const filterVal = ['area', 'frequency1', 'number1', 'frequency2', 'number2']
+        const mHead = [
+          ['县（市、区）', '黄金周', '', '普通周', '']
+        ]
+        const list = this.chartArr.sideItem5_2.list
+        const data = this.formatJson(filterVal, list)
+
+        excel.export_json_to_excel({
+          header: tHeader,
+          multiHeader: mHead,
+          merges: ["A1:A2", "B1:C1", "D1:E1"],
+          data,
+          filename: `${this.chartArr.sideItem5_2.title}${this.returnDatetime()}`,
+          autoWidth: true,
+          bookType: 'xlsx'
+        })
+        this.downloadLoading = false
+      })
+    },
+    phone2Export() {
+      import('@/vendor/Export2Excel').then(excel => {
+        const tHeader = ['', '出行次数', '出行人数', '出行次数', '出行人数']
+        const filterVal = ['area', 'frequency1', 'number1', 'frequency2', 'number2']
+        const mHead = [
+          ['地市', '黄金周', '', '普通周', '']
+        ]
+        const list = this.chartArr.sideItem5_5.list
+        const data = this.formatJson(filterVal, list)
+
+        excel.export_json_to_excel({
+          header: tHeader,
+          multiHeader: mHead,
+          merges: ["A1:A2", "B1:C1", "D1:E1"],
+          data,
+          filename: `${this.chartArr.sideItem5_5.title}${this.returnDatetime()}`,
+          autoWidth: true,
+          bookType: 'xlsx'
+        })
+        this.downloadLoading = false
+      })
+    },
+    phone3Export() {
+      import('@/vendor/Export2Excel').then(excel => {
+        const tHeader = ['', '出行次数', '出行人数', '出行次数', '出行人数']
+        const filterVal = ['area', 'frequency1', 'number1', 'frequency2', 'number2']
+        const mHead = [
+          ['省份', '黄金周', '', '普通周', '']
+        ]
+        const list = this.chartArr.sideItem5_8.list
+        const data = this.formatJson(filterVal, list)
+
+        excel.export_json_to_excel({
+          header: tHeader,
+          multiHeader: mHead,
+          merges: ["A1:A2", "B1:C1", "D1:E1"],
+          data,
+          filename: `${this.chartArr.sideItem5_8.title}${this.returnDatetime()}`,
+          autoWidth: true,
+          bookType: 'xlsx'
+        })
+        this.downloadLoading = false
+      })
+    },
+    phone4Export() {
+      import('@/vendor/Export2Excel').then(excel => {
+        const tHeader = ['', '出行次数', '出行人数', '出行次数', '出行人数']
+        const filterVal = ['area', 'frequency1', 'number1', 'frequency2', 'number2']
+        const mHead = [
+          ['省份', '黄金周', '', '普通周', '']
+        ]
+        const list = this.chartArr.sideItem5_9.list
+        const data = this.formatJson(filterVal, list)
+
+        excel.export_json_to_excel({
+          header: tHeader,
+          multiHeader: mHead,
+          merges: ["A1:A2", "B1:C1", "D1:E1"],
+          data,
+          filename: `${this.chartArr.sideItem5_9.title}${this.returnDatetime()}`,
+          autoWidth: true,
+          bookType: 'xlsx'
+        })
+        this.downloadLoading = false
+      })
+    },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => {
+        return v[j]
+      }))
+    },
+  }
+}

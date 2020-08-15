@@ -1,0 +1,1586 @@
+<template>
+  <div class="bodyMain">
+    <nav class="navTopArea">
+      <div class="navLeft">
+        <img src="@/assets/images/nav/logo.png">
+        <span v-if="routerActive === 1">{{countyName}}环境质量分析</span>
+        <span v-if="routerActive === 2">{{countyName}}生态资源分析</span>
+        <span v-if="routerActive === 3">{{countyName}}污染物排放分析</span>
+        <span v-if="routerActive === 4">{{countyName}}生态资源状况分析</span>
+      </div>
+      <ul class="navRight">
+        <li :class="{navActive:routerActive === 1}" @click="routerFn(1)">
+          <el-tooltip class="item" effect="dark" content="环境质量" placement="top">
+            <div>
+              <img src="@/assets/images/nav/navTopIcon1.png">
+              <span v-if="routerActive === 1">环境质量</span>
+            </div>
+          </el-tooltip>
+        </li>
+        <li :class="{navActive:routerActive === 2}" @click="routerFn(2)">
+          <el-tooltip class="item" effect="dark" content="生态资源" placement="top">
+            <div>
+              <img src="@/assets/images/nav/navTopIcon2.png">
+              <span v-if="routerActive === 2">生态资源</span>
+            </div>
+          </el-tooltip>
+        </li>
+        <li :class="{navActive:routerActive === 3}" @click="routerFn(3)">
+          <el-tooltip class="item" effect="dark" content="污染物排放" placement="top">
+            <div>
+              <img src="@/assets/images/nav/navTopIcon3.png">
+              <span v-if="routerActive === 3">污染物排放</span>
+            </div>
+          </el-tooltip>
+        </li>
+        <li :class="{navActive:routerActive === 4}" @click="routerFn(4)">
+          <el-tooltip class="item" effect="dark" content="生态资源状况" placement="top">
+            <div>
+              <img src="@/assets/images/nav/navTopIcon4.png">
+              <span v-if="routerActive === 4">生态资源状况</span>
+            </div>
+          </el-tooltip>
+        </li>
+        <li @click="downloadDoc">
+          <el-tooltip class="item" effect="dark" content="导出文档" placement="top">
+            <div>
+              <img src="@/assets/images/nav/navTopIcon5.png">
+            </div>
+          </el-tooltip>
+        </li>
+        <li @click="feedbackClick">
+          <el-tooltip class="item" effect="dark" content="意见反馈" placement="top">
+            <div>
+              <img src="@/assets/images/feedbackIcon.png">
+            </div>
+          </el-tooltip>
+        </li>
+        <li @click="junpLink('http://47.103.102.173:8089/aiPage?tag=home&cityName=' + countyName)">
+          <el-tooltip class="item" effect="dark" content="回到总览" placement="top">
+            <div>
+              <img src="@/assets/images/nav/navTopIcon6.png">
+            </div>
+          </el-tooltip>
+        </li>
+        <li @click="junpLink('http://47.103.102.173:8089/aiPage')">
+          <el-tooltip class="item" effect="dark" content="回到首页" placement="top">
+            <div>
+              <img src="@/assets/images/nav/navTopIcon7.png">
+            </div>
+          </el-tooltip>
+        </li>
+      </ul>
+    </nav>
+    <div class="bottomMain">
+      <div class="mainWrap" v-show="routerActive === 1">
+        <div class="CuttingLine">
+          <p class="txtWrap">
+            <img src="@/assets/images/cuttingLine1.png">
+            <span class="txt">大气环境质量分析</span>
+            <img src="@/assets/images/cuttingLine2.png">
+          </p>
+        </div>
+        <div class="sideItem width800 sideItem1_0">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem1_0.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem1_0',chartArr.sideItem1_0.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown trigger="click" @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_0',['bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_0',['line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width800" id="sideItem1_0"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem1_0.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem1_0.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width1020 sideItem1_1">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem1_1.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem1_1',chartArr.sideItem1_1.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_1',['bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_1',['line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width1020" id="sideItem1_1"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem1_1.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem1_1.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width800 sideItem1_2">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem1_2.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem1_2',chartArr.sideItem1_2.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_2',['bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_2',['line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <p class="markLineArea">
+            <span class="colorLine" style="border-color: #fff45c;"></span>
+            <span>国家空气质量二级标准要求（35µg/m³）</span>
+          </p>
+          <div class="sideItemChart width800" id="sideItem1_2"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem1_2.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem1_2.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width1020 sideItem1_3">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem1_3.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesLoadOpenFn('sideItem1_3',chartArr.sideItem1_3.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_3',['bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_3',['line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <p class="markLineArea">
+            <span class="colorLine" style="border-color: #fff;"></span>
+            <span>国家空气质量二级标准要求（35µg/m³）</span>
+          </p>
+          <div class="sideItemChart width1020" id="sideItem1_3"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem1_3.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem1_3.result"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="CuttingLine">
+          <p class="txtWrap">
+            <img src="@/assets/images/cuttingLine1.png">
+            <span class="txt">水环境质量分析</span>
+            <img src="@/assets/images/cuttingLine2.png">
+          </p>
+        </div>
+        <div class="twoWrap">
+          <div class="sideItem width910 sideItem1_4">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem1_4.title}}</span>
+              <p class="optionGroup">
+                <img class="optionImg" @click="imagesLoadOpenFn('sideItem1_4',chartArr.sideItem1_4.title,barLineChart)"
+                  src="@/assets/images/downImgIcon.png">
+                <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
+                  <span class="el-dropdown-link">
+                    <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem1_4',['bar','bar'],barLineChart)">
+                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                      <span class="txt">柱状图样式</span>
+                    </el-dropdown-item>
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem1_4',['line','line'],barLineChart)"
+                      divided>
+                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                      <span class="txt">折线图样式</span>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </p>
+            </h4>
+            <div class="sideItemChart width910" id="sideItem1_4"></div>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem1_4.dataSource}}</h5>
+          </div>
+          <div class="sideItem width910 sideItem1_5">
+            <h4 class="moudleTitle">
+              <p class="left">{{chartArr.sideItem1_5.title}}</p>
+              <p class="optionGroup" style="justify-content: flex-end;">
+                <img @click="exportType" class="optionImg" src="@/assets/images/exportIcon.png"
+                  v-if="chartArr.sideItem1_5.dataSource != '暂无数据'">
+              </p>
+            </h4>
+            <ul class="sideItemChart width910 waterTypeTableWrap">
+              <li class="head">
+                <p></p>
+                <p v-for="(item,index) in chartArr.sideItem1_5.headData.slice(0,6)" :key="index">{{item}}</p>
+              </li>
+              <li class="body" v-for="(item1,k) in chartArr.sideItem1_5.bodyData" :key="k">
+                <p>{{item1.name}}</p>
+                <p class="yellow" v-for="(item2,j) in item1.list.slice(0,6)" :key="j">{{item2}}</p>
+              </li>
+            </ul>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem1_5.dataSource}}</h5>
+          </div>
+
+          <div class="resultWrap" style="width: 100%;">
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem1_4.result"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mainWrap" v-show="routerActive === 2">
+        <div class="CuttingLine">
+          <p class="txtWrap">
+            <img src="@/assets/images/cuttingLine1.png">
+            <span class="txt">生态资源状况</span>
+            <img src="@/assets/images/cuttingLine2.png">
+          </p>
+        </div>
+        <div class="twoWrap">
+
+          <div class="sideItem width910 sideItem2_0">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem2_0.title}}</span>
+              <p class="optionGroup">
+                <img class="optionImg" @click="imagesLoadOpenFn('sideItem2_0',chartArr.sideItem2_0.title,barLineChart)"
+                  src="@/assets/images/downImgIcon.png">
+                <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
+                  <span class="el-dropdown-link">
+                    <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem2_0',['bar'],barLineChart)">
+                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                      <span class="txt">柱状图样式</span>
+                    </el-dropdown-item>
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem2_0',['line'],barLineChart)" divided>
+                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                      <span class="txt">折线图样式</span>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </p>
+            </h4>
+            <div class="sideItemChart width910" id="sideItem2_0"></div>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem2_1.dataSource}}</h5>
+          </div>
+          <div class="sideItem width910 sideItem2_1">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem2_1.title}}</span>
+              <p class="optionGroup">
+                <img class="optionImg" @click="imagesLoadOpenFn('sideItem2_1',chartArr.sideItem2_1.title,barLineChart)"
+                  src="@/assets/images/downImgIcon.png">
+                <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
+                  <span class="el-dropdown-link">
+                    <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem2_1',['bar'],barLineChart)">
+                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                      <span class="txt">柱状图样式</span>
+                    </el-dropdown-item>
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem2_1',['line'],barLineChart)" divided>
+                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                      <span class="txt">折线图样式</span>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </p>
+            </h4>
+            <div class="sideItemChart width910" id="sideItem2_1"></div>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem2_1.dataSource}}</h5>
+          </div>
+          <div class="resultWrap" style="width: 100%;">
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem2_0.result"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mainWrap" v-show="routerActive === 3">
+        <div class="CuttingLine">
+          <p class="txtWrap">
+            <img src="@/assets/images/cuttingLine1.png">
+            <span class="txt">化学需氧量排放总量和强度</span>
+            <img src="@/assets/images/cuttingLine2.png">
+          </p>
+        </div>
+        <div class="twoWrap">
+          <div class="sideItem width800 sideItem3_0">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem3_0.title}}</span>
+              <p class="optionGroup">
+                <img class="optionImg" @click="imagesLoadOpenFn('sideItem3_0',chartArr.sideItem3_0.title,barLineChart)"
+                  src="@/assets/images/downImgIcon.png">
+                <el-dropdown trigger="click" @command="chartTypeClick">
+                  <span class="el-dropdown-link">
+                    <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_0',['bar'],barLineChart)">
+                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                      <span class="txt">柱状图样式</span>
+                    </el-dropdown-item>
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_0',['line'],barLineChart)" divided>
+                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                      <span class="txt">折线图样式</span>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </p>
+            </h4>
+            <div class="sideItemChart width800" id="sideItem3_0"></div>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_0.dataSource}}</h5>
+          </div>
+          <div class="sideItem width1020 sideItem3_1">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem3_1.title}}</span>
+              <p class="optionGroup">
+                <img class="optionImg" @click="imagesLoadOpenFn('sideItem3_1',chartArr.sideItem3_1.title,barLineChart)"
+                  src="@/assets/images/downImgIcon.png">
+                <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
+                  <span class="el-dropdown-link">
+                    <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_1',['bar'],barLineChart)">
+                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                      <span class="txt">柱状图样式</span>
+                    </el-dropdown-item>
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_1',['line'],barLineChart)" divided>
+                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                      <span class="txt">折线图样式</span>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </p>
+            </h4>
+            <div class="sideItemChart width1020" id="sideItem3_1"></div>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_1.dataSource}}</h5>
+          </div>
+          <div class="sideItem width800 sideItem3_2">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem3_2.title}}</span>
+              <p class="optionGroup" style="justify-content: flex-end;">
+                <img class="optionImg" @click="imagesLoadOpenFn('sideItem3_2',chartArr.sideItem3_2.title,pieChart)"
+                  src="@/assets/images/downImgIcon.png">
+              </p>
+            </h4>
+            <div class="sideItemChart width800" id="sideItem3_2"></div>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_2.dataSource}}</h5>
+          </div>
+          <div class="sideItem width1020 sideItem3_3">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem3_3.title}}</span>
+              <p class="optionGroup">
+                <img class="optionImg" @click="imagesLoadOpenFn('sideItem3_3',chartArr.sideItem3_3.title,barLineChart)"
+                  src="@/assets/images/downImgIcon.png">
+                <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
+                  <span class="el-dropdown-link">
+                    <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_3',['bar'],barLineChart)">
+                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                      <span class="txt">柱状图样式</span>
+                    </el-dropdown-item>
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_3',['line'],barLineChart)" divided>
+                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                      <span class="txt">折线图样式</span>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </p>
+            </h4>
+            <div class="sideItemChart width1020" id="sideItem3_3"></div>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_3.dataSource}}</h5>
+          </div>
+          <div class="resultWrap" style="width: 100%;">
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem3_0.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="CuttingLine">
+          <p class="txtWrap">
+            <img src="@/assets/images/cuttingLine1.png">
+            <span class="txt">氨氮排放总量和强度</span>
+            <img src="@/assets/images/cuttingLine2.png">
+          </p>
+        </div>
+        <div class="twoWrap">
+          <div class="sideItem width800 sideItem3_4">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem3_4.title}}</span>
+              <p class="optionGroup">
+                <img class="optionImg" @click="imagesLoadOpenFn('sideItem3_4',chartArr.sideItem3_4.title,barLineChart)"
+                  src="@/assets/images/downImgIcon.png">
+                <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
+                  <span class="el-dropdown-link">
+                    <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_4',['bar'],barLineChart)">
+                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                      <span class="txt">柱状图样式</span>
+                    </el-dropdown-item>
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_4',['line'],barLineChart)" divided>
+                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                      <span class="txt">折线图样式</span>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </p>
+            </h4>
+            <div class="sideItemChart width800" id="sideItem3_4"></div>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_4.dataSource}}</h5>
+          </div>
+          <div class="sideItem width1020 sideItem3_5">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem3_5.title}}</span>
+              <p class="optionGroup">
+                <img class="optionImg" @click="imagesLoadOpenFn('sideItem3_5',chartArr.sideItem3_5.title,barLineChart)"
+                  src="@/assets/images/downImgIcon.png">
+                <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
+                  <span class="el-dropdown-link">
+                    <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_5',['bar'],barLineChart)">
+                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                      <span class="txt">柱状图样式</span>
+                    </el-dropdown-item>
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_5',['line'],barLineChart)" divided>
+                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                      <span class="txt">折线图样式</span>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </p>
+            </h4>
+            <div class="sideItemChart width1020" id="sideItem3_5"></div>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_5.dataSource}}</h5>
+          </div>
+          <div class="sideItem width800 sideItem3_6">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem3_6.title}}</span>
+              <p class="optionGroup" style="justify-content: flex-end;">
+                <img class="optionImg" @click="imagesLoadOpenFn('sideItem3_6',chartArr.sideItem3_6.title,pieChart)"
+                  src="@/assets/images/downImgIcon.png">
+              </p>
+            </h4>
+            <div class="sideItemChart width800" id="sideItem3_6"></div>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_6.dataSource}}</h5>
+          </div>
+          <div class="sideItem width1020 sideItem3_7">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem3_7.title}}</span>
+              <p class="optionGroup">
+                <img class="optionImg" @click="imagesLoadOpenFn('sideItem3_7',chartArr.sideItem3_7.title,barLineChart)"
+                  src="@/assets/images/downImgIcon.png">
+                <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
+                  <span class="el-dropdown-link">
+                    <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_7',['bar'],barLineChart)">
+                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                      <span class="txt">柱状图样式</span>
+                    </el-dropdown-item>
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_7',['line'],barLineChart)" divided>
+                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                      <span class="txt">折线图样式</span>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </p>
+            </h4>
+            <div class="sideItemChart width1020" id="sideItem3_7"></div>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_2.dataSource}}</h5>
+          </div>
+          <div class="resultWrap" style="width: 100%;">
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem3_1.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="CuttingLine">
+          <p class="txtWrap">
+            <img src="@/assets/images/cuttingLine1.png">
+            <span class="txt">二氧化硫排放总量和强度</span>
+            <img src="@/assets/images/cuttingLine2.png">
+          </p>
+        </div>
+        <div class="twoWrap">
+          <div class="sideItem width800 sideItem3_8">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem3_8.title}}</span>
+              <p class="optionGroup">
+                <img class="optionImg" @click="imagesLoadOpenFn('sideItem3_8',chartArr.sideItem3_8.title,barLineChart)"
+                  src="@/assets/images/downImgIcon.png">
+                <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
+                  <span class="el-dropdown-link">
+                    <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_8',['bar'],barLineChart)">
+                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                      <span class="txt">柱状图样式</span>
+                    </el-dropdown-item>
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_8',['line'],barLineChart)" divided>
+                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                      <span class="txt">折线图样式</span>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </p>
+            </h4>
+            <div class="sideItemChart width800" id="sideItem3_8"></div>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_8.dataSource}}</h5>
+          </div>
+          <div class="sideItem width1020 sideItem3_9">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem3_9.title}}</span>
+              <p class="optionGroup">
+                <img class="optionImg" @click="imagesLoadOpenFn('sideItem3_9',chartArr.sideItem3_9.title,barLineChart)"
+                  src="@/assets/images/downImgIcon.png">
+                <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
+                  <span class="el-dropdown-link">
+                    <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_9',['bar'],barLineChart)">
+                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                      <span class="txt">柱状图样式</span>
+                    </el-dropdown-item>
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_9',['line'],barLineChart)" divided>
+                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                      <span class="txt">折线图样式</span>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </p>
+            </h4>
+            <div class="sideItemChart width1020" id="sideItem3_9"></div>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_9.dataSource}}</h5>
+          </div>
+          <div class="sideItem width800 sideItem3_10">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem3_10.title}}</span>
+              <p class="optionGroup" style="justify-content: flex-end;">
+                <img class="optionImg" @click="imagesLoadOpenFn('sideItem3_10',chartArr.sideItem3_10.title,pieChart)"
+                  src="@/assets/images/downImgIcon.png">
+              </p>
+            </h4>
+            <div class="sideItemChart width800" id="sideItem3_10"></div>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_10.dataSource}}</h5>
+          </div>
+          <div class="sideItem width1020 sideItem3_11">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem3_11.title}}</span>
+              <p class="optionGroup">
+                <img class="optionImg"
+                  @click="imagesLoadOpenFn('sideItem3_11',chartArr.sideItem3_11.title,barLineChart)"
+                  src="@/assets/images/downImgIcon.png">
+                <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
+                  <span class="el-dropdown-link">
+                    <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_11',['bar'],barLineChart)">
+                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                      <span class="txt">柱状图样式</span>
+                    </el-dropdown-item>
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_11',['line'],barLineChart)" divided>
+                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                      <span class="txt">折线图样式</span>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </p>
+            </h4>
+            <div class="sideItemChart width1020" id="sideItem3_11"></div>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_11.dataSource}}</h5>
+          </div>
+          <div class="resultWrap" style="width: 100%;">
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem3_2.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="CuttingLine">
+          <p class="txtWrap">
+            <img src="@/assets/images/cuttingLine1.png">
+            <span class="txt">氮氧化物排放总量和强度</span>
+            <img src="@/assets/images/cuttingLine2.png">
+          </p>
+        </div>
+        <div class="twoWrap">
+          <div class="sideItem width800 sideItem3_12">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem3_12.title}}</span>
+              <p class="optionGroup">
+                <img class="optionImg"
+                  @click="imagesLoadOpenFn('sideItem3_12',chartArr.sideItem3_12.title,barLineChart)"
+                  src="@/assets/images/downImgIcon.png">
+                <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
+                  <span class="el-dropdown-link">
+                    <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_12',['bar'],barLineChart)">
+                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                      <span class="txt">柱状图样式</span>
+                    </el-dropdown-item>
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_12',['line'],barLineChart)" divided>
+                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                      <span class="txt">折线图样式</span>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </p>
+            </h4>
+            <div class="sideItemChart width800" id="sideItem3_12"></div>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_12.dataSource}}</h5>
+          </div>
+          <div class="sideItem width1020 sideItem3_13">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem3_13.title}}</span>
+              <p class="optionGroup">
+                <img class="optionImg"
+                  @click="imagesLoadOpenFn('sideItem3_13',chartArr.sideItem3_13.title,barLineChart)"
+                  src="@/assets/images/downImgIcon.png">
+                <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
+                  <span class="el-dropdown-link">
+                    <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_13',['bar'],barLineChart)">
+                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                      <span class="txt">柱状图样式</span>
+                    </el-dropdown-item>
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_13',['line'],barLineChart)" divided>
+                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                      <span class="txt">折线图样式</span>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </p>
+            </h4>
+            <div class="sideItemChart width1020" id="sideItem3_13"></div>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_13.dataSource}}</h5>
+          </div>
+          <div class="sideItem width800 sideItem3_14">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem3_14.title}}</span>
+              <p class="optionGroup" style="justify-content: flex-end;">
+                <img class="optionImg" @click="imagesLoadOpenFn('sideItem3_14',chartArr.sideItem3_14.title,pieChart)"
+                  src="@/assets/images/downImgIcon.png">
+              </p>
+            </h4>
+            <div class="sideItemChart width800" id="sideItem3_14"></div>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_14.dataSource}}</h5>
+          </div>
+          <div class="sideItem width1020 sideItem3_15">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem3_15.title}}</span>
+              <p class="optionGroup">
+                <img class="optionImg"
+                  @click="imagesLoadOpenFn('sideItem3_15',chartArr.sideItem3_15.title,barLineChart)"
+                  src="@/assets/images/downImgIcon.png">
+                <el-dropdown class="chartDropdown" trigger="click" @command="chartTypeClick">
+                  <span class="el-dropdown-link">
+                    <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_15',['bar'],barLineChart)">
+                      <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                      <span class="txt">柱状图样式</span>
+                    </el-dropdown-item>
+                    <el-dropdown-item :command="beforeHandleCommand('sideItem3_15',['line'],barLineChart)" divided>
+                      <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                      <span class="txt">折线图样式</span>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </p>
+            </h4>
+            <div class="sideItemChart width1020" id="sideItem3_15"></div>
+            <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem3_15.dataSource}}</h5>
+          </div>
+          <div class="resultWrap" style="width: 100%;">
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem3_3.result"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mainWrap" style="margin-top: 30px;" v-show="routerActive === 4">
+        <div class="sideItem width1845 sideItem4_0">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem4_0.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg"
+                @click="imagesLoadOpenFn('sideItem4_0',chartArr.sideItem4_0.title,sideItem4_0Chart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown trigger="click" @command="chartTypeClick1">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem4_0','bar',sideItem4_0Chart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem4_0','line',sideItem4_0Chart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <p class="markLineArea">
+            <span class="colorLine" style="border-color:#00ff7d"></span>
+            <span>优</span>
+          </p>
+          <div class="sideItemChart width1845" id="sideItem4_0"></div>
+          <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem4_0.dataSource}}</h5>
+        </div>
+        <div class="sideItem width1845 sideItem4_1">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem4_1.title}}</span>
+            <p class="optionGroup" style="justify-content: flex-end;">
+              <img @click="exportExcel" class="optionImg" src="@/assets/images/exportIcon.png">
+            </p>
+          </h4>
+          <div class="tableWrap rankTable">
+            <el-table :data="chartArr.sideItem4_1.list" fit>
+              <el-table-column prop="name" label="县（市、区）" align="center" />
+              <el-table-column prop="value" label="2018年EI值" align="center">
+                <template slot-scope="scope">
+                  <span style="color:#f09800">{{ scope.row.value }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="value" label="等级" align="center">
+                <template slot-scope="scope">
+                  <span :class="[classNameSwitch(scope.row.value)]">
+                    {{ classSwitch(scope.row.value) }}
+                  </span>
+                </template>
+              </el-table-column>
+
+              <el-table-column prop="rank" label="省内排名" align="center" />
+              <el-table-column prop="change" label="排名变化" align="center">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.change === 'up'" style="color:#00f082">
+                    {{Math.abs(scope.row.changeNum)}}
+                    <i class="el-icon-top"></i>
+                  </span>
+                  <span v-if="scope.row.change === 'down'" style="color:red">
+                    {{Math.abs(scope.row.changeNum)}}
+                    <i class="el-icon-bottom"></i>
+                  </span>
+                  <span v-if="scope.row.change === 'const'">
+                    {{Math.abs(scope.row.changeNum)}}
+                    <i>-</i>
+                  </span>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+          <h5 class="dataSourceTxt">数据来源：{{chartArr.sideItem4_1.dataSource}}</h5>
+        </div>
+        <div class="twoWrap">
+          <div class="sideItem width1340 sideItem4_2">
+            <h4 class="moudleTitle">
+              <span class="left"> {{chartArr.sideItem4_2.title}}</span>
+              <p class="optionGroup" style="justify-content: flex-end;">
+                <img class="optionImg" @click="imagesLoadOpenFn('sideItem4_2',chartArr.sideItem4_2.title,initMap)"
+                  src="@/assets/images/downImgIcon.png">
+              </p>
+            </h4>
+            <div class="sideItemChart width1340" id="sideItem4_2" style="height: 720px!important;"></div>
+          </div>
+          <div class="rightResultWrap">
+            <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+            <p v-html="chartArr.sideItem4_2.result"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ul class="navBottomArea">
+      <li :class="{active:routerActive === 1}" @click="routerFn(1)">
+        <img v-if="routerActive === 1" class="activeImg" src="@/assets/images/nav/navBottomActiveIcon.png">
+        <img v-if="routerActive === 1" src="@/assets/images/nav/navBottomIcon1-1.png">
+        <img v-if="routerActive !== 1" src="@/assets/images/nav/navBottomIcon1.png">
+        <span>环境质量</span>
+      </li>
+      <li :class="{active:routerActive === 2}" @click="routerFn(2)">
+        <img v-if="routerActive === 2" class="activeImg" src="@/assets/images/nav/navBottomActiveIcon.png">
+        <img v-if="routerActive === 2" src="@/assets/images/nav/navBottomIcon2-1.png">
+        <img v-if="routerActive !== 2" src="@/assets/images/nav/navBottomIcon2.png">
+        <span>生态资源</span>
+      </li>
+      <li :class="{active:routerActive === 3}" @click="routerFn(3)">
+        <img v-if="routerActive === 3" class="activeImg" src="@/assets/images/nav/navBottomActiveIcon.png">
+        <img v-if="routerActive === 3" src="@/assets/images/nav/navBottomIcon3-1.png">
+        <img v-if="routerActive !== 3" src="@/assets/images/nav/navBottomIcon3.png">
+        <span>污染物排放</span>
+      </li>
+      <li :class="{active:routerActive === 4}" @click="routerFn(4)">
+        <img v-if="routerActive === 4" class="activeImg" src="@/assets/images/nav/navBottomActiveIcon.png">
+        <img v-if="routerActive === 4" src="@/assets/images/nav/navBottomIcon4-1.png">
+        <img v-if="routerActive !== 4" src="@/assets/images/nav/navBottomIcon4.png">
+        <span>生态环境状态</span>
+      </li>
+    </ul>
+
+    <el-dialog title="图片下载" :visible.sync="imagesVisi" width="60%" custom-class="imagesWrap" center
+      :close-on-click-modal="false" :close-on-press-escape="false" @close="imagesModalCloseFn">
+      <div class="imgModalBody">
+        <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+        <div class="sideItemChart" id="echartsWrap1"></div>
+        <div class="colorArea">
+          <p>
+            <span class="txt">背景颜色：</span>
+            <ColorPicker v-model="chartColor.backgroundColor" alpha :colors="predefineColors"
+              @on-active-change="bgColorChange"></ColorPicker>
+          </p>
+          <p>
+            <span class="txt">文字颜色：</span>
+            <ColorPicker v-model="chartColor.textColor" alpha :colors="predefineColors"
+              @on-active-change="txtColorChange"></ColorPicker>
+          </p>
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="exportPic">保 存</el-button>
+      </span>
+    </el-dialog>
+    <div class="fileLoadingModal" v-if="fullscreenLoading">
+      <div class="progressWrap">
+        <el-progress :text-inside="true" :stroke-width="15" :percentage="filePercentage"></el-progress>
+        <span class="downTxt">文件导出中</span>
+      </div>
+    </div>
+    <feedback :feedbackVisi="feedbackVisi" :feedForm="feedForm" @feedbackDialog="feedbackDialog"></feedback>
+  </div>
+</template>
+<script>
+import geoJson from '../../../public/js/zheJiang1'
+import { savePic, axiosAll } from '@/api/api'
+import { finishMixin } from '@/utils/finishMixin.js'
+import { qualityMixin } from '@/utils/countyEnvironmental/qualityMixin.js'
+import { resourcesMixin } from '@/utils/countyEnvironmental/resourcesMixin.js'
+import { emissionsMixin } from '@/utils/countyEnvironmental/emissionsMixin.js'
+import { environmentStateMixin } from '@/utils/countyEnvironmental/environmentStateMixin.js'
+import axios from 'axios'
+
+export default {
+  name: 'Home',
+  mixins: [
+    finishMixin,
+    qualityMixin,
+    resourcesMixin,
+    emissionsMixin,
+    environmentStateMixin
+  ],
+  data() {
+    return {
+      geoJson: geoJson,
+      cityName: '', // 被分析城市
+      countyName: '', // 被分析县区
+      routerActive: 1, // 选中模块
+      chartArr: {
+        sideItem1_0: {
+          id: 'sideItem1_0',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '',
+          result: '',
+          barWidth: '55px',
+          xAxis: [],
+          chartArr: [
+            {
+              name: '',
+              chartType: 'line',
+              color: '#498eff',
+              yAxis: []
+            }
+          ]
+        },
+        sideItem1_1: {
+          id: 'sideItem1_1',
+          picNum: 2,
+          infoNum: 2,
+          titleNum: 2,
+          title: '',
+          dataSource: '',
+          result: '',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#00976d',
+              lightColor: '#00ffb8',
+              yAxis: []
+            }
+          ]
+        },
+        sideItem1_2: {
+          id: 'sideItem1_2',
+          picNum: 3,
+          infoNum: 3,
+          titleNum: 3,
+          title: '',
+          dataSource: '',
+          result: '',
+          xAxis: [],
+          barWidth: '55px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'line',
+              color: '#b062ff',
+              yAxis: []
+            }
+          ],
+          markLine: {
+            silent: true,
+            lineStyle: {
+              normal: {
+                color: '#fff45c'
+              }
+            },
+            data: [
+              {
+                yAxis: 35
+              }
+            ],
+            label: {
+              normal: {
+                formatter: '',
+                position: 'middle'
+              }
+            }
+          }
+        },
+        sideItem1_3: {
+          id: 'sideItem1_3',
+          picNum: 4,
+          infoNum: 4,
+          titleNum: 4,
+          title: '',
+          dataSource: '',
+          result: '',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#90a2d4',
+              lightColor: '#b062ff',
+              yAxis: []
+            }
+          ],
+          markLine: {
+            silent: true,
+            lineStyle: {
+              normal: {
+                color: '#fff' // 这儿设置安全基线颜色
+              }
+            },
+            data: [
+              {
+                yAxis: 35 //这儿定义基准线的数值为多少
+              }
+            ],
+            label: {
+              normal: {
+                formatter: '', // 这儿设置安全基线
+                position: 'middle'
+              }
+            }
+          }
+        },
+        sideItem1_4: {
+          id: 'sideItem1_4',
+          picNum: 5,
+          infoNum: 5,
+          titleNum: 5,
+          title: '',
+          dataSource: '',
+          result: '',
+          xAxis: [],
+          chartArr: [
+            {
+              name: 'Ⅲ类以上数量',
+              chartType: 'bar',
+              color: '#ffba00',
+              yAxis: []
+            },
+            {
+              name: '省控断面数量',
+              chartType: 'bar',
+              color: '#498eff',
+              yAxis: []
+            }
+          ]
+        },
+        sideItem1_5: {
+          id: 'sideItem1_5',
+          picHidden: true,
+          titleNum: 6,
+          title: '',
+          dataSource: '',
+          headData: [],
+          bodyData: []
+        },
+
+        sideItem2_0: {
+          id: 'sideItem2_0',
+          picNum: 6,
+          infoNum: 6,
+          titleNum: 7,
+          title: '',
+          dataSource: '',
+          result: '',
+          barWidth: '30px',
+          xAxis: [],
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#950f95',
+              lightColor: '#ff00ff',
+              yAxis: []
+            }
+          ]
+        },
+        sideItem2_1: {
+          id: 'sideItem2_1',
+          picNum: 7,
+          titleNum: 8,
+          title: '',
+          dataSource: '',
+          result: '',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              lightColor: '#00ffff',
+              color: '#00afaf',
+              yAxis: []
+            }
+          ]
+        },
+
+        sideItem3_0: {
+          id: 'sideItem3_0',
+          picNum: 8,
+          infoNum: 7,
+          titleNum: 9,
+          title: '',
+          dataSource: '',
+          result: '',
+          xAxis: [],
+          barWidth: '55px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'line',
+              color: '#c90eff',
+              yAxis: []
+            }
+          ]
+        },
+        sideItem3_1: {
+          id: 'sideItem3_1',
+          picNum: 9,
+          infoNum: 8,
+          titleNum: 10,
+          title: '',
+          dataSource: '',
+          result: '',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#00976d',
+              lightColor: '#00ffb8',
+              yAxis: []
+            }
+          ]
+        },
+        sideItem3_2: {
+          id: 'sideItem3_2',
+          picNum: 10,
+          infoNum: 9,
+          titleNum: 11,
+          title: '',
+          dataSource: '',
+          chartArr: [
+            {
+              name: '',
+              unit: '',
+              list: [],
+              legends: []
+            }
+          ]
+        },
+        sideItem3_3: {
+          id: 'sideItem3_3',
+          picNum: 11,
+          infoNum: 10,
+          titleNum: 12,
+          title: '',
+          dataSource: '省生态环境厅',
+          result: '',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '化学需氧量排放强度（千克/万元）',
+              chartType: 'bar',
+              color: '#b14400',
+              lightColor: '#ff7723',
+              yAxis: []
+            }
+          ]
+        },
+        sideItem3_4: {
+          id: 'sideItem3_4',
+          picNum: 12,
+          titleNum: 13,
+          title: '',
+          dataSource: '',
+          xAxis: [],
+          barWidth: '55px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'line',
+              color: '#ff7723',
+              yAxis: []
+            }
+          ]
+        },
+        sideItem3_5: {
+          id: 'sideItem3_5',
+          picNum: 13,
+          titleNum: 14,
+          title: '',
+          dataSource: '',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#a00062',
+              lightColor: '#ff62c2',
+              yAxis: []
+            }
+          ]
+        },
+        sideItem3_6: {
+          id: 'sideItem3_6',
+          picNum: 14,
+          titleNum: 15,
+          title: '',
+          dataSource: '',
+          chartArr: [
+            {
+              name: '全省各地市氨氮排放总量占比',
+              unit: '',
+              list: [],
+              legends: []
+            }
+          ]
+        },
+        sideItem3_7: {
+          id: 'sideItem3_7',
+          picNum: 15,
+          titleNum: 16,
+          title: '',
+          dataSource: '省生态环境厅',
+          xAxis: [],
+          chartType: 'bar',
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '氨氮排放强度（千克/万元）',
+              chartType: 'bar',
+              color: '#9d7700',
+              lightColor: '#ffd85c',
+              yAxis: []
+            }
+          ]
+        },
+        sideItem3_8: {
+          id: 'sideItem3_8',
+          picNum: 16,
+          titleNum: 17,
+          title: '',
+          dataSource: '',
+          xAxis: [],
+          barWidth: '55px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'line',
+              color: '#00d8ff',
+              yAxis: []
+            }
+          ]
+        },
+        sideItem3_9: {
+          id: 'sideItem3_8',
+          picNum: 17,
+          titleNum: 18,
+          title: '',
+          dataSource: '',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#00976d',
+              lightColor: '#00ffb8',
+              yAxis: []
+            }
+          ]
+        },
+        sideItem3_10: {
+          id: 'sideItem3_10',
+          picNum: 18,
+          titleNum: 19,
+          title: '',
+          dataSource: '',
+          chartArr: [
+            {
+              name: '二氧化硫排放总量占比',
+              unit: '',
+              list: [],
+              legends: []
+            }
+          ]
+        },
+        sideItem3_11: {
+          id: 'sideItem3_11',
+          picNum: 19,
+          titleNum: 20,
+          title: '',
+          dataSource: '省生态环境厅',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '二氧化硫（千克/万元）',
+              chartType: 'bar',
+              color: '#34249a',
+              lightColor: '#917fff',
+              yAxis: []
+            }
+          ]
+        },
+        sideItem3_12: {
+          id: 'sideItem3_12',
+          picNum: 20,
+          titleNum: 21,
+          title: '',
+          dataSource: '',
+          xAxis: [],
+          barWidth: '55px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'line',
+              color: '#00ffb8',
+              yAxis: []
+            }
+          ]
+        },
+        sideItem3_13: {
+          id: 'sideItem3_13',
+          picNum: 21,
+          titleNum: 22,
+          title: '',
+          xAxis: [],
+          barWidth: '30px',
+          dataSource: '',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#886000',
+              unit: '',
+              lightColor: '#ffbe23',
+              yAxis: []
+            }
+          ]
+        },
+        sideItem3_14: {
+          id: 'sideItem3_14',
+          picNum: 22,
+          titleNum: 23,
+          title: '',
+          chartArr: [
+            {
+              name: '全省各地市氮氧化物排放总量占比',
+              unit: '',
+              list: [],
+              legends: []
+            }
+          ]
+        },
+        sideItem3_15: {
+          id: 'sideItem3_15',
+          picNum: 23,
+          titleNum: 24,
+          title: '',
+          dataSource: '省生态环境厅',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '氮氧化物（千克/万元）',
+              chartType: 'bar',
+              color: '#00976d',
+              lightColor: '#00ffb8',
+              yAxis: []
+            }
+          ]
+        },
+
+        sideItem4_0: {
+          id: 'sideItem4_0',
+          picNum: 24,
+          titleNum: 25,
+          title: '',
+          name: '',
+          chartType: 'bar',
+          color: '#ff5975',
+          dataSource: '',
+          result: '',
+          legend: [],
+          yAxisArr: []
+        },
+        sideItem4_1: {
+          picHidden: true,
+          titleNum: 26,
+          title: '',
+          dataSource: '省生态环境厅',
+          list: []
+        },
+        sideItem4_2: {
+          id: 'sideItem4_2',
+          picNum: 25,
+          titleNum: 27,
+          infoNum: 11,
+          title: '2018年全省各县市区生态环境状况指数',
+          dataSource: '省生态环境厅',
+          result: '',
+          geoJson: geoJson,
+          list: []
+        }
+      }
+    }
+  },
+  created() {
+    this.cityName = this.$route.query.cityName
+    this.countyName = this.$route.query.countyName
+  },
+  mounted() {},
+  methods: {
+    initChart(color) {
+      this.chartColor.textColor = color
+      this.barLineChart('sideItem1_0', this.chartArr.sideItem1_0)
+      this.barLineChart('sideItem1_1', this.chartArr.sideItem1_1)
+      this.barLineChart('sideItem1_2', this.chartArr.sideItem1_2)
+      this.barLineChart('sideItem1_3', this.chartArr.sideItem1_3)
+      this.barLineChart('sideItem1_4', this.chartArr.sideItem1_4)
+
+      this.barLineChart('sideItem2_0', this.chartArr.sideItem2_0)
+      this.barLineChart('sideItem2_1', this.chartArr.sideItem2_1)
+
+      this.barLineChart('sideItem3_0', this.chartArr.sideItem3_0)
+      this.barLineChart('sideItem3_1', this.chartArr.sideItem3_1)
+      this.pieChart('sideItem3_2', this.chartArr.sideItem3_2)
+      this.barLineChart('sideItem3_3', this.chartArr.sideItem3_3)
+      this.barLineChart('sideItem3_4', this.chartArr.sideItem3_4)
+      this.barLineChart('sideItem3_5', this.chartArr.sideItem3_5)
+      this.pieChart('sideItem3_6', this.chartArr.sideItem3_6)
+      this.barLineChart('sideItem3_7', this.chartArr.sideItem3_7)
+      this.barLineChart('sideItem3_8', this.chartArr.sideItem3_8)
+      this.barLineChart('sideItem3_8', this.chartArr.sideItem3_8)
+      this.pieChart('sideItem3_10', this.chartArr.sideItem3_10)
+      this.barLineChart('sideItem3_11', this.chartArr.sideItem3_11)
+      this.barLineChart('sideItem3_12', this.chartArr.sideItem3_12)
+      this.barLineChart('sideItem3_13', this.chartArr.sideItem3_13)
+      this.pieChart('sideItem3_14', this.chartArr.sideItem3_14)
+      this.barLineChart('sideItem3_15', this.chartArr.sideItem3_15)
+
+      this.initMap('sideItem4_2', this.chartArr.sideItem4_2)
+      this.sideItem4_0Chart('sideItem4_0', this.chartArr.sideItem4_0)
+    },
+    // 图表柱状图折线图转换
+    chartTypeClick1(command) {
+      this.chartArr[command.id].chartType = command.type
+      command.fnName(command.id, this.chartArr[command.id], command.light)
+    },
+    // 下载文档
+    downloadDoc() {
+      let _self = this
+      _self.initChart('#000')
+      _self.fullscreenLoading = true
+      let baseURlArr = []
+      let infoArr = []
+      let picArrIndex = 0
+      let picArrFn = []
+
+      setTimeout(function() {
+        for (let key in _self.chartArr) {
+          if (!_self.chartArr[key].picHidden) {
+            let chart = _self.$echarts.init(
+              document.getElementById(_self.chartArr[key].id)
+            )
+            baseURlArr[key] = chart.getDataURL()
+            picArrFn[picArrIndex] = savePic({
+              picInfo: baseURlArr[key],
+              no: 'no' + _self.chartArr[key].picNum,
+              type: 'ecology-county',
+              area: _self.countyName
+            }).then(res => {})
+            picArrIndex++
+          }
+          infoArr.push(
+            {
+              name: 'title' + _self.chartArr[key].titleNum,
+              value: _self.chartArr[key].title
+            },
+            {
+              name: 'verdict' + _self.chartArr[key].infoNum,
+              value: _self.chartArr[key].result
+            },
+            {
+              name: 'source' + _self.chartArr[key].titleNum,
+              value: _self.chartArr[key].dataSource
+            }
+          )
+        }
+
+        axiosAll(picArrFn).then(res => {
+          axios({
+            url: _self.baseUrl + '/section/exportWord',
+            method: 'post',
+            data: {
+              area: _self.countyName,
+              type: 'ecology-county',
+              condition: JSON.stringify(infoArr)
+            },
+            responseType: 'blob',
+            onDownloadProgress(progress) {
+              _self.filePercentage = Math.round(
+                (progress.loaded / progress.total) * 100
+              )
+            }
+          }).then(res => {
+            // new Blob([data])用来创建URL的file对象或者blob对象
+            let url = window.URL.createObjectURL(new Blob([res.data]))
+            // 生成一个a标签
+            let link = document.createElement('a')
+            link.style.display = 'none'
+            link.href = url
+
+            let fileName = `${_self.countyName}${
+              _self.$route.meta.moudleSystem
+            }报告${_self.returnDatetime()}`
+            link.download = fileName + '.docx'
+            document.body.appendChild(link)
+            setTimeout(function() {
+              link.click()
+              _self.initChart('#fff')
+              _self.filePercentage = 0
+              _self.fullscreenLoading = false
+            }, 1000)
+          })
+        })
+      }, 1500)
+    }
+  }
+}
+</script>
+<style lang="scss" scoped>
+@import './countyEnvironmental.scss';
+</style>

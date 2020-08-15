@@ -1,0 +1,125 @@
+import {
+  getScaleData,
+  getScaleDataWithName
+}
+from '@/api/api'
+export const resourcesMixin = {
+  data() {
+    return {}
+  },
+  mounted() {
+    // 0、全省各地市森林覆盖率
+    getScaleData({
+      area: '浙江省',
+      zb: '森林覆盖率'
+    }).then(res => {
+      let data = res.data
+      
+      this.chartArr.sideItem2_0.title = `${data.yAxis.year}年全省各地市森林覆盖率`
+      this.chartArr.sideItem2_0.chartArr[0].name = `${data.yAxis.name}(${data.yAxis.unit})`
+      this.chartArr.sideItem2_0.dataSource = data.yAxis.source
+      this.chartArr.sideItem2_0.xAxis = data.xAxis
+      this.chartArr.sideItem2_0.chartArr[0].yAxis = data.yAxis.list
+      this.barLineChart('sideItem2_0', this.chartArr.sideItem2_0)
+
+      let i = this.chartArr.sideItem2_0.xAxis.indexOf(this.cityName)
+      let aaa = this.returnDiff(this.returnArrAvg(data.yAxis.list), data.yAxis.list[i]) >= 0 ? '高于' : '低于'
+      this.chartArr.sideItem2_0.result = `根据${data.yAxis.year}年调查数据，${this.cityName}森林覆盖率<span class="light">${this.chartArr.sideItem2_0.chartArr[0].yAxis[i]}</span>%，在全省11地市中排第<span class="light">${i + 1}</span>位，<span class="light">${aaa}</span>全省平均水平。`
+    })
+    // 1、全省各地市活立木蓄积量占比
+    getScaleDataWithName({
+      area: '浙江省',
+      zbs: '活立木蓄积量'
+    }).then(res => {
+      let data = res.data[0]
+      this.chartArr.sideItem2_1.chartArr[0].list = data.list
+      this.chartArr.sideItem2_1.title = `${data.year}年全省各地市活立木蓄积量占比`
+      this.chartArr.sideItem2_1.chartArr[0].unit = data.unit
+      this.chartArr.sideItem2_1.chartArr[0].name = `${data.name}(${data.unit})`
+      this.chartArr.sideItem2_1.dataSource = data.source
+      for (let i = 0; i < data.list.length; i++) {
+        this.chartArr.sideItem2_1.chartArr[0].legends.push(data.list[i].name)
+      }
+      this.pieChart('sideItem2_1', this.chartArr.sideItem2_1)
+      let aaa = data.list.filter(item => {
+        return item.name === this.cityName
+      })[0]
+      let bbb = (aaa.value / data.total).toFixed(4) * 100
+      this.chartArr.sideItem2_1.result = `${data.year}年${this.cityName}活立木蓄积量为<span class="light">${aaa.value}</span>万立方米，占全省的<span class="light">${bbb.toFixed(1)}</span>%。`
+    })
+    // 2、全省各地市林地面积占比
+    getScaleDataWithName({
+      area: '浙江省',
+      zbs: '林地面积'
+    }).then(res => {
+      let data = res.data[0]
+      this.chartArr.sideItem2_2.chartArr[0].list = data.list
+      this.chartArr.sideItem2_2.chartArr[0].unit = data.unit
+      this.chartArr.sideItem2_2.title = `${data.year}年全省各地市林地面积占比`
+      this.chartArr.sideItem2_2.chartArr[0].name = `${data.name}(${data.unit})`
+      this.chartArr.sideItem2_2.dataSource = data.source
+      for (let i = 0; i < data.list.length; i++) {
+        this.chartArr.sideItem2_2.chartArr[0].legends.push(data.list[i].name)
+      }
+      this.pieChart('sideItem2_2', this.chartArr.sideItem2_2)
+
+       let aaa = data.list.filter(item => {
+         return item.name === this.cityName
+       })[0]
+       let bbb = (aaa.value / data.total).toFixed(4) * 100
+      this.chartArr.sideItem2_2.result = `根据${data.year}年调查数据，${this.cityName}林地面积为<span class="light">${aaa.value}</span>万公顷，占全省的<span class="light">${bbb.toFixed(1)}</span>%。`
+    })
+    // 3、全省各地市单位面积森林蓄积量
+    getScaleData({
+      area: '浙江省',
+      zb: '单位面积森林蓄积量'
+    }).then(res => {
+      let data = res.data
+      this.chartArr.sideItem2_3.title = `${data.yAxis.year}年全省各地市单位面积森林蓄积量`
+      this.chartArr.sideItem2_3.chartArr[0].name = `${data.yAxis.name}(${data.yAxis.unit})`
+      this.chartArr.sideItem2_3.dataSource = data.yAxis.source
+      this.chartArr.sideItem2_3.xAxis = data.xAxis
+      this.chartArr.sideItem2_3.chartArr[0].yAxis = data.yAxis.list
+      this.barLineChart('sideItem2_3', this.chartArr.sideItem2_3)
+
+      let i = this.chartArr.sideItem2_3.xAxis.indexOf(this.cityName)
+      let aaa = this.returnDiff(this.returnArrAvg(data.yAxis.list), data.yAxis.list[i]) >= 0 ? '高于' : '低于'
+      this.chartArr.sideItem2_3.result = `根据${data.yAxis.year}年调查数据，${this.cityName}单位面积森林蓄积量为<span class="light">${this.chartArr.sideItem2_3.chartArr[0].yAxis[i]}</span>（立方米/公顷），在全省11地市中排第<span class="light">${i + 1}</span>位，<span class="light">${aaa}</span>全省平均水平。`
+    })
+    // 4、获取市各县、市森林覆盖率并绘制图表
+    getScaleData({
+      area: this.cityName,
+      zb: '森林覆盖率'
+    }).then(res => {
+      let data = res.data
+      this.chartArr.sideItem2_4.title = `${data.yAxis.year}年${this.cityName}各县、市森林覆盖率`
+      this.chartArr.sideItem2_4.chartArr[0].name = `${data.yAxis.name}(${data.yAxis.unit})`
+      this.chartArr.sideItem2_4.dataSource = data.yAxis.source
+      this.chartArr.sideItem2_4.xAxis = data.xAxis
+      this.chartArr.sideItem2_4.chartArr[0].yAxis = data.yAxis.list
+      this.barLineChart('sideItem2_4', this.chartArr.sideItem2_4)
+
+      let aaa = this.returnRepeatNumArr(this.chartArr.sideItem2_4.xAxis, this.chartArr.sideItem2_4.chartArr[0].yAxis, this.chartArr.sideItem2_4.chartArr[0].yAxis[this.chartArr.sideItem2_4.chartArr[0].yAxis.length - 1], 'max')
+      let bbb = this.returnRepeatNumArr(this.chartArr.sideItem2_4.xAxis, this.chartArr.sideItem2_4.chartArr[0].yAxis, this.chartArr.sideItem2_4.chartArr[0].yAxis[0], 'min')
+
+      this.chartArr.sideItem2_4.result = `${data.yAxis.year}年${this.cityName}下辖各县市中，${bbb.join()}森林覆盖率最高，达到<span class="light">${this.chartArr.sideItem2_4.chartArr[0].yAxis[0]}</span>%，${aaa.join()}最低，为<span class="light">${this.returnArrLast(this.chartArr.sideItem2_4.chartArr[0].yAxis)}</span>%。`
+    })
+    // 5、获取各县、市单位面积森林蓄积量并绘制图表
+    getScaleData({
+      area: this.cityName,
+      zb: '单位面积森林蓄积量'
+    }).then(res => {
+      let data = res.data
+      this.chartArr.sideItem2_5.title = `${data.yAxis.year}${this.cityName}年各县、市单位面积森林蓄积量`
+      this.chartArr.sideItem2_5.chartArr[0].name = `${data.yAxis.name}(${data.yAxis.unit})`
+      this.chartArr.sideItem2_5.dataSource = data.yAxis.source
+      this.chartArr.sideItem2_5.xAxis = data.xAxis
+      this.chartArr.sideItem2_5.chartArr[0].yAxis = data.yAxis.list
+      this.barLineChart('sideItem2_5', this.chartArr.sideItem2_5)
+
+      let aaa = this.returnRepeatNumArr(this.chartArr.sideItem2_5.xAxis, this.chartArr.sideItem2_5.chartArr[0].yAxis, this.chartArr.sideItem2_5.chartArr[0].yAxis[this.chartArr.sideItem2_5.chartArr[0].yAxis.length - 1], 'max')
+      let bbb = this.returnRepeatNumArr(this.chartArr.sideItem2_5.xAxis, this.chartArr.sideItem2_5.chartArr[0].yAxis, this.chartArr.sideItem2_5.chartArr[0].yAxis[0], 'min')
+      this.chartArr.sideItem2_5.result = `${data.yAxis.year}年${this.cityName}下辖各县市中，${bbb.join()}的单位面积森林蓄积量最高，达到<span class="light">${this.chartArr.sideItem2_5.chartArr[0].yAxis[0]}</span>立方米/公顷，${aaa.join()}最低，为<span class="light">${this.returnArrLast(this.chartArr.sideItem2_5.chartArr[0].yAxis)}</span>立方米/公顷。`
+    })
+  }
+}

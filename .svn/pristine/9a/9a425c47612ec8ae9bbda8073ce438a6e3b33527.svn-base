@@ -1,0 +1,166 @@
+@import '@/assets/styles/mixin.scss';
+.bodyMain {
+  margin: 0 auto;
+  width: 1845px;
+}
+
+.mainWrap {
+  flex-wrap: wrap;
+  @include fj();
+  .sideItem {
+    position: relative;
+    margin-bottom: 20px;
+    width: 910px;
+    border: 1px solid #448fe4;
+    background: radial-gradient(circle, rgba(18, 69, 113, 0) 0,  rgba(18, 69, 113, 1) 160%);
+    .markLineArea {
+      position: absolute;
+      top: 70px;
+      right: 25px;
+      display: flex;
+      align-items: center;
+      .colorLine {
+        display: inline-block;
+        margin-right: 12px;
+        width: 30px;
+        border-bottom: 1px dashed #ff5975;
+      }
+    }
+  }
+
+  .width740 {
+    width: 740px;
+  }
+
+  .width800 {
+    width: 800px;
+  }
+
+  .width910 {
+    width: 910px;
+  }
+
+  .width1020 {
+    width: 1020px;
+  }
+
+  .width1080 {
+    width: 1080px;
+  }
+
+  .width1845 {
+    width: 1845px;
+  }
+
+  .sideItemChart {
+    height: 425px;
+  }  
+
+  .sideItem1_6 {
+    background: radial-gradient(circle, rgba(18, 69, 113, 0) 0, rgba(18, 69, 113, 1) 160%);
+  }
+
+  .sideItem4_3 {
+    width: 1340px;
+    height: 780px;
+    border: none;
+  }
+
+  #sideItem4_3 {
+    width: 1340px;
+    height: 720px;
+  }
+}
+
+.twoWrap {
+  flex-wrap: wrap;
+  @include fj();
+  width: 100%;
+  border: 1px solid #448fe4;
+}
+
+.classColor1 {
+  color: #00f082;
+}
+
+.classColor2 {
+  color: #00d7e9;
+}
+
+.classColor3 {
+  color: #f09800;
+}
+
+.classColor4 {
+  color: rgba(243, 213, 8, 1);
+}
+
+.classColor5 {
+  color: #bb0000;
+}
+
+.tableWrap {
+  display: table;
+  margin: 10px auto;
+  width: 98%;
+  border: 2px solid #007e7d;
+  @include sc(20px,#00def0);
+  li {
+    display: table-cell;
+    font-size: 22px;
+    text-align: center;
+
+    .th {
+      line-height: 80px;
+      background: #0b274a;
+      color: #fff;
+    }
+    span {
+      display: block;
+      height: 65px;
+      line-height: 65px;
+      &:nth-child(odd) {
+        background: #0b274a;
+      }
+    }
+  }
+}
+
+.imgModalBody {
+  position: relative;
+  @include fj(center);
+  #echartsWrap1 {
+    @include wh(95%,415px);
+  }
+
+  .colorArea {
+    margin: 10px 0 0 5px;
+    p {
+      margin-bottom: 5px;
+      .txt {
+        display: block;
+        margin-bottom: 5px;
+        white-space: nowrap;
+        color: #fff;
+      }
+    }
+  }
+}
+
+.fileLoadingModal {
+  position: fixed;
+  text-align: center;
+  @include wh(100%,100%);
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  .progressWrap {
+    width: 50%;
+    @include center()
+  }
+  .downTxt {
+
+    display: block;
+    margin-top: 10px;
+  }
+}

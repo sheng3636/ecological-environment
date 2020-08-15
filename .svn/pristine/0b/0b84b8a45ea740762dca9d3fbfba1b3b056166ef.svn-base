@@ -1,0 +1,329 @@
+import {
+  apiGet,
+  axiosAll
+}
+from '@/api/api'
+import {
+  getArrFirst,
+  getArrLast,
+  getArrAvg
+}
+from '@/utils/mUtils.js'
+export const scienceMixin = {
+  data() {
+    return {}
+  },
+  mounted() {
+    // 0、 获取某年限内某地区发明专利授权量变化并绘制图表
+    // 1、 获取某年某地区发明专利授权量评价图并绘制图表
+    axiosAll([this.getCitySciData1(), this.getCitySciData2()]).then(res => {
+      let data1 = res[0].data
+      let aaa = getArrFirst(data1.xAxis)
+      let ccc = getArrLast(data1.xAxis)
+      let list = data1.yAxis[0].list
+
+      this.chartArr.sideItem2_0.title = `${aaa}年-${ccc}年${this.cityName}发明专利授权量变化`
+      this.chartArr.sideItem2_0.chartArr[0].name = `${this.cityName}(${data1.yAxis[0].unit})`
+      this.chartArr.sideItem2_0.chartArr[1].name = `浙江省(${data1.yAxis[1].unit})`
+      this.chartArr.sideItem2_0.chartArr[2].name = `全国(${data1.yAxis[2].unit})`
+      this.chartArr.sideItem2_0.xAxis = data1.xAxis
+      this.chartArr.sideItem2_0.chartArr[0].yAxis = list
+      this.chartArr.sideItem2_0.chartArr[1].yAxis = data1.yAxis[1].list
+      this.chartArr.sideItem2_0.chartArr[2].yAxis = data1.yAxis[2].list
+      this.barLineChart('sideItem2_0', this.chartArr.sideItem2_0)
+
+      let lastIndex = list.length - 1
+      let value1 = list[lastIndex]
+      let valueOld = list[lastIndex - 1]
+      let diff = (value1 - valueOld)
+      let change1 = (diff == 0) ? `维持不变` : diff > 0 ? `同比增加<span class="light">${diff}</span>项` : `同比减少<span class="light">${Math.abs(diff)}</span>项`
+
+      let data2 = res[1].data
+      for (const key in data2) {
+        if (data2.hasOwnProperty(key)) {
+          let value = isNaN(data2[key]) ? 0 : (data2[key] * 100 > 100 ? 100 : data2[key] * 100)
+          this.chartArr.sideItem2_1.xAxis.push(key)
+          this.chartArr.sideItem2_1.chartArr[0].yAxis.push(value)
+        }
+      }
+      this.horizontalChart('sideItem2_1', this.chartArr.sideItem2_1)
+
+      let fff = (ccc - 2016 + 1) * 0.2 * 100
+      let ggg = this.chartArr.sideItem2_1.chartArr[0].yAxis[0] >= fff ? '良好' : '滞后'
+
+      this.chartArr.sideItem2_0.result = `${ccc}年，${this.cityName}发明专利授权量达到<span class="light">${value1}</span>项， 较上年${change1}。十三五”时期，${this.cityName}发明专利授权量进度<span class="light">${ggg}</span>。`
+    })
+    // 2、 获取某年某地区全省各地市发明专利授权量对比并绘制图表
+    axiosAll([this.getCitySciData3(), this.getCitySciData4()]).then(res => {
+      let data1 = res[0].data
+      let year = data1.yAxis[0].year
+      let list = data1.yAxis[0].list
+      let avg = getArrAvg(list)
+
+      this.chartArr.sideItem2_2.title = `${year}年全省各地市发明专利授权量对比`
+      this.chartArr.sideItem2_2.chartArr[0].name = `${data1.yAxis[0].name}(${data1.yAxis[0].unit})`
+      this.chartArr.sideItem2_2.xAxis = data1.xAxis
+      this.chartArr.sideItem2_2.chartArr[0].yAxis = list
+      this.chartArr.sideItem2_2.chartArr[1].name = `全省平均值(${avg}${data1.yAxis[0].unit})`
+      this.chartArr.sideItem2_2.chartArr[1].markLine.data[0].yAxis = avg
+
+      this.barLineChart('sideItem2_2', this.chartArr.sideItem2_2)
+
+      let index = data1.xAxis.indexOf(this.cityName)
+      let value = list[index]
+      let diff = (value - avg)
+      let avgStr = (diff == 0) ? `与全省平均水平持平` : diff > 0 ? `高于全省平均水平` : `低于全省平均水平`
+
+      let data2 = res[1].data
+      let rank = data2.table[0]
+      let rankStr = ''
+
+      if(rank.changeVal === undefined){
+        rankStr = `暂无上年排名数据`
+      }else{
+        rankStr = rank.changeVal == 0 ? `排名较上年维持不变` : rank.changeVal > 0 ? `排名较上年上升<span class="light">${rank.changeVal}</span>位` : `排名较上年下降<span class="light">${Math.abs(rank.changeVal)}</span>位`
+      }
+
+      this.chartArr.sideItem2_2.result = `${year}年，${this.cityName}发明专利授权量${avgStr}，在全省排第<span class="light">${index + 1}</span>位，${rankStr}。`
+    })
+
+    // 3、 获取某年限内某地区每万人发明专利授权量变化并绘制图表
+    apiGet(
+      '/statistics/getMultiZoneData', {
+        startYear: 2015,
+        endYear: 2018,
+        areas: [this.cityName, '浙江省', '全国'].join(','),
+        zb: '每万人发明专利授权量'
+      }).then(res => {
+      let data = res.data
+      let aaa = getArrFirst(data.xAxis)
+      let ccc = getArrLast(data.xAxis)
+      let list = data.yAxis[0].list
+
+      this.chartArr.sideItem2_3.title = `${aaa}-${ccc}年${this.cityName}每万人发明专利授权量变化`
+      this.chartArr.sideItem2_3.chartArr[0].name = `${this.cityName}(${data.yAxis[0].unit})`
+      this.chartArr.sideItem2_3.chartArr[1].name = `浙江省(${data.yAxis[1].unit})`
+      this.chartArr.sideItem2_3.chartArr[2].name = `全国(${data.yAxis[2].unit})`
+      this.chartArr.sideItem2_3.xAxis = data.xAxis
+      this.chartArr.sideItem2_3.chartArr[0].yAxis = list
+      this.chartArr.sideItem2_3.chartArr[1].yAxis = data.yAxis[1].list
+      this.chartArr.sideItem2_3.chartArr[2].yAxis = data.yAxis[2].list
+      this.barLineChart('sideItem2_3', this.chartArr.sideItem2_3)
+
+
+      let lastIndex = list.length - 1
+      let value1 = list[lastIndex]
+      let valueOld = list[lastIndex - 1]
+      let diff = (value1 - valueOld).toFixed(2)
+      let change1 = (diff == 0) ? `维持不变` : diff > 0 ? `同比增加<span class="light">${diff}</span>项` : `同比减少<span class="light">${Math.abs(diff)}</span>项`
+
+      this.chartArr.sideItem2_3.result = `${ccc}年，${this.cityName}每万人发明专利授权量达到<span class="light">${value1}</span>项，较上年${change1}。`
+    })
+    // 4、 获取某年某地区全省各地市每万人发明专利授权量对比并绘制图表
+    axiosAll([this.getCitySciData5(), this.getCitySciData6()]).then(res => {
+      let data1 = res[0].data
+      let year = data1.yAxis[0].year
+      let list = data1.yAxis[0].list
+      let avg = getArrAvg(list)
+
+
+      this.chartArr.sideItem2_4.title = `${year}年全省各地市每万人发明专利授权量对比`
+      this.chartArr.sideItem2_4.chartArr[0].name = `${data1.yAxis[0].name}(${data1.yAxis[0].unit})`
+      this.chartArr.sideItem2_4.xAxis = data1.xAxis
+      this.chartArr.sideItem2_4.chartArr[0].yAxis =list
+      this.chartArr.sideItem2_4.chartArr[1].name = `全省平均值(${avg}${data1.yAxis[0].unit})`
+      this.chartArr.sideItem2_4.chartArr[1].markLine.data[0].yAxis = avg
+      this.barLineChart('sideItem2_4', this.chartArr.sideItem2_4)
+
+      let index = data1.xAxis.indexOf(this.cityName)
+      let value = list[index]
+      let diff = (value - avg)
+      let avgStr = (diff == 0) ? `与全省平均水平持平` : diff > 0 ? `高于全省平均水平` : `低于全省平均水平`
+
+      let data2 = res[1].data
+      let rank = data2.table[0]
+      let rankStr = ''
+
+      if(rank.changeVal === undefined){
+        rankStr = `暂无上年排名数据`
+      }else{
+        rankStr = rank.changeVal == 0 ? `排名较上年维持不变` : rank.changeVal > 0 ? `排名较上年上升<span class="light">${rank.changeVal}</span>位` : `排名较上年下降<span class="light">${Math.abs(rank.changeVal)}</span>位`
+      }
+
+      this.chartArr.sideItem2_4.result = `${year}年，${this.cityName}每万人发明专利授权量${avgStr}，在全省排第<span class="light">${index + 1}</span>位，${rankStr}。`
+    })
+    // 5、 获取某年限内某地区R&D经费投入占生产总值比重变化并绘制图表
+    // 6、 获取某年某地区发明专利授权量评价图并绘制图表
+    axiosAll([this.getCitySciData7(), this.getCitySciData8()]).then(res => {
+      let data1 = res[0].data
+      let aaa = getArrFirst(data1.xAxis)
+      let ccc = getArrLast(data1.xAxis)
+      let list = data1.yAxis[0].list
+
+      this.chartArr.sideItem2_5.title = `${aaa}年-${ccc}年${this.cityName}R&D经费投入占生产总值比重变化`
+      this.chartArr.sideItem2_5.chartArr[0].name = `${this.cityName}(${data1.yAxis[0].unit})`
+      this.chartArr.sideItem2_5.chartArr[1].name = `浙江省(${data1.yAxis[1].unit})`
+      this.chartArr.sideItem2_5.chartArr[2].name = `全国(${data1.yAxis[2].unit})`
+      this.chartArr.sideItem2_5.xAxis = data1.xAxis
+      this.chartArr.sideItem2_5.chartArr[0].yAxis = list
+      this.chartArr.sideItem2_5.chartArr[1].yAxis = data1.yAxis[1].list
+      this.chartArr.sideItem2_5.chartArr[2].yAxis = data1.yAxis[2].list
+      this.barLineChart('sideItem2_5', this.chartArr.sideItem2_5)
+
+
+      let lastIndex = list.length - 1
+      let value1 = list[lastIndex]
+      let valueOld = list[lastIndex - 1]
+      let diff = (value1 - valueOld).toFixed(2)
+      let change1 = (diff == 0) ? `维持不变` : diff > 0 ? `同比增加<span class="light">${diff}</span>个百分点` : `同比减少<span class="light">${Math.abs(diff)}</span>个百分点`
+
+      
+      let data2 = res[1].data
+      for (const key in data2) {
+        if (data2.hasOwnProperty(key)) {
+          let value = isNaN(data2[key]) ? 0 : (data2[key] * 100 > 100 ? 100 : data2[key] * 100)
+          this.chartArr.sideItem2_6.xAxis.push(key)
+          this.chartArr.sideItem2_6.chartArr[0].yAxis.push(value)
+        }
+      }
+      this.horizontalChart('sideItem2_6', this.chartArr.sideItem2_6)
+
+      let fff = (ccc - 2016 + 1) * 0.2 * 100
+      let ggg = this.chartArr.sideItem2_6.chartArr[0].yAxis[0] >= fff ? '良好' : '滞后'
+
+      this.chartArr.sideItem2_5.result = `${ccc}年，${this.cityName}R&D经费投入占生产总值比重达到<span class="light">${value1}</span>%，较上年${change1}。“十三五”时期，${this.cityName}R&D经费投入占生产总值比重进度<span class="light">${ggg}</span>。`
+    })
+    // 7、 获取某年某地区全省各地市R&D经费投入占生产总值比重对比并绘制图表
+    axiosAll([this.getCitySciData9(), this.getCitySciData10()]).then(res => {
+      let data1 = res[0].data
+      let year = data1.yAxis[0].year
+      let list = data1.yAxis[0].list
+      let avg = getArrAvg(list)
+
+      this.chartArr.sideItem2_7.title = `${year}年全省各地市R&D经费投入占生产总值比重对比`
+      this.chartArr.sideItem2_7.chartArr[0].name = `${data1.yAxis[0].name}(${data1.yAxis[0].unit})`
+      this.chartArr.sideItem2_7.xAxis = data1.xAxis
+      this.chartArr.sideItem2_7.chartArr[0].yAxis = list
+      this.chartArr.sideItem2_7.chartArr[1].name = `全省平均值(${avg}${data1.yAxis[0].unit})`
+      this.chartArr.sideItem2_7.chartArr[1].markLine.data[0].yAxis = avg
+      this.barLineChart('sideItem2_7', this.chartArr.sideItem2_7)
+
+      let index = data1.xAxis.indexOf(this.cityName)
+      let value = list[index]
+      let diff = (value - avg)
+      let avgStr = (diff == 0) ? `与全省平均水平持平` : diff > 0 ? `高于全省平均水平` : `低于全省平均水平`
+
+      let data2 = res[1].data
+      let rank = data2.table[0]
+      let rankStr = ''
+
+      if(rank.changeVal === undefined){
+        rankStr = `暂无上年排名数据`
+      }else{
+        rankStr = rank.changeVal == 0 ? `排名较上年维持不变` : rank.changeVal > 0 ? `排名较上年上升<span class="light">${rank.changeVal}</span>位` : `排名较上年下降<span class="light">${Math.abs(rank.changeVal)}</span>位`
+      }
+
+      this.chartArr.sideItem2_7.result = `${year}年，${this.cityName}R&D经费投入占生产总值比重${avgStr}，在全省排第<span class="light">${index + 1}</span>位，${rankStr}。`
+    })
+  },
+  methods: {
+    // 0、 获取某年限内某地区发明专利授权量变化并绘制图表
+    getCitySciData1(){
+      return apiGet(
+        '/statistics/getMultiZoneData', {
+          startYear: 2015,
+          endYear: 2018,
+          areas: [this.cityName, '浙江省', '全国'].join(','),
+          zb: '发明专利授权量'
+        })
+    },
+    // 1、 获取某年某地区发明专利授权量评价图并绘制图表
+    getCitySciData2(){
+      return  apiGet(
+        '/statistics/getProgressStatusData', {
+          year: 2018,
+          area: this.cityName,
+          zbs: '发明专利授权量'
+        })
+    },
+    // 2、 获取某年某地区全省各地市发明专利授权量对比并绘制图表
+    getCitySciData3(){
+      return  apiGet(
+        '/statistics/getScaleData', {
+          year: 2018,
+          area: '浙江省',
+          zb: '发明专利授权量'
+        })
+    },
+    getCitySciData4(){
+      return apiGet(
+        '/statistics/getRank', {
+          startYear: 2017,
+          endYear: 2018,
+          areas: '浙江省',
+          area: this.cityName,
+          zbs: '发明专利授权量',
+          model: 'city'
+        })
+    },
+    getCitySciData5(){
+      return  apiGet(
+        '/statistics/getScaleData', {
+          year: 2018,
+          area: '浙江省',
+          zb: '每万人发明专利授权量'
+        })
+    },
+    getCitySciData6(){
+      return apiGet(
+        '/statistics/getRank', {
+          startYear: 2017,
+          endYear: 2018,
+          areas: '浙江省',
+          area: this.cityName,
+          zbs: '每万人发明专利授权量',
+          model: 'city'
+        })
+    },
+    // 5、 获取某年限内某地区R&D经费投入占生产总值比重变化并绘制图表
+    getCitySciData7(){
+      return apiGet(
+        '/statistics/getMultiZoneData', {
+          startYear: 2015,
+          endYear: 2018,
+          areas: [this.cityName, '浙江省', '全国'].join(','),
+          zb: 'R&D经费投入占生产总值比重'
+        })
+    },
+    // 6、 获取某年某地区发明专利授权量评价图并绘制图表
+    getCitySciData8(){
+      return  apiGet(
+        '/statistics/getProgressStatusData', {
+          year: 2018,
+          area: this.cityName,
+          zbs: 'R&D经费投入占生产总值比重'
+        })
+    },
+    getCitySciData9(){
+      return  apiGet(
+        '/statistics/getScaleData', {
+          year: 2018,
+          area: '浙江省',
+          zb: 'R&D经费投入占生产总值比重'
+        })
+    },
+    getCitySciData10(){
+      return apiGet(
+        '/statistics/getRank', {
+          startYear: 2017,
+          endYear: 2018,
+          areas: '浙江省',
+          area: this.cityName,
+          zbs: 'R&D经费投入占生产总值比重',
+          model: 'city'
+        })
+    },
+
+
+  }
+}

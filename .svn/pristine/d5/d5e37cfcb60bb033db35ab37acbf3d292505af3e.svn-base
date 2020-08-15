@@ -1,0 +1,719 @@
+// 存储localStorage
+const setStore = (name, content) => {
+  if (!name) return
+  if (typeof content !== 'string') {
+    content = JSON.stringify(content)
+  }
+  window.localStorage.setItem(name, content)
+}
+// 获取localStorage
+const getStore = name => {
+  if (!name) return
+  return window.localStorage.getItem(name)
+}
+// 删除localStorage
+export const removeStore = name => {
+  if (!name) return
+  window.localStorage.removeItem(name)
+}
+// 通过getDataURL()获取图片的base64编码字符；字符解码， 并转换成Blob对象；
+const base64ToBlob = code => {
+  let parts = code.split(';base64,')
+  let contentType = parts[0].split(':')[1]
+  let raw = window.atob(parts[1]);
+  let rawLength = raw.length;
+
+  let uInt8Array = new Uint8Array(rawLength)
+
+  for (let i = 0; i < rawLength; ++i) {
+    uInt8Array[i] = raw.charCodeAt(i)
+  }
+  return new Blob([uInt8Array], {
+    type: contentType
+  })
+}
+// 通过getDataURL将echarts图表导出为图片
+const saveAsImage = (chart) => {
+  let content = chart.getDataURL()
+  let aLink = document.createElement('a')
+  let blob = base64ToBlob(content)
+  let evt = document.createEvent("HTMLEvents")
+  evt.initEvent("click", true, true)
+  aLink.download = "mapChart.png"
+  aLink.href = URL.createObjectURL(blob)
+  aLink.dispatchEvent(new MouseEvent('click', {
+    bubbles: true,
+    cancelable: true,
+    view: window
+  }))
+}
+
+export const getJenksBreaks = function (lineListFilter, numclass) {
+  if (lineListFilter.length < numclass) {
+    numclass = lineListFilter.length
+  } else {
+    numclass = numclass
+  }
+  let data = lineListFilter.map(li => {
+    return li.num;
+  })
+  //在javascript里，Array的sort方法，必须用这个函数，否则不是按数字大小排序
+  function sortNumber(a, b) {
+    return a - b;
+  }
+
+  // int numclass;
+  var numdata = data.length;
+  data.sort(sortNumber); //先排序
+  var mat1 = new Array();
+  var mat2 = new Array();
+  var st = new Array();
+  var j = 0,
+    i = 0;
+  for (j = 0; j <= numdata; j++) {
+    mat1[j] = new Array();
+    mat2[j] = new Array();
+    st[j] = 0;
+    for (i = 0; i <= numclass; i++) {
+      mat1[j][i] = 0;
+      mat2[j][i] = 0;
+    }
+  }
+  for (i = 1; i <= numclass; i++) {
+    mat1[1][i] = 1;
+    mat2[1][i] = 0;
+    for (j = 2; j <= numdata; j++) {
+      mat2[j][i] = Number.MAX_VALUE;
+    }
+  }
+  var v = 0;
+  for (var l = 2; l <= numdata; l++) {
+    var s1 = 0;
+    var s2 = 0;
+    var w = 0;
+    var i3 = 0;
+    for (var m = 1; m <= l; m++) {
+      i3 = l - m + 1;
+      var val = parseInt(data[i3 - 1]);
+      s2 += val * val;
+      s1 += val;
+      w++;
+      v = s2 - (s1 * s1) / w;
+      var i4 = i3 - 1;
+      if (i4 != 0) {
+        for (j = 2; j <= numclass; j++) {
+          if (mat2[l][j] >= (v + mat2[i4][j - 1])) {
+            mat1[l][j] = i3;
+            mat2[l][j] = v + mat2[i4][j - 1];
+          }
+        }
+      }
+    }
+    mat1[l][1] = 1;
+    mat2[l][1] = v;
+  }
+  var k = numdata;
+  var kclass = new Array();
+  kclass[numclass - 1] = parseInt(data[data.length - 1]);
+  for (j = numclass; j >= 2; j--) {
+    var id = parseInt(mat1[k][j]) - 2;
+    kclass[j - 2] = parseInt(data[id]);
+    k = parseInt(mat1[k][j] - 1);
+  }
+  return kclass;
+};
+
+//获取最小值下标
+const getMinIndex = arr => {
+  var min = arr[0];
+  var index = 0;
+  for (var i = 0; i < arr.length; i++) {
+    if (parseFloat(min) > parseFloat(arr[i])) {
+      min = arr[i];
+      index = i;
+    }
+  }
+  return index;
+}
+
+const getMaxIndex = data => {
+  let max = data[0];
+  let index = 0;
+  data.forEach((d, i) => {
+    if (parseFloat(d) >= parseFloat(max)) {
+      max = d;
+      index = i;
+    }
+  });
+  return index;
+}
+
+const getDiff = (arr1, arr2) => {
+  let sum1 = arr1.reduce((tol, cur) => {
+    return parseFloat(tol) + parseFloat(cur);
+  });
+  let sum2 = arr2.reduce((tol, cur) => {
+    return parseFloat(tol) + parseFloat(cur);
+  });
+
+  if (sum1 - sum2 >= 0) {
+    return "大于";
+  } else {
+    return "小于";
+  }
+}
+
+const compareData = (arr) => {
+  let len = arr.length;
+  let num1 = arr[0];
+  let num2 = arr[len - 1];
+  if (num1 > num2) {
+    return "减少";
+  } else {
+    return "增加"
+  }
+}
+
+const getNumIndex = (num, arr) => {
+  num = parseFloat(num);
+  let index = 0
+  arr.forEach((a, i) => {
+    if (num < a) {
+      index = i + 1
+    }
+  })
+  return index
+}
+
+const getMinDataIndex = (arr) => {
+  let index = -1
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i]) {
+      index = i
+      break
+    }
+  }
+  return index
+}
+
+const zheJiangAreaCode = {
+  "舟山市": {
+    "parent": "浙江省",
+    "code": "330900",
+    "level": "city"
+  },
+  "嵊泗县": {
+    "parent": "舟山市",
+    "code": "330922",
+    "level": "county"
+  },
+  "岱山县": {
+    "parent": "舟山市",
+    "code": "330921",
+    "level": "county"
+  },
+  "定海区": {
+    "parent": "舟山市",
+    "code": "330902",
+    "level": "county"
+  },
+  "普陀区": {
+    "parent": "舟山市",
+    "code": "330903",
+    "level": "county"
+  },
+  "嘉兴市": {
+    "parent": "浙江省",
+    "code": "330400",
+    "level": "city"
+  },
+  "平湖市": {
+    "parent": "嘉兴市",
+    "code": "330482",
+    "level": "county"
+  },
+  "秀洲区": {
+    "parent": "嘉兴市",
+    "code": "330411",
+    "level": "county"
+  },
+  "南湖区": {
+    "parent": "嘉兴市",
+    "code": "330402",
+    "level": "county"
+  },
+  "嘉善县": {
+    "parent": "嘉兴市",
+    "code": "330421",
+    "level": "county"
+  },
+  "海盐县": {
+    "parent": "嘉兴市",
+    "code": "330424",
+    "level": "county"
+  },
+  "桐乡市": {
+    "parent": "嘉兴市",
+    "code": "330483",
+    "level": "county"
+  },
+  "海宁市": {
+    "parent": "嘉兴市",
+    "code": "330481",
+    "level": "county"
+  },
+  "宁波市": {
+    "parent": "浙江省",
+    "code": "330200",
+    "level": "city"
+  },
+  "北仑区": {
+    "parent": "宁波市",
+    "code": "330206",
+    "level": "county"
+  },
+  "象山县": {
+    "parent": "宁波市",
+    "code": "330225",
+    "level": "county"
+  },
+  "镇海区": {
+    "parent": "宁波市",
+    "code": "330211",
+    "level": "county"
+  },
+  "江北区": {
+    "parent": "宁波市",
+    "code": "330205",
+    "level": "county"
+  },
+  "宁海县": {
+    "parent": "宁波市",
+    "code": "330226",
+    "level": "county"
+  },
+  "奉化区": {
+    "parent": "宁波市",
+    "code": "330213",
+    "level": "county"
+  },
+  "海曙区": {
+    "parent": "宁波市",
+    "code": "330203",
+    "level": "county"
+  },
+  "鄞州区": {
+    "parent": "宁波市",
+    "code": "330212",
+    "level": "county"
+  },
+  "余姚市": {
+    "parent": "宁波市",
+    "code": "330281",
+    "level": "county"
+  },
+  "慈溪市": {
+    "parent": "宁波市",
+    "code": "330282",
+    "level": "county"
+  },
+  "台州市": {
+    "parent": "浙江省",
+    "code": "331000",
+    "level": "city"
+  },
+  "临海市": {
+    "parent": "台州市",
+    "code": "331082",
+    "level": "county"
+  },
+  "椒江区": {
+    "parent": "台州市",
+    "code": "331002",
+    "level": "county"
+  },
+  "路桥区": {
+    "parent": "台州市",
+    "code": "331004",
+    "level": "county"
+  },
+  "玉环市": {
+    "parent": "台州市",
+    "code": "331083",
+    "level": "county"
+  },
+  "温岭市": {
+    "parent": "台州市",
+    "code": "331081",
+    "level": "county"
+  },
+  "三门县": {
+    "parent": "台州市",
+    "code": "331022",
+    "level": "county"
+  },
+  "天台县": {
+    "parent": "台州市",
+    "code": "331023",
+    "level": "county"
+  },
+  "黄岩区": {
+    "parent": "台州市",
+    "code": "331003",
+    "level": "county"
+  },
+  "仙居县": {
+    "parent": "台州市",
+    "code": "331024",
+    "level": "county"
+  },
+  "温州市": {
+    "parent": "浙江省",
+    "code": "330300",
+    "level": "city"
+  },
+  "洞头区": {
+    "parent": "温州市",
+    "code": "330305",
+    "level": "county"
+  },
+  "苍南县": {
+    "parent": "温州市",
+    "code": "330327",
+    "level": "county"
+  },
+  "平阳县": {
+    "parent": "温州市",
+    "code": "330326",
+    "level": "county"
+  },
+  "瑞安市": {
+    "parent": "温州市",
+    "code": "330381",
+    "level": "county"
+  },
+  "龙港市": {
+    "parent": "温州市",
+    "code": "330383",
+    "level": "county"
+  },
+  "泰顺县": {
+    "parent": "温州市",
+    "code": "330329",
+    "level": "county"
+  },
+  "文成县": {
+    "parent": "温州市",
+    "code": "330328",
+    "level": "county"
+  },
+  "永嘉县": {
+    "parent": "温州市",
+    "code": "330324",
+    "level": "county"
+  },
+  "乐清市": {
+    "parent": "温州市",
+    "code": "330382",
+    "level": "county"
+  },
+  "鹿城区": {
+    "parent": "温州市",
+    "code": "330302",
+    "level": "county"
+  },
+  "瓯海区": {
+    "parent": "温州市",
+    "code": "330304",
+    "level": "county"
+  },
+  "龙湾区": {
+    "parent": "温州市",
+    "code": "330303",
+    "level": "county"
+  },
+  "丽水市": {
+    "parent": "浙江省",
+    "code": "331100",
+    "level": "city"
+  },
+  "缙云县": {
+    "parent": "丽水市",
+    "code": "331122",
+    "level": "county"
+  },
+  "松阳县": {
+    "parent": "丽水市",
+    "code": "331124",
+    "level": "county"
+  },
+  "遂昌县": {
+    "parent": "丽水市",
+    "code": "331123",
+    "level": "county"
+  },
+  "莲都区": {
+    "parent": "丽水市",
+    "code": "331102",
+    "level": "county"
+  },
+  "龙泉市": {
+    "parent": "丽水市",
+    "code": "331181",
+    "level": "county"
+  },
+  "景宁畲族自治县": {
+    "parent": "丽水市",
+    "code": "331127",
+    "level": "county"
+  },
+  "云和县": {
+    "parent": "丽水市",
+    "code": "331125",
+    "level": "county"
+  },
+  "青田县": {
+    "parent": "丽水市",
+    "code": "331121",
+    "level": "county"
+  },
+  "庆元县": {
+    "parent": "丽水市",
+    "code": "331126",
+    "level": "county"
+  },
+  "绍兴市": {
+    "parent": "浙江省",
+    "code": "330600",
+    "level": "city"
+  },
+  "嵊州市": {
+    "parent": "绍兴市",
+    "code": "330683",
+    "level": "county"
+  },
+  "上虞区": {
+    "parent": "绍兴市",
+    "code": "330604",
+    "level": "county"
+  },
+  "越城区": {
+    "parent": "绍兴市",
+    "code": "330602",
+    "level": "county"
+  },
+  "柯桥区": {
+    "parent": "绍兴市",
+    "code": "330603",
+    "level": "county"
+  },
+  "诸暨市": {
+    "parent": "绍兴市",
+    "code": "330681",
+    "level": "county"
+  },
+  "新昌县": {
+    "parent": "绍兴市",
+    "code": "330624",
+    "level": "county"
+  },
+  "湖州市": {
+    "parent": "浙江省",
+    "code": "330500",
+    "level": "city"
+  },
+  "德清县": {
+    "parent": "湖州市",
+    "code": "330521",
+    "level": "county"
+  },
+  "安吉县": {
+    "parent": "湖州市",
+    "code": "330523",
+    "level": "county"
+  },
+  "长兴县": {
+    "parent": "湖州市",
+    "code": "330522",
+    "level": "county"
+  },
+  "吴兴区": {
+    "parent": "湖州市",
+    "code": "330502",
+    "level": "county"
+  },
+  "南浔区": {
+    "parent": "湖州市",
+    "code": "330503",
+    "level": "county"
+  },
+  "衢州市": {
+    "parent": "浙江省",
+    "code": "330800",
+    "level": "city"
+  },
+  "开化县": {
+    "parent": "衢州市",
+    "code": "330824",
+    "level": "county"
+  },
+  "衢江区": {
+    "parent": "衢州市",
+    "code": "330803",
+    "level": "county"
+  },
+  "常山县": {
+    "parent": "衢州市",
+    "code": "330822",
+    "level": "county"
+  },
+  "柯城区": {
+    "parent": "衢州市",
+    "code": "330802",
+    "level": "county"
+  },
+  "江山市": {
+    "parent": "衢州市",
+    "code": "330881",
+    "level": "county"
+  },
+  "龙游县": {
+    "parent": "衢州市",
+    "code": "330825",
+    "level": "county"
+  },
+  "金华市": {
+    "parent": "浙江省",
+    "code": "330700",
+    "level": "city"
+  },
+  "浦江县": {
+    "parent": "金华市",
+    "code": "330726",
+    "level": "county"
+  },
+  "永康市": {
+    "parent": "金华市",
+    "code": "330784",
+    "level": "county"
+  },
+  "东阳市": {
+    "parent": "金华市",
+    "code": "330783",
+    "level": "county"
+  },
+  "兰溪市": {
+    "parent": "金华市",
+    "code": "330781",
+    "level": "county"
+  },
+  "磐安县": {
+    "parent": "金华市",
+    "code": "330727",
+    "level": "county"
+  },
+  "武义县": {
+    "parent": "金华市",
+    "code": "330723",
+    "level": "county"
+  },
+  "金东区": {
+    "parent": "金华市",
+    "code": "330703",
+    "level": "county"
+  },
+  "义乌市": {
+    "parent": "金华市",
+    "code": "330782",
+    "level": "county"
+  },
+  "婺城区": {
+    "parent": "金华市",
+    "code": "330702",
+    "level": "county"
+  },
+  "杭州市": {
+    "parent": "浙江省",
+    "code": "330100",
+    "level": "city"
+  },
+  "西湖区": {
+    "parent": "杭州市",
+    "code": "330106",
+    "level": "county"
+  },
+  "上城区": {
+    "parent": "杭州市",
+    "code": "330102",
+    "level": "county"
+  },
+  "富阳区": {
+    "parent": "杭州市",
+    "code": "330111",
+    "level": "county"
+  },
+  "桐庐县": {
+    "parent": "杭州市",
+    "code": "330122",
+    "level": "county"
+  },
+  "建德市": {
+    "parent": "杭州市",
+    "code": "330182",
+    "level": "county"
+  },
+  "余杭区": {
+    "parent": "杭州市",
+    "code": "330110",
+    "level": "county"
+  },
+  "淳安县": {
+    "parent": "杭州市",
+    "code": "330127",
+    "level": "county"
+  },
+  "临安区": {
+    "parent": "杭州市",
+    "code": "330112",
+    "level": "county"
+  },
+  "滨江区": {
+    "parent": "杭州市",
+    "code": "330108",
+    "level": "county"
+  },
+  "萧山区": {
+    "parent": "杭州市",
+    "code": "330109",
+    "level": "county"
+  },
+  "拱墅区": {
+    "parent": "杭州市",
+    "code": "330105",
+    "level": "county"
+  },
+  "江干区": {
+    "parent": "杭州市",
+    "code": "330104",
+    "level": "county"
+  },
+  "下城区": {
+    "parent": "杭州市",
+    "code": "330103",
+    "level": "county"
+  }
+}
+
+export default {
+  setStore,
+  getStore,
+  removeStore,
+  base64ToBlob,
+  saveAsImage,
+  getMinIndex,
+  getMaxIndex,
+  getDiff,
+  compareData,
+  getNumIndex,
+  getMinDataIndex
+}

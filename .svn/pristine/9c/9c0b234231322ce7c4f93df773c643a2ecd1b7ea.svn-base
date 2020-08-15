@@ -1,0 +1,1997 @@
+<template>
+  <div class="bodyMain">
+    <nav class="navTopArea">
+      <div class="navLeft">
+        <img src="@/assets/images/nav/logo.png">
+        <span v-show="routerActive === 1">{{countyName}}人口总量分析</span>
+        <span v-show="routerActive === 2">{{countyName}}人口结构分析</span>
+        <span v-show="routerActive === 3">{{countyName}}人口迁移分析</span>
+        <span v-show="routerActive === 4">{{countyName}}人口联系分析</span>
+      </div>
+      <ul class="navRight">
+        <li :class="{navActive:routerActive === 1}" @click="routerFn(1)">
+          <el-tooltip class="item" effect="dark" content="人口总量分析" placement="top">
+            <div>
+              <img src="@/assets/images/peopleAnalyze/nav/navTopIcon1.png">
+              <span v-if="routerActive === 1">人口总量</span>
+            </div>
+          </el-tooltip>
+        </li>
+        <li :class="{navActive:routerActive === 2}" @click="routerFn(2)">
+          <el-tooltip class="item" effect="dark" content="人口结构分析" placement="top">
+            <div>
+              <img src="@/assets/images/peopleAnalyze/nav/navTopIcon2.png">
+              <span v-if="routerActive === 2">人口结构</span>
+            </div>
+          </el-tooltip>
+        </li>
+        <li :class="{navActive:routerActive === 3}" @click="routerFn(3)">
+          <el-tooltip class="item" effect="dark" content="人口迁移分析" placement="top">
+            <div>
+              <img src="@/assets/images/peopleAnalyze/nav/navTopIcon4.png">
+              <span v-if="routerActive === 3">人口迁移</span>
+            </div>
+          </el-tooltip>
+        </li>
+        <li :class="{navActive:routerActive === 4}" @click="routerFn(4)">
+          <el-tooltip class="item" effect="dark" content="人口联系分析" placement="top">
+            <div>
+              <img src="@/assets/images/peopleAnalyze/nav/navTopIcon5.png">
+              <span v-if="routerActive === 4">人口联系</span>
+            </div>
+          </el-tooltip>
+        </li>
+        <li>
+          <el-tooltip class="item" effect="dark" content="导出文档" placement="top">
+            <div>
+              <img src="@/assets/images/nav/navTopIcon5.png">
+            </div>
+          </el-tooltip>
+        </li>
+        <li @click="feedbackClick">
+          <el-tooltip class="item" effect="dark" content="意见反馈" placement="top">
+            <div>
+              <img src="@/assets/images/feedbackIcon.png">
+            </div>
+          </el-tooltip>
+        </li>
+        <li @click="junpLink('http://118.190.204.249:8989/aiPage?tag=home&cityName=' + cityName)">
+          <el-tooltip class="item" effect="dark" content="回到总览" placement="top">
+            <div>
+              <img src="@/assets/images/nav/navTopIcon6.png">
+            </div>
+          </el-tooltip>
+        </li>
+        <li @click="junpLink('http://118.190.204.249:8989/aiPage')">
+          <el-tooltip class="item" effect="dark" content="回到首页" placement="top">
+            <div>
+              <img src="@/assets/images/nav/navTopIcon7.png">
+            </div>
+          </el-tooltip>
+        </li>
+      </ul>
+    </nav>
+    <div class="bottomMain">
+      <div class="mainWrap" v-show="routerActive === 1">
+        <div class="CuttingLine">
+          <p class="txtWrap">
+            <img src="@/assets/images/cuttingLine1.png">
+            <span class="txt">人口总量分析</span>
+            <img src="@/assets/images/cuttingLine2.png">
+          </p>
+        </div>
+        <div class="sideItem width910 sideItem1_0">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem1_0.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesModalOpenFn('sideItem1_0',chartArr.sideItem1_0.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown trigger="click" @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_0',['bar','bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_0',['line','line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width910" id="sideItem1_0"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem1_0.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem1_0.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width910 sideItem1_1">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem1_1.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesModalOpenFn('sideItem1_1',chartArr.sideItem1_1.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown trigger="click" @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_1',['bar','bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_1',['line','line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width910" id="sideItem1_1"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem1_1.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem1_1.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width910 sideItem1_2">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem1_2.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesModalOpenFn('sideItem1_2',chartArr.sideItem1_2.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown trigger="click" @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_2',['bar','bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_2',['line','line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width910" id="sideItem1_2"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem1_2.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem1_2.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width910 sideItem1_3">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem1_3.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesModalOpenFn('sideItem1_3',chartArr.sideItem1_3.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown trigger="click" @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_3',['bar','bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_3',['line','line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width910" id="sideItem1_3"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem1_3.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem1_3.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width910 sideItem1_4">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem1_4.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesModalOpenFn('sideItem1_4',chartArr.sideItem1_4.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown trigger="click" @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_4',['bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_4',['line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width910" id="sideItem1_4"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem1_4.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem1_4.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width910 sideItem1_5">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem1_5.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesModalOpenFn('sideItem1_5',chartArr.sideItem1_5.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown trigger="click" @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_5',['bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_5',['line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width910" id="sideItem1_5"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem1_5.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem1_5.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width910 sideItem1_6">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem1_6.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesModalOpenFn('sideItem1_6',chartArr.sideItem1_6.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown trigger="click" @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_6',['bar','bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_6',['line','line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_6',['bar','line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/barLineIcon1.png">
+                    <span class="txt">柱状图+折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width910" id="sideItem1_6"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem1_6.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem1_6.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width910 sideItem1_7">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem1_7.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesModalOpenFn('sideItem1_7',chartArr.sideItem1_7.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown trigger="click" @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_7',['bar','bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_7',['line','line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem1_7',['bar','line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/barLineIcon1.png">
+                    <span class="txt">柱状图+折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width910" id="sideItem1_7"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem1_7.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem1_7.result"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mainWrap" v-show="routerActive === 2">
+        <div class="CuttingLine">
+          <p class="txtWrap">
+            <img src="@/assets/images/cuttingLine1.png">
+            <span class="txt">人口结构分析</span>
+            <img src="@/assets/images/cuttingLine2.png">
+          </p>
+        </div>
+        <div class="sideItem width600 sideItem2_0">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem2_0.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesModalOpenFn('sideItem2_0',chartArr.sideItem2_0.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown trigger="click" @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_0',['bar','bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_0',['line','line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width600" id="sideItem2_0"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem2_0.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem2_0.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width600 sideItem2_1">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem2_1.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesModalOpenFn('sideItem2_1',chartArr.sideItem2_1.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown trigger="click" @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_1',['bar','bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_1',['line','line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_1',['bar','line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/barLineIcon1.png">
+                    <span class="txt">柱状图+折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width600" id="sideItem2_1"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem2_1.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem2_1.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width600 sideItem2_2">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem2_2.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesModalOpenFn('sideItem2_2',chartArr.sideItem2_2.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown trigger="click" @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_2',['bar','bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_2',['line','line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width600" id="sideItem2_2"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem2_2.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem2_2.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width910 sideItem2_3">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem2_3.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesModalOpenFn('sideItem2_3',chartArr.sideItem2_3.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown trigger="click" @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_3',['bar','bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_3',['line','line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width910" id="sideItem2_3"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem2_3.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem2_3.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width910 sideItem2_4">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem2_4.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesModalOpenFn('sideItem2_4',chartArr.sideItem2_4.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown trigger="click" @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_4',['bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_4',['line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width910" id="sideItem2_4"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem2_4.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem2_4.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width910 sideItem2_5">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem2_5.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesModalOpenFn('sideItem2_5',chartArr.sideItem2_5.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown trigger="click" @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_5',['bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_5',['line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width910" id="sideItem2_5"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem2_5.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem2_5.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width910 sideItem2_6">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem2_6.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesModalOpenFn('sideItem2_6',chartArr.sideItem2_6.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown trigger="click" @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_6',['bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem2_6',['line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width910" id="sideItem2_6"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem2_6.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem2_6.result"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mainWrap" v-show="routerActive === 3">
+        <div class="CuttingLine">
+          <p class="txtWrap">
+            <img src="@/assets/images/cuttingLine1.png">
+            <span class="txt">人口迁移分析</span>
+            <img src="@/assets/images/cuttingLine2.png">
+          </p>
+        </div>
+        <div class="sideItem width910 sideItem3_0">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem3_0.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesModalOpenFn('sideItem3_0',chartArr.sideItem3_0.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown trigger="click" @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem3_0',['bar','bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem3_0',['line','line'],barLineChart)" divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width910" id="sideItem3_0"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem3_0.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem3_0.result"></p>
+            </div>
+          </div>
+        </div>
+        <div class="sideItem width910 sideItem3_1">
+          <h4 class="moudleTitle">
+            <span class="left">{{chartArr.sideItem3_1.title}}</span>
+            <p class="optionGroup">
+              <img class="optionImg" @click="imagesModalOpenFn('sideItem3_1',chartArr.sideItem3_1.title,barLineChart)"
+                src="@/assets/images/downImgIcon.png">
+              <el-dropdown trigger="click" @command="chartTypeClick">
+                <span class="el-dropdown-link">
+                  <img class="optionImg" src="@/assets/images/echartTypeIcon.png">
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem3_1',['bar','bar','bar'],barLineChart)">
+                    <img class="chartIcon" src="@/assets/images/barLineIcon.png">
+                    <span class="txt">柱状图样式</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item :command="beforeHandleCommand('sideItem3_1',['line','line','line'],barLineChart)"
+                    divided>
+                    <img class="chartIcon" src="@/assets/images/lineIcon.png">
+                    <span class="txt">折线图样式</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </p>
+          </h4>
+          <div class="sideItemChart width910" id="sideItem3_1"></div>
+          <div class="resultWrap">
+            <h5>数据来源：{{chartArr.sideItem3_1.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem3_1.result"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mainWrap" v-show="routerActive === 4">
+        <div class="CuttingLine">
+          <p class="txtWrap">
+            <img src="@/assets/images/cuttingLine1.png">
+            <span class="txt">人口联系分析</span>
+            <img src="@/assets/images/cuttingLine2.png">
+          </p>
+        </div>
+        <div class="twoWrap">
+          <div class="sideItem width600 sideItem5_0">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem5_0.title}}</span>
+              <p class="optionGroup" style="justify-content: flex-end;">
+                <img class="optionImg" src="@/assets/images/downImgIcon.png"
+                  @click="imagesModalOpenFn('sideItem5_0',chartArr.sideItem5_0.title,lineintervalMap)">
+              </p>
+            </h4>
+            <div class="sideItemChart width600" id="sideItem5_0"></div>
+          </div>
+          <div class="sideItem width600 sideItem5_1">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem5_1.title}}</span>
+              <p class="optionGroup" style="justify-content: flex-end;">
+                <img class="optionImg" src="@/assets/images/downImgIcon.png"
+                  @click="imagesModalOpenFn('sideItem5_1',chartArr.sideItem5_1.title,lineintervalMap)">
+              </p>
+            </h4>
+            <div class="sideItemChart width600" id="sideItem5_1"></div>
+          </div>
+          <div class="sideItem width600 sideItem5_2">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem5_2.title}}</span>
+              <p class="optionGroup" style="justify-content: flex-end;">
+                <img class="optionImg" src="@/assets/images/exportIcon.png" @click="phone1Export">
+              </p>
+            </h4>
+            <div class="tableWrap2">
+              <el-table :data="chartArr.sideItem5_2.list">
+                <el-table-column prop="area" label="县（市，区）" align="center">
+                </el-table-column>
+                <el-table-column label="黄金周" align="center">
+                  <el-table-column prop="frequency1" label="出现次数" align="center">
+                  </el-table-column>
+                  <el-table-column prop="number1" label="出行人数" align="center">
+                  </el-table-column>
+
+                </el-table-column>
+                <el-table-column label="普通周" align="center">
+                  <el-table-column prop="frequency2" label="出行次数" align="center">
+                  </el-table-column>
+                  <el-table-column prop="number2" label="出行人数" align="center">
+                  </el-table-column>
+                </el-table-column>
+              </el-table>
+            </div>
+          </div>
+          <div class="resultWrap" style="width: 100%;">
+            <h5>数据来源：{{chartArr.sideItem5_3.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem5_3.result"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="twoWrap">
+          <div class="sideItem width600 sideItem5_3">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem5_3.title}}</span>
+              <p class="optionGroup" style="justify-content: flex-end;">
+                <img class="optionImg" src="@/assets/images/downImgIcon.png"
+                  @click="imagesModalOpenFn('sideItem5_3',chartArr.sideItem5_3.title,lineintervalMap)">
+              </p>
+            </h4>
+            <div class="sideItemChart width600" id="sideItem5_3" style="height:650px"></div>
+          </div>
+          <div class="sideItem width600 sideItem5_4">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem5_4.title}}</span>
+              <p class="optionGroup" style="justify-content: flex-end;">
+                <img class="optionImg" src="@/assets/images/downImgIcon.png"
+                  @click="imagesModalOpenFn('sideItem5_4',chartArr.sideItem5_4.title,lineintervalMap)">
+              </p>
+            </h4>
+            <div class="sideItemChart width600" id="sideItem5_4" style="height:650px"></div>
+          </div>
+          <div class="sideItem width600 sideItem5_5">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem5_5.title}}</span>
+              <p class="optionGroup" style="justify-content: flex-end;">
+                <img class="optionImg" src="@/assets/images/exportIcon.png" @click="phone2Export">
+              </p>
+            </h4>
+            <div class="tableWrap2">
+              <el-table :data="chartArr.sideItem5_5.list">
+                <el-table-column prop="area" label="地市" align="center">
+                </el-table-column>
+                <el-table-column label="黄金周" align="center">
+                  <el-table-column prop="frequency1" label="出现次数" align="center">
+                  </el-table-column>
+                  <el-table-column prop="number1" label="出行人数" align="center">
+                  </el-table-column>
+
+                </el-table-column>
+                <el-table-column label="普通周" align="center">
+                  <el-table-column prop="frequency2" label="出行次数" align="center">
+                  </el-table-column>
+                  <el-table-column prop="number2" label="出行人数" align="center">
+                  </el-table-column>
+                </el-table-column>
+              </el-table>
+            </div>
+          </div>
+          <div class="resultWrap" style="width: 100%;">
+            <h5>数据来源：{{chartArr.sideItem5_3.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem5_3.result"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="twoWrap">
+          <div class="sideItem width600 sideItem5_6">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem5_6.title}}</span>
+              <p class="optionGroup" style="justify-content: flex-end;">
+                <img class="optionImg" src="@/assets/images/downImgIcon.png"
+                  @click="imagesModalOpenFn('sideItem5_6',chartArr.sideItem5_6.title,lineintervalMap)">
+              </p>
+            </h4>
+            <div class="sideItemChart width600" id="sideItem5_6"></div>
+          </div>
+          <div class="sideItem width600 sideItem5_7">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem5_7.title}}</span>
+              <p class="optionGroup" style="justify-content: flex-end;">
+                <img class="optionImg" src="@/assets/images/downImgIcon.png"
+                  @click="imagesModalOpenFn('sideItem5_7',chartArr.sideItem5_7.title,lineintervalMap)">
+              </p>
+            </h4>
+            <div class="sideItemChart width600" id="sideItem5_7"></div>
+          </div>
+          <div class="sideItem width600 sideItem5_8">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem5_8.title}}</span>
+              <p class="optionGroup" style="justify-content: flex-end;">
+                <img class="optionImg" src="@/assets/images/exportIcon.png" @click="phone3Export">
+              </p>
+            </h4>
+            <div class="tableWrap2">
+              <el-table :data="chartArr.sideItem5_8.list">
+                <el-table-column prop="area" label="地市" align="center">
+                </el-table-column>
+                <el-table-column label="黄金周" align="center">
+                  <el-table-column prop="frequency1" label="出现次数" align="center">
+                  </el-table-column>
+                  <el-table-column prop="number1" label="出行人数" align="center">
+                  </el-table-column>
+
+                </el-table-column>
+                <el-table-column label="普通周" align="center">
+                  <el-table-column prop="frequency2" label="出行次数" align="center">
+                  </el-table-column>
+                  <el-table-column prop="number2" label="出行人数" align="center">
+                  </el-table-column>
+                </el-table-column>
+              </el-table>
+            </div>
+          </div>
+          <div class="resultWrap" style="width: 100%;">
+            <h5>数据来源：{{chartArr.sideItem5_6.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem5_6.result"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="twoWrap">
+          <div class="sideItem width600 sideItem5_9">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem5_9.title}}</span>
+              <p class="optionGroup" style="justify-content: flex-end;">
+                <img class="optionImg" src="@/assets/images/downImgIcon.png"
+                  @click="imagesModalOpenFn('sideItem5_9',chartArr.sideItem5_9.title,lineintervalMap)">
+              </p>
+            </h4>
+            <div class="sideItemChart width600" id="sideItem5_9" style="height:700px"></div>
+          </div>
+          <div class="sideItem width600 sideItem5_10">
+            <h4 class="moudleTitle">
+              <span class="left">{{chartArr.sideItem5_10.title}}</span>
+              <p class="optionGroup" style="justify-content: flex-end;">
+                <img class="optionImg" src="@/assets/images/downImgIcon.png"
+                  @click="imagesModalOpenFn('sideItem5_10',chartArr.sideItem5_10.title,lineintervalMap)">
+              </p>
+            </h4>
+            <div class="sideItemChart width600" id="sideItem5_10" style="height:700px"></div>
+          </div>
+          <div>
+            <div class="sideItem width600 sideItem5_11">
+              <h4 class="moudleTitle">
+                <span class="left">{{chartArr.sideItem5_11.title}}</span>
+                <p class="optionGroup" style="justify-content: flex-end;">
+                  <img class="optionImg" src="@/assets/images/exportIcon.png" @click="phone4Export">
+                </p>
+              </h4>
+              <div class="tableWrap2">
+                <el-table :data="chartArr.sideItem5_11.list">
+                  <el-table-column prop="area" label="地市" align="center">
+                  </el-table-column>
+                  <el-table-column label="黄金周" align="center">
+                    <el-table-column prop="frequency1" label="出现次数" align="center">
+                    </el-table-column>
+                    <el-table-column prop="number1" label="出行人数" align="center">
+                    </el-table-column>
+
+                  </el-table-column>
+                  <el-table-column label="普通周" align="center">
+                    <el-table-column prop="frequency2" label="出行次数" align="center">
+                    </el-table-column>
+                    <el-table-column prop="number2" label="出行人数" align="center">
+                    </el-table-column>
+                  </el-table-column>
+                </el-table>
+              </div>
+            </div>
+            <div class="sideItem width600 sideItem5_12">
+              <h4 class="moudleTitle">
+                <span class="left">{{chartArr.sideItem5_12.title}}</span>
+                <p class="optionGroup" style="justify-content: flex-end;">
+                  <img class="optionImg" src="@/assets/images/exportIcon.png" @click="phone5Export">
+                </p>
+              </h4>
+              <div class="tableWrap2">
+                <el-table :data="chartArr.sideItem5_12.list">
+                  <el-table-column prop="area" label="省份" align="center">
+                  </el-table-column>
+                  <el-table-column label="黄金周" align="center">
+                    <el-table-column prop="frequency1" label="出现次数" align="center">
+                    </el-table-column>
+                    <el-table-column prop="number1" label="出行人数" align="center">
+                    </el-table-column>
+
+                  </el-table-column>
+                  <el-table-column label="普通周" align="center">
+                    <el-table-column prop="frequency2" label="出行次数" align="center">
+                    </el-table-column>
+                    <el-table-column prop="number2" label="出行人数" align="center">
+                    </el-table-column>
+                  </el-table-column>
+                </el-table>
+              </div>
+            </div>
+          </div>
+          <div class="resultWrap" style="width: 100%;">
+            <h5>数据来源：{{chartArr.sideItem5_3.dataSource}}</h5>
+            <div class="content">
+              <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+              <p v-html="chartArr.sideItem5_3.result"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <el-dialog title="图片下载" :visible.sync="imagesVisi" width="60%" custom-class="imagesWrap" center
+      :close-on-click-modal="false" :close-on-press-escape="false" @close="imagesModalCloseFn">
+      <div class="imgModalBody">
+        <span class="fourIcon" v-for="(item,index) in 4" :key="index" :class="'fourIcon' + index"></span>
+        <div class="sideItemChart" id="echartsWrap1"></div>
+        <div class="colorArea">
+          <p>
+            <span class="txt">背景颜色：</span>
+            <ColorPicker v-model="chartColor.backgroundColor" alpha :colors="predefineColors"
+              @on-active-change="backgroundColorChange"></ColorPicker>
+          </p>
+          <p>
+            <span class="txt">文字颜色：</span>
+            <ColorPicker v-model="chartColor.textColor" alpha :colors="predefineColors"
+              @on-active-change="textColorChange"></ColorPicker>
+          </p>
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="exportPic">保 存</el-button>
+      </span>
+    </el-dialog>
+    <ul class="navBottomArea">
+      <li :class="{active:routerActive === 1}" @click="routerFn(1)">
+        <img v-if="routerActive === 1" class="activeImg" src="@/assets/images/nav/navBottomActiveIcon.png">
+        <img v-if="routerActive === 1" src="@/assets/images/peopleAnalyze/nav/navBottomIcon1-1.png">
+        <img v-if="routerActive !== 1" src="@/assets/images/peopleAnalyze/nav/navBottomIcon1.png">
+        <span>人口总量分析</span>
+      </li>
+      <li :class="{active:routerActive === 2}" @click="routerFn(2)">
+        <img v-if="routerActive === 2" class="activeImg" src="@/assets/images/nav/navBottomActiveIcon.png">
+        <img v-if="routerActive === 2" src="@/assets/images/peopleAnalyze/nav/navBottomIcon2-1.png">
+        <img v-if="routerActive !== 2" src="@/assets/images/peopleAnalyze/nav/navBottomIcon2.png">
+        <span>人口结构分析</span>
+      </li>
+      <li :class="{active:routerActive === 3}" @click="routerFn(3)">
+        <img v-if="routerActive === 3" class="activeImg" src="@/assets/images/nav/navBottomActiveIcon.png">
+        <img v-if="routerActive === 3" src="@/assets/images/peopleAnalyze/nav/navBottomIcon4-1.png">
+        <img v-if="routerActive !== 3" src="@/assets/images/peopleAnalyze/nav/navBottomIcon4.png">
+        <span>人口迁移分析</span>
+      </li>
+      <li :class="{active:routerActive === 4}" @click="routerFn(4)">
+        <img v-if="routerActive === 4" class="activeImg" src="@/assets/images/nav/navBottomActiveIcon.png">
+        <img v-if="routerActive === 4" src="@/assets/images/peopleAnalyze/nav/navBottomIcon5-1.png">
+        <img v-if="routerActive !== 4" src="@/assets/images/peopleAnalyze/nav/navBottomIcon5.png">
+        <span>人口联系分析</span>
+      </li>
+    </ul>
+  </div>
+</template>
+<script>
+import mUtilsFn from '@/utils/mUtils.js'
+import { finishMixin } from '@/utils/finishMixin.js'
+import { peopleCountMixin } from '@/utils/countPeopleAnalyze/peopleCount.js'
+import { structuraMixin } from '@/utils/countPeopleAnalyze/structura.js'
+import { migrationMixin } from '@/utils/countPeopleAnalyze/migration.js'
+import { contactMixin } from '@/utils/countPeopleAnalyze/contact.js'
+const cityName = '台州市'
+const countyName = '仙居县'
+export default {
+  name: 'peopleCount',
+  mixins: [
+    finishMixin,
+    peopleCountMixin,
+    structuraMixin,
+    migrationMixin,
+    contactMixin
+  ],
+  data() {
+    return {
+      cityName: cityName,
+      countyName: countyName,
+      routerActive: 4,
+      imagesVisi: false, // 是否显示保存图片弹窗
+      whichEchart: null, // 要被下载图表对象id
+      imagesName: '', // 图片名称
+      fnName: null,
+      chartColor: {
+        backgroundColor: 'rgba(0,0,0,0)',
+        textColor: '#fff'
+      }, // 下载图片各颜色值
+      predefineColors: [
+        '#ff4500',
+        '#ff8c00',
+        '#ffd700',
+        '#90ee90',
+        '#00ced1',
+        '#1e90ff',
+        '#c71585',
+        'rgba(255, 69, 0, 0.68)',
+        'rgb(255, 120, 0)',
+        'rgba(51, 100, 98)',
+        'hsla(209, 100%, 56%, 0.73)',
+        'rgba(0, 0, 0)'
+      ], // ColorPicker 颜色选择器背景颜色预定义颜色数组
+      predefineColors1: [
+        '#ff4500',
+        '#ff8c00',
+        '#ffd700',
+        '#90ee90',
+        '#00ced1',
+        '#1e90ff',
+        '#c71585',
+        'rgba(255, 69, 0)',
+        'rgb(255, 120, 0)',
+        'hsv(51, 100, 98)',
+        '#fff',
+        '#000',
+        '#666'
+      ], // ColorPicker 颜色选择器文字颜色预定义颜色数组
+      chartArr: {
+        sideItem1_0: {
+          id: 'sideItem1_0',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '',
+          result: '',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#00baff',
+              yAxis: [50, 20, 30, 40]
+            },
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#e3791b',
+              yAxis: [30, 12, 40, 35]
+            }
+          ]
+        },
+        sideItem1_1: {
+          id: 'sideItem1_2',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '',
+          result:
+            '2016年，淳安县的常住人口增长率最小， 比杭州市低16.27个千分点',
+          xAxis: [],
+          barWidth: '40px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'line',
+              color: '#00c6ff',
+              yAxis: [50, 20, 30, 40, 25]
+            },
+            {
+              name: '',
+              chartType: 'line',
+              color: '#72ff00',
+              yAxis: [30, 12, 40, 35, 40]
+            }
+          ]
+        },
+        sideItem1_2: {
+          id: 'sideItem1_3',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '',
+          result:
+            '“十三五”以来，台州市常住人口增长率整体增幅小于全省平均水平,户籍人口增长率整体增幅小于全省平均水平。',
+          xAxis: [],
+          barWidth: '40px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'line',
+              color: '#00c6ff',
+              yAxis: []
+            },
+            {
+              name: '',
+              chartType: 'line',
+              color: '#72ff00',
+              yAxis: []
+            }
+          ]
+        },
+        sideItem1_3: {
+          id: 'sideItem1_3',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '',
+          result:
+            '2015年、2016年、2017年、2018年，台州市常住人口总量大于户籍人口总量,说明人口呈流入状态。',
+          xAxis: [],
+          barWidth: '40px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'line',
+              color: '#ff3764',
+              yAxis: []
+            }
+          ]
+        },
+        sideItem1_4: {
+          id: 'sideItem1_4',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '',
+          result: '2018年， 台州市常住与户籍人口比值在全省排名第9。',
+          xAxis: [
+            '宁波市',
+            '嘉兴市',
+            '台州市',
+            '舟山市',
+            '金华市',
+            '湖州市',
+            '绍兴市',
+            '温州市',
+            '台州市',
+            '衢州市',
+            '丽水市'
+          ],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#8c0084',
+              lightColor: '#ff28f2',
+              yAxis: []
+            }
+          ]
+        },
+        sideItem1_5: {
+          id: 'sideItem1_5',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '',
+          result:
+            '2018年,台州市常住人口占全省总人口比重为10.7%， 居全省第4位。',
+          xAxis: [],
+          barWidth: '30px',
+          doubleYxis: true,
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#8c0084',
+              lightColor: '#ff28f2',
+              yAxis: []
+            },
+            {
+              name: '',
+              chartType: 'line',
+              color: '#fffc00',
+              lightColor: '#ff28f2',
+              yAxis: []
+            }
+          ]
+        },
+        sideItem1_6: {
+          id: 'sideItem1_6',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '',
+          result:
+            '2018年,台州市常住人口占全省总人口比重为10.7%， 居全省第4位。',
+          xAxis: [
+            '宁波市',
+            '嘉兴市',
+            '台州市',
+            '舟山市',
+            '金华市',
+            '湖州市',
+            '绍兴市',
+            '温州市',
+            '台州市',
+            '衢州市',
+            '丽水市'
+          ],
+          barWidth: '30px',
+          doubleYxis: true,
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#732e00',
+              lightColor: '#ff28f2',
+              yAxis: []
+            },
+            {
+              name: '',
+              chartType: 'line',
+              color: '#fffc00',
+              lightColor: '#ff28f2',
+              yAxis: []
+            }
+          ]
+        },
+        sideItem1_7: {
+          id: 'sideItem1_7',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '',
+          result:
+            '2018年,台州市常住人口占全省总人口比重为10.7%， 居全省第4位。',
+          xAxis: [],
+          barWidth: '30px',
+          doubleYxis: true,
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#732e00',
+              lightColor: '#ff28f2',
+              yAxis: []
+            },
+            {
+              name: '',
+              chartType: 'line',
+              color: '#fffc00',
+              lightColor: '#ff28f2',
+              yAxis: []
+            }
+          ]
+        },
+
+        sideItem2_0: {
+          id: 'sideItem2_0',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '',
+          result:
+            '2016年“全面二孩”正式实施后，台州市的常住人口出生率有明显提高，但孕育高峰期很快于2017年到来，早于政策出台时的预期。2017年常住人口出生率0‰，比2015年年高0个千分点； 2018年常住人口出生率已明显回落，为0‰，比2017年低0个千分点。2015年-2018年台州市常住人口出生率每年平均0全省0个千分点。',
+          xAxis: [],
+          barWidth: '40px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'line',
+              color: '#00ffff',
+              yAxis: []
+            },
+            {
+              name: '',
+              chartType: 'line',
+              color: '#fefb00',
+              yAxis: []
+            },
+            {
+              name: '',
+              chartType: 'line',
+              color: '#00c6ff',
+              yAxis: []
+            }
+          ]
+        },
+        sideItem2_1: {
+          id: 'sideItem2_1',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '',
+          result:
+            '2018年，台州市的户籍劳动年龄人口（18-59岁）规模为0万人，占台州市户籍劳动人口总数0％，比2015年的劳动年龄人口规模0万人，占比0个人口。',
+          xAxis: [],
+          barWidth: '40px',
+          doubleYxis: true,
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#00ff78',
+              yAxis: []
+            },
+            {
+              name: '',
+              chartType: 'line',
+              color: '#ff00f6',
+              yAxis: []
+            }
+          ]
+        },
+        sideItem2_2: {
+          id: 'sideItem2_2',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '',
+          result:
+            '2018年，台州市的户籍劳动年龄人口（18-59岁）规模为0万人，占台州市户籍劳动人口总数0％，比2015年的劳动年龄人口规模0万人，占比0个人口。',
+          xAxis: [],
+          barWidth: '40px',
+          stack: true,
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#ef822b',
+              yAxis: []
+            },
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#55aeca',
+              yAxis: []
+            },
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#2b6cef',
+              yAxis: []
+            },
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#dabe00',
+              yAxis: []
+            }
+          ]
+        },
+        sideItem2_3: {
+          id: 'sideItem2_3',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '',
+          result:
+            '2015年台州市60岁以上户籍老年人口为109.6729万人，到2018年已达到125.084万人， 2018年台州市60岁以上户籍老年人口占总人口的比重为20.66%， 进入中度老龄化阶段，比2015年增加了2.3个百分点， 较全省平均水平低1.8个百分点。 与全省各县（市、区）相比，台州市户籍老年人口规模和老龄化率分别排名第4位和第9位。',
+          xAxis: ['2015', '2016', '2017', '2018'],
+          barWidth: '40px',
+          doubleYxis: true,
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#2b6cef',
+              yAxis: []
+            },
+            {
+              name: '',
+              chartType: 'line',
+              color: '#f6ff00',
+              yAxis: []
+            }
+          ]
+        },
+        sideItem2_4: {
+          id: 'sideItem2_3',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '',
+          result:
+            '2015年台州市60岁以上户籍老年人口为109.6729万人，到2018年已达到125.084万人， 2018年台州市60岁以上户籍老年人口占总人口的比重为20.66%， 进入中度老龄化阶段，比2015年增加了2.3个百分点， 较全省平均水平低1.8个百分点。 与全省各县（市、区）相比，台州市户籍老年人口规模和老龄化率分别排名第4位和第9位。',
+          xAxis: [],
+          barWidth: '40px',
+          doubleYxis: true,
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#83007b',
+              yAxis: []
+            },
+            {
+              name: '',
+              chartType: 'line',
+              color: '#f6ff00',
+              yAxis: []
+            }
+          ]
+        },
+        sideItem2_5: {
+          id: 'sideItem2_5',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '',
+          result:
+            '2015年台州市60岁以上户籍老年人口为109.6729万人，到2018年已达到125.084万人， 2018年台州市60岁以上户籍老年人口占总人口的比重为20.66%， 进入中度老龄化阶段，比2015年增加了2.3个百分点， 较全省平均水平低1.8个百分点。 与全省各县（市、区）相比，台州市户籍老年人口规模和老龄化率分别排名第4位和第9位。',
+          xAxis: [],
+          barWidth: '40px',
+          doubleYxis: true,
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#00eaff',
+              yAxis: []
+            },
+            {
+              name: '',
+              chartType: 'line',
+              color: '#f6ff00',
+              yAxis: []
+            }
+          ]
+        },
+        sideItem2_6: {
+          id: 'sideItem2_3',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '',
+          result:
+            '2015年台州市60岁以上户籍老年人口为109.6729万人，到2018年已达到125.084万人， 2018年台州市60岁以上户籍老年人口占总人口的比重为20.66%， 进入中度老龄化阶段，比2015年增加了2.3个百分点， 较全省平均水平低1.8个百分点。 与全省各县（市、区）相比，台州市户籍老年人口规模和老龄化率分别排名第4位和第9位。',
+          xAxis: [],
+          barWidth: '40px',
+          doubleYxis: true,
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#fe9500',
+              yAxis: []
+            },
+            {
+              name: '',
+              chartType: 'line',
+              color: '#ff00b4',
+              yAxis: []
+            }
+          ]
+        },
+        sideItem2_7: {
+          id: 'sideItem2_3',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '',
+          result:
+            '2015年台州市60岁以上户籍老年人口为109.6729万人，到2018年已达到125.084万人， 2018年台州市60岁以上户籍老年人口占总人口的比重为20.66%， 进入中度老龄化阶段，比2015年增加了2.3个百分点， 较全省平均水平低1.8个百分点。 与全省各县（市、区）相比，台州市户籍老年人口规模和老龄化率分别排名第4位和第9位。',
+          xAxis: [],
+          barWidth: '40px',
+          doubleYxis: true,
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#00ffb4',
+              yAxis: []
+            },
+            {
+              name: '',
+              chartType: 'line',
+              color: '#e3791b',
+              yAxis: []
+            }
+          ]
+        },
+
+        sideItem3_0: {
+          id: 'sideItem3_0',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '',
+          result:
+            '“十三五”期间的常住和户籍人口增量为0万人和0万人，分别居全省第0名和第0名。',
+          xAxis: [],
+          barWidth: '30px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#00ff7e',
+              yAxis: []
+            },
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#ffb400',
+              yAxis: []
+            }
+          ]
+        },
+        sideItem3_1: {
+          id: 'sideItem3_1',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '',
+          result:
+            '2018年，杭州市为0状态，0人数为0人，位居全省第0位。在杭州市内，0为净迁入状态，0为净迁出状态。',
+          xAxis: [],
+          barWidth: '20px',
+          chartArr: [
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#00b4ff',
+              yAxis: []
+            },
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#e56af7',
+              yAxis: []
+            },
+            {
+              name: '',
+              chartType: 'bar',
+              color: '#00ff7e',
+              yAxis: []
+            }
+          ]
+        },
+
+        sideItem5_0: {
+          id: 'sideItem5_0',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '2018年手机信令台州市黄金周人口联系',
+          dataSource: '移动手机信令数据',
+          result:
+            '2018年，杭州市为0状态，0人数为0人，位居全省第0位。在杭州市内，0为净迁入状态，0为净迁出状态。',
+          isFlowMap:true,
+          configObj: {
+            url: '/statistics/getFlowDirectionData',
+            params: {
+              year: 2018,
+              area: cityName,
+              week: 1,
+              type: 1
+            },
+            curCity: cityName
+          }
+        },
+        sideItem5_1: {
+          id: 'sideItem5_1',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '2018年手机信令台州市普通周人口联系',
+          dataSource: '移动手机信令数据',
+          result:
+            '2018年，杭州市为0状态，0人数为0人，位居全省第0位。在杭州市内，0为净迁入状态，0为净迁出状态。',
+          isFlowMap:true,
+          configObj: {
+            url: '/statistics/getFlowDirectionData',
+            params: {
+              year: 2018,
+              area: cityName,
+              week: 2,
+              type: 1
+            },
+            curCity: cityName
+          }
+        },
+        sideItem5_2: {
+          id: 'sideItem5_2',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '移动手机信令数据',
+          result:
+            '2018年，在台州市内，人口流动最多的地方，其中与的人口联系最紧密。',
+          list: []
+        },
+        sideItem5_3: {
+          id: 'sideItem5_3',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '2018年移动电话信令台州市与全省各区域间黄金周人口联系',
+          dataSource: '移动手机信令数据',
+          result: '2018年，在浙江省内，台州市与的人口联系最高。',
+          isFlowMap:true,
+          configObj: {
+            url: '/statistics/getFlowDirectionData2',
+            params: {
+              year: 2018,
+              area: countyName,
+              week: 1,
+              type: 2,
+              way: '流入'
+            },
+            curCity: '浙江省'
+          }
+        },
+        sideItem5_4: {
+          id: 'sideItem5_4',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '2018年移动手机信令台州市与全省各区域间普通周人口联系',
+          dataSource: '移动手机信令数据',
+          result: '2018年，在浙江省内，台州市与的人口联系最高。',
+          isFlowMap:true,
+          configObj: {
+            url: '/statistics/getFlowDirectionData2',
+            params: {
+              year: 2018,
+              area: countyName,
+              week: 2,
+              type: 2,
+              way: '流入'
+            },
+            curCity: '浙江省'
+          }
+        },
+        sideItem5_5: {
+          id: 'sideItem5_5',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '移动手机信令数据',
+          result: '2018年，在浙江省内，台州市与的人口联系最高。',
+          list: []
+        },
+        sideItem5_6: {
+          id: 'sideItem5_6',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '联通手机信令数据',
+          result:
+            '2018年，在长三角范围内，台州市的人口联系以省内为主，在省内的人口相互联系次数占整个长三角区域的人口相互联系总次数的parcent1％以上；',
+          isFlowMap:true,
+          configObj: {
+            url: '/statistics/getFlowDirectionData2',
+            params: {
+              year: 2018,
+              area: countyName,
+              week: 1,
+              type: 2,
+              way: '流出'
+            },
+            curCity: '浙江省'
+          }
+        },
+        sideItem5_7: {
+          id: 'sideItem5_7',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '联通手机信令数据',
+          result:
+            '2018年，在长三角范围内，台州市的人口联系以省内为主，在省内的人口相互联系次数占整个长三角区域的人口相互联系总次数的parcent1％以上；',
+          isFlowMap:true,
+          configObj: {
+            url: '/statistics/getFlowDirectionData2',
+            params: {
+              year: 2018,
+              area: countyName,
+              week: 2,
+              type: 2,
+              way: '流出'
+            },
+            curCity: '浙江省'
+          }
+        },
+        sideItem5_8: {
+          id: 'sideItem5_8',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '联通手机信令数据',
+          result:
+            '2018年，在长三角范围内，台州市的人口联系以省内为主，在省内的人口相互联系次数占整个长三角区域的人口相互联系总次数的parcent1％以上；',
+          list: []
+        },
+        sideItem5_9: {
+          id: 'sideItem5_9',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '联通手机信令数据',
+          result:
+            '2018年，在长三角范围内，台州市的人口联系以省内为主，在省内的人口相互联系次数占整个长三角区域的人口相互联系总次数的parcent1％以上；',
+          isFlowMap:true,
+          configObj: {
+            url: '/statistics/getFlowDirectionData2',
+            params: {
+              year: 2018,
+              area: countyName,
+              week: 1,
+              type: 3
+            },
+            curCity: '长三角'
+          }
+        },
+        sideItem5_10: {
+          id: 'sideItem5_10',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '联通手机信令数据',
+          result:
+            '2018年，在长三角范围内，台州市的人口联系以省内为主，在省内的人口相互联系次数占整个长三角区域的人口相互联系总次数的parcent1％以上；',
+          isFlowMap:true,
+          configObj: {
+            url: '/statistics/getFlowDirectionData2',
+            params: {
+              year: 2018,
+              area: countyName,
+              week: 2,
+              type: 3
+            },
+            curCity: '长三角'
+          }
+        },
+        sideItem5_11: {
+          id: 'sideItem5_11',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '联通手机信令数据',
+          result:
+            '2018年，在长三角范围内，台州市的人口联系以省内为主，在省内的人口相互联系次数占整个长三角区域的人口相互联系总次数的parcent1％以上；',
+          list: []
+        },
+        sideItem5_12: {
+          id: 'sideItem5_12',
+          picNum: 1,
+          infoNum: 1,
+          titleNum: 1,
+          title: '',
+          dataSource: '联通手机信令数据',
+          result:
+            '2018年，在长三角范围内，台州市的人口联系以省内为主，在省内的人口相互联系次数占整个长三角区域的人口相互联系总次数的parcent1％以上；',
+          list: []
+        }
+      }
+    }
+  },
+  watch: {
+    cityLineData: function(newData) {
+      if (newData.length < 2) {
+        return
+      }
+      this.tableData = []
+      let cData = newData[0]
+      let cData1 = newData[1]
+      let freqSum1 = this.getDirtSum(cData.data[1])
+      let tripSum1 = this.getDirtSum(cData.data[0])
+      let freqSum2 = this.getDirtSum(cData1.data[1])
+      let tripSum2 = this.getDirtSum(cData1.data[0])
+      this.cityList.forEach(c => {
+        if (c === this.parCity) {
+          return
+        }
+        let dirt = {}
+        if (cData.week == 1) {
+          dirt['city'] = c
+          dirt['freq1'] =
+            Math.floor((cData.data[1][c] / freqSum1) * 10000) / 100
+          dirt['trip1'] =
+            Math.floor((cData.data[0][c] / tripSum1) * 10000) / 100
+          //cData.data[0][c];
+          dirt['freq2'] =
+            Math.floor((cData1.data[1][c] / freqSum2) * 10000) / 100
+          // cData1.data[1][c];
+          dirt['trip2'] =
+            Math.floor((cData1.data[0][c] / tripSum2) * 10000) / 100
+          // cData1.data[0][c];
+        } else {
+          dirt['city'] = c
+          dirt['freq1'] =
+            Math.floor((cData1.data[1][c] / freqSum1) * 10000) / 100
+          dirt['trip1'] =
+            Math.floor((cData1.data[0][c] / tripSum1) * 10000) / 100
+          //cData.data[0][c];
+          dirt['freq2'] =
+            Math.floor((cData.data[1][c] / freqSum2) * 10000) / 100
+          // cData1.data[1][c];
+          dirt['trip2'] =
+            Math.floor((cData.data[0][c] / tripSum2) * 10000) / 100
+          // dirt["freq1"] = cData1.data[1][c];
+          // dirt["trip1"] = cData1.data[0][c];
+          // dirt["freq2"] = cData.data[1][c];
+          // dirt["trip2"] = cData.data[0][c];
+        }
+        this.tableData.push(dirt)
+      })
+      // cityLineData 城市分析 newData.data 0 出行人数, 1 出行频次
+    },
+    townData: function(newData) {
+      newData.forEach(n => {
+        if (n.area == this.cityName) {
+          this.paramsBasic.peopleNum1 = n.frequency1
+          this.paramsBasic.peopleNum2 = n.frequency2
+        }
+      })
+      let list = newData.map(n => {
+        return n.frequency2
+      })
+
+      this.paramsBasic.rank1 = list.indexOf(this.paramsBasic.peopleNum2) + 1
+    },
+    tableData1: function(newData) {
+      this.paramsBasic.cityName6 = newData[0].area
+    },
+    tableData2: function(newData) {
+      this.paramsBasic.cityName7 = newData[0].area
+    },
+    tableData3: function(newData) {
+      if (newData[0].frequency1 - newData[0].frequency2 > 0) {
+        this.paramsBasic.parcent1 = newData[0].frequency2
+      } else {
+        this.paramsBasic.parcent1 = newData[0].frequency1
+      }
+
+      newData.forEach(n => {
+        if (n.area == '上海市') {
+          this.paramsBasic.parcent2 = n.frequency2
+        }
+      })
+    },
+    tableData4: function(newData) {
+      this.paramsBasic.cityName5 = newData[0].area
+    },
+    numArr: function(value) {
+      if (value == 8) {
+        setTimeout(() => {
+          var temp = {
+            config: this.maps,
+            data: this.getAllValue()
+          }
+          this.$emit('acceptChildren', 'people4Town', temp)
+        }, 2000)
+      }
+    }
+  },
+  mounted() {},
+  methods: {
+    // 颜色选择器背景颜色值发生变化
+    backgroundColorChange(color) {
+      this.chartColor.backgroundColor = color
+      if (this.chartArr[this.whichEchart].isFlowMap) {
+        this.$nextTick(() => {
+          this.fnName(
+            'echartsWrap1',
+            this.whichEchart
+          )
+        })
+      } else {
+        this.fnName('echartsWrap1', this.chartArr[this.whichEchart])
+      }
+    },
+    // 颜色选择器文字颜色值发生变化
+    textColorChange(color) {
+      this.chartColor.textColor = color
+      if (this.chartArr[this.whichEchart].isFlowMap) {
+        this.$nextTick(() => {
+          this.fnName(
+            'echartsWrap1',
+            this.whichEchart
+          )
+        })
+      } else {
+        this.fnName('echartsWrap1', this.chartArr[this.whichEchart])
+      }
+    },
+    // 将图表转换成图片并下载
+    exportPic() {
+      let chart = this.$echarts.init(document.getElementById('echartsWrap1'))
+      let content = chart.getDataURL()
+      let aLink = document.createElement('a')
+      let blob = mUtilsFn.base64ToBlob(content)
+      let evt = document.createEvent('HTMLEvents')
+      evt.initEvent('click', true, true)
+
+      let date = new Date()
+      let year = date.getFullYear() // 获取完整的年份(4位)
+      let month =
+        date.getMonth() < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1 //获取当前月份(0-11,0代表1月)
+      let day = date.getDate() // 获取当前日(1-31)
+      let hours = date.getHours() // 获取当前小时数(0-23)
+      let minutes =
+        date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes() // 获取当前分钟数(0-59)
+      let seconds =
+        date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds() // 获取当前秒数(0-59)
+
+      aLink.download = `${this.imagesName}${year}${month}${day}${hours}${minutes}${seconds}.png`
+      aLink.href = URL.createObjectURL(blob)
+      aLink.dispatchEvent(
+        new MouseEvent('click', {
+          bubbles: true,
+          cancelable: true,
+          view: window
+        })
+      )
+
+      this.imagesModalCloseFn()
+    },
+    // 图表柱状图折线图转换
+    chartTypeClick(command) {
+      this.chartArr[command.id].chartType = command.type
+      command.fnName(command.id, this.chartArr[command.id])
+    },
+
+    // 打开保存图片弹窗并渲染图表
+    imagesModalOpenFn(val, imagesName, fnName) {
+      this.chartColor.backgroundColor = 'rgba(0,0,0,0)'
+      this.chartColor.textColor = '#fff'
+      this.imagesName = imagesName
+      this.whichEchart = val
+      this.imagesVisi = true
+      this.fnName = fnName
+
+      if (this.chartArr[val].isFlowMap) {
+        this.$nextTick(() => {
+          this.fnName('echartsWrap1', val)
+        })
+      } else {
+        this.$nextTick(() => {
+          fnName('echartsWrap1', this.chartArr[val])
+        })
+      }
+    },
+    // 关闭保存图片弹窗
+    imagesModalCloseFn() {
+      this.chartColor.backgroundColor = 'rgba(0,0,0,0)'
+      this.chartColor.textColor = '#fff'
+      this.imagesVisi = false
+    },
+    // 对command参数进行重新封装成一个对象
+    beforeHandleCommand(command1, command2, command3) {
+      return {
+        id: command1,
+        type: command2,
+        fnName: command3
+      }
+    },
+    // 图表柱状图折线图转换
+    chartTypeClick(command) {
+      for (let i = 0; i < command.type.length; i++) {
+        this.chartArr[command.id].chartArr[i].chartType = command.type[i]
+      }
+      command.fnName(command.id, this.chartArr[command.id])
+    }
+  }
+}
+</script>
+<style lang="scss" scoped>
+@import './countyPeopleAnalyze.scss';
+</style>

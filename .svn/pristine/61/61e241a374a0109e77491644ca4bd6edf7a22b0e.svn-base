@@ -1,0 +1,87 @@
+import {
+  apiGet,
+  axiosAll
+}
+from '@/api/api'
+import {
+  getArrFirst,
+  getArrLast,
+  getArrAvg
+}
+from '@/utils/mUtils.js'
+export const benefitMixin = {
+  data() {
+    return {}
+  },
+  mounted() {
+    // 1、 获取某年限内某地区规上工业亩均税收变化并绘制图表
+    apiGet(
+      '/statistics/getMultiZoneData', {
+        startYear: 2015,
+        endYear: 2018,
+        areas: [this.cityName, '浙江省', '全国'].join(','),
+        zb: '规上工业亩均税收（万元/亩）'
+      }).then(res => {
+      let data = res.data
+      this.chartArr.sideItem5_0.title = `${getArrFirst(data.xAxis)}-${getArrLast(data.xAxis)}年${this.cityName}规上工业亩均税收变化`
+      this.chartArr.sideItem5_0.chartArr[0].name = `${data.yAxis[0].name}`
+      this.chartArr.sideItem5_0.chartArr[1].name = `浙江省${data.yAxis[1].name}`
+      this.chartArr.sideItem5_0.chartArr[2].name = `全国${data.yAxis[2].name}`
+      this.chartArr.sideItem5_0.xAxis = data.xAxis
+      this.chartArr.sideItem5_0.chartArr[0].yAxis = data.yAxis[0].list
+      this.chartArr.sideItem5_0.chartArr[1].yAxis = data.yAxis[1].list
+      this.chartArr.sideItem5_0.chartArr[2].yAxis = data.yAxis[2].list
+      this.barLineChart('sideItem5_0', this.chartArr.sideItem5_0)
+    })
+    // 2、 获取某年某地区全省各地市市规上工业亩均税收对比并绘制图表
+    apiGet(
+      '/statistics/getScaleData', {
+        year: 2018,
+        area: '浙江省',
+        zb: '规上工业亩均税收（万元/亩）'
+      }).then(res => {
+      let data = res.data
+      this.chartArr.sideItem5_1.title = `2018年全省各地市规上工业亩均税收对比`
+      this.chartArr.sideItem5_1.chartArr[0].name = `${data.yAxis[0].name}(${data.yAxis[0].unit})`
+      this.chartArr.sideItem5_1.xAxis = data.xAxis
+      this.chartArr.sideItem5_1.chartArr[0].yAxis = data.yAxis[0].list
+      this.barLineChart('sideItem5_1', this.chartArr.sideItem5_1)
+    })
+    // 3、 获取某年限内某地区单位建设用地生产总值变化并绘制图表
+    apiGet(
+      '/statistics/getMultiZoneData', {
+        startYear: 2015,
+        endYear: 2018,
+        areas: [this.cityName, '浙江省', '全国'].join(','),
+        zb: '单位建设用地生产总值'
+      }).then(res => {
+      let data = res.data
+      this.chartArr.sideItem5_2.title = `${getArrFirst(data.xAxis)}-${getArrLast(data.xAxis)}年${this.cityName}单位建设用地生产总值变化`
+      this.chartArr.sideItem5_2.chartArr[0].name = `${data.yAxis[0].name}`
+      this.chartArr.sideItem5_2.chartArr[1].name = `浙江省${data.yAxis[1].name}`
+      this.chartArr.sideItem5_2.chartArr[2].name = `全国${data.yAxis[2].name}`
+      this.chartArr.sideItem5_2.xAxis = data.xAxis
+      this.chartArr.sideItem5_2.chartArr[0].yAxis = data.yAxis[0].list
+      this.chartArr.sideItem5_2.chartArr[1].yAxis = data.yAxis[1].list
+      this.chartArr.sideItem5_2.chartArr[2].yAxis = data.yAxis[2].list
+      this.barLineChart('sideItem5_2', this.chartArr.sideItem5_2)
+    })
+    // 2、 获取某年某地区全省各地市市规上工业亩均税收对比并绘制图表
+    apiGet(
+      '/statistics/getScaleData', {
+        year: 2018,
+        area: '浙江省',
+        zb: '单位建设用地生产总值'
+      }).then(res => {
+      let data = res.data
+      this.chartArr.sideItem5_3.title = `2018年全省各地市单位建设用地生产总值对比`
+      this.chartArr.sideItem5_3.chartArr[0].name = `${data.yAxis[0].name}(${data.yAxis[0].unit})`
+      this.chartArr.sideItem5_3.xAxis = data.xAxis
+      this.chartArr.sideItem5_3.chartArr[0].yAxis = data.yAxis[0].list
+      this.chartArr.sideItem5_3.chartArr[1].name = `全省平均值(${getArrAvg(data.yAxis[0].list)}${data.yAxis[0].unit})`
+      this.chartArr.sideItem5_3.chartArr[1].markLine.data[0].yAxis = getArrAvg(data.yAxis[0].list)
+      this.barLineChart('sideItem5_3', this.chartArr.sideItem5_3)
+    })
+  },
+  methods: {}
+}

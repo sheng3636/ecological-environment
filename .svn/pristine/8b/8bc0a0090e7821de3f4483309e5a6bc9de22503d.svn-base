@@ -1,0 +1,104 @@
+import {
+  apiGet,
+  axiosAll
+}
+from '@/api/api'
+import {
+  getArrFirst,
+  getArrLast,
+  getArrAvg
+}
+from '@/utils/mUtils.js'
+export const evnvironmentalMixin = {
+  data() {
+    return {}
+  },
+  mounted() {
+    // 0、 获取某年限内某地区生态环境状况指数（EI）变化并绘制图表
+    apiGet(
+      '/statistics/getStructuralData', {
+        startYear: 2015,
+        endYear: 2018,
+        area: this.cityName,
+        zbs: '生态环境指数'
+      }).then(res => {
+      let data = res.data
+      this.chartArr.sideItem4_0.title = `${getArrFirst(data.xAxis)}-${getArrLast(data.xAxis)}年${this.cityName}生态环境状况指数（EI）变化`
+      this.chartArr.sideItem4_0.chartArr[0].name = `${data.yAxis[0].name}(${data.yAxis[0].unit})`
+      this.chartArr.sideItem4_0.xAxis = data.xAxis
+      this.chartArr.sideItem4_0.chartArr[0].yAxis = data.yAxis[0].list
+      this.barLineChart('sideItem4_0', this.chartArr.sideItem4_0)
+    })
+    // 1、 获取某年某地区全省各地市生态环境状况指数（EI）对比并绘制图表
+    apiGet(
+      '/statistics/getScaleData', {
+        year: 2018,
+        area: '浙江省',
+        zb: '生态环境指数'
+      }).then(res => {
+      let data = res.data
+      this.chartArr.sideItem4_1.title = `2018年全省各地市生态环境状况指数（EI）对比`
+      this.chartArr.sideItem4_1.chartArr[0].name = `${data.yAxis[0].name}(${data.yAxis[0].unit})`
+      this.chartArr.sideItem4_1.xAxis = data.xAxis
+      this.chartArr.sideItem4_1.chartArr[0].yAxis = data.yAxis[0].list
+      this.barLineChart('sideItem4_1', this.chartArr.sideItem4_1)
+    })
+    // 2、 获取某年限内某地区空气质量达到优良天数比例并绘制图表
+    apiGet(
+      '/statistics/getMultiZoneData', {
+        startYear: 2015,
+        endYear: 2018,
+        areas: [this.cityName, '浙江省', '全国'].join(','),
+        zb: '空气质量达到优良天数的比率'
+      }).then(res => {
+      let data = res.data
+
+      this.chartArr.sideItem4_2.title = `${getArrFirst(data.xAxis)}-${getArrLast(data.xAxis)}年${this.cityName}空气质量达到优良天数比例变化`
+      this.chartArr.sideItem4_2.chartArr[0].name = `${data.yAxis[0].name}(${data.yAxis[0].unit})`
+      this.chartArr.sideItem4_2.chartArr[1].name = `浙江省${data.yAxis[1].name}(${data.yAxis[1].unit})`
+      this.chartArr.sideItem4_2.chartArr[2].name = `全国${data.yAxis[2].name}(${data.yAxis[2].unit})`
+      this.chartArr.sideItem4_2.xAxis = data.xAxis
+      this.chartArr.sideItem4_2.chartArr[0].yAxis = data.yAxis[0].list
+      this.chartArr.sideItem4_2.chartArr[1].yAxis = data.yAxis[1].list
+      this.chartArr.sideItem4_2.chartArr[2].yAxis = data.yAxis[2].list
+      this.barLineChart('sideItem4_2', this.chartArr.sideItem4_2)
+    })
+    // 3、 获取某年某地区空气质量达到优良天数的比率进度评价图并绘制图表
+    apiGet(
+      '/statistics/getProgressStatusData', {
+        year: 2018,
+        area: this.cityName,
+        zbs: '空气质量达到优良天数的比率'
+      }).then(res => {
+      let data = res.data
+      for (const key in data) {
+        if (data.hasOwnProperty(key)) {
+          this.chartArr.sideItem4_3.xAxis.push(key)
+          this.chartArr.sideItem4_3.chartArr[0].yAxis.push(data[key] * 100)
+        }
+      }
+      this.horizontalChart('sideItem4_3', this.chartArr.sideItem4_3)
+      // let aaa = (2018 - 2016 + 1) * 0.2
+      // let bbb = this.chartArr.sideItem1_1.chartArr[0].yAxis[0] >= aaa ? '良好' : '滞后'
+      // this.chartArr.sideItem1_1.result = `“十三五”时期，${this.cityName}${this.chartArr.sideItem1_1.xAxis[0]}进度<span class="light">${bbb}</span>。`
+    })
+    // 4、 获取某年某地区全省各地市空气质量达到优良天数比例并绘制图表
+    apiGet(
+      '/statistics/getScaleData', {
+        year: 2018,
+        area: '浙江省',
+        zb: '空气质量达到优良天数的比率'
+      }).then(res => {
+      let data = res.data
+      this.chartArr.sideItem4_4.title = `2018年全省各地市空气质量达到优良天数比例对比`
+      this.chartArr.sideItem4_4.chartArr[0].name = `${data.yAxis[0].name}(${data.yAxis[0].unit})`
+      this.chartArr.sideItem4_4.xAxis = data.xAxis
+      this.chartArr.sideItem4_4.chartArr[0].yAxis = data.yAxis[0].list
+      this.chartArr.sideItem4_4.chartArr[1].name = `全省平均值(${getArrAvg(data.yAxis[0].list)}${data.yAxis[0].unit})`
+      this.chartArr.sideItem4_4.chartArr[1].markLine.data[0].yAxis = getArrAvg(data.yAxis[0].list)
+      this.barLineChart('sideItem4_4', this.chartArr.sideItem4_4)
+    })
+
+  },
+  methods: {}
+}

@@ -4,7 +4,8 @@ const path = require('path')
 function resolve(dir) {
   return path.join(__dirname, dir)
 }
-
+// 时间戳保证不会版本重复
+const Timestamp = new Date().getTime();
 // 如果你的端口设置为80，
 // 使用管理员权限执行命令行。
 // 例如，Mac: sudo npm运行
@@ -48,5 +49,14 @@ module.exports = {
         }
       }
     }
+  },
+  configureWebpack: {
+    externals: {
+      'AMap': 'AMap' // 高德地图配置
+    },
+    // output: { // 输出重构  打包编译后的 文件名称  【模块名称.版本号.时间戳】
+    //   filename: `static/js/[name].[chunkhash].${Timestamp}.js`,
+    //   chunkFilename: `static/js/[name].[chunkhash].${Timestamp}.js`
+    // }
   }
 }

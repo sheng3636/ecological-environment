@@ -1,0 +1,102 @@
+@import '@/assets/styles/mixin.scss';
+
+.zoomImg {
+  position: absolute;
+  right: 20px;
+  top: 75px;
+  cursor: pointer;
+  z-index: 998;
+}
+.flowMapBody {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 640px;
+}
+
+.mapArea {
+  width: 850px;
+  height: 645px;
+}
+
+.tableArea {
+  width: 530px;
+  height: 645px;
+  font-size: 16px;
+  color: #00e3fe;
+  h3 {
+    line-height: 56px;
+    font-size: 24px;
+    text-align: center;
+  }
+  .flowTab {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto 10px 0;
+    width: 98%;
+    color: #fff;
+    span {
+      display: block;
+      width: 50%;
+      line-height: 40px;
+      text-align: center;
+      background-color: #041e40;
+      cursor: pointer;
+      &.active {
+        color: #041e40;
+        background-color: #00e4ff;
+      }
+    }
+  }
+
+  .flowModalTable {
+    margin: 0 auto 10px 0;
+    width: 98%;
+    max-height: 517px;
+    overflow-y: auto;
+    @include scrollBar();
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0 auto;
+      width: 90%;
+      line-height: 35px;
+      .name {
+        display: flex;
+        align-items: center;
+        width: 120px;
+        span {
+          display: block;
+          margin-right: 5px;
+          width: 22px;
+          height: 22px;
+          line-height: 22px;
+          border-radius: 50%;
+          color: #fff;
+          text-align: center;
+        }
+      }
+
+      &:nth-child(1) .name span {
+        background-color: #0185eb;
+      }
+
+      &:nth-child(2) .name span {
+        background-color: #0185eb;
+      }
+
+      &:nth-child(3) .name span {
+        background-color: #0185eb;
+      }
+      .line{
+        width: 280px;
+        border-bottom: 1px dashed #02cfe4;
+      }
+      .num {
+        width: 80px;
+        text-align: center;
+      }
+    }
+  }
+}

@@ -1,0 +1,561 @@
+import {
+  getStructuralData1,
+  getScaleData1
+}
+from '@/api/environmentalQuality'
+import {
+  getJenksBreaks
+} from '@/utils/mUtils.js'
+import axios from 'axios'
+export const contactMixin = {
+  data() {
+    return {
+      cityLineData: [],
+      cityLineData1: [],
+      cityList: [
+        '杭州市',
+        '湖州市',
+        '嘉兴市',
+        '金华市',
+        '丽水市',
+        '宁波市',
+        '衢州市',
+        '绍兴市',
+        '台州市',
+        '温州市',
+        '舟山市'
+      ],
+      paramsBasic: {
+        cityName1: null,
+        cityName2: null,
+        cityName3: null,
+        cityName4: null,
+        cityName5: null,
+        parcent1: 'parcent1',
+        parcent2: 'parcent2'
+      },
+      maps: {
+        people5Map1: {
+          chart: null,
+          url: '/statistics/getFlowDirectionData',
+          params: {
+            year: 2018,
+            area: '台州市',
+            week: 1,
+            type: 1
+          },
+          result: {},
+          interval: null,
+          curCity: '台州市',
+          no: 'no28'
+        },
+        people5Map2: {
+          chart: null,
+          url: '/statistics/getFlowDirectionData',
+          params: {
+            year: 2018,
+            area: '台州市',
+            week: 2,
+            type: 1
+          },
+          result: {},
+          interval: null,
+          curCity: '台州市',
+          no: 'no29'
+        },
+        people5Map3: {
+          chart: null,
+          url: '/statistics/getFlowDirectionData',
+          params: {
+            year: 2018,
+            area: '台州市',
+            week: 1,
+            type: 2
+          },
+          result: {},
+          interval: null,
+          curCity: '浙江省',
+          no: 'no30'
+        },
+        people5Map4: {
+          chart: null,
+          url: '/statistics/getFlowDirectionData',
+          params: {
+            year: 2018,
+            area: '台州市',
+            week: 2,
+            type: 2
+          },
+          result: {},
+          interval: null,
+          curCity: '浙江省',
+          no: 'no31'
+        },
+        people5Map5: {
+          chart: null,
+          url: '/statistics/getFlowDirectionData',
+          params: {
+            year: 2018,
+            area: '台州市',
+            week: 1,
+            type: 3
+          },
+          result: {},
+          interval: null,
+          curCity: '长三角',
+          no: 'no32'
+        },
+        people5Map6: {
+          chart: null,
+          url: '/statistics/getFlowDirectionData',
+          params: {
+            year: 2018,
+            area: '台州市',
+            week: 2,
+            type: 3
+          },
+          result: {},
+          interval: null,
+          curCity: '长三角',
+          no: 'no33'
+        }
+      }
+    }
+  },
+  watch: {
+    cityLineData: function (newData) {
+      if (newData.length < 2) {
+        return
+      }
+      let cData = newData[0]
+      let cData1 = newData[1]
+      let freqSum1 = this.getDirtSum(cData.data[1])
+      let tripSum1 = this.getDirtSum(cData.data[0])
+      let freqSum2 = this.getDirtSum(cData1.data[1])
+      let tripSum2 = this.getDirtSum(cData1.data[0])
+      this.cityList.forEach(c => {
+        if (c === this.cityName) {
+          return
+        }
+        let dirt = {}
+        if (cData.week == 1) {
+          dirt['city'] = c
+          dirt['freq1'] =
+            Math.floor((cData.data[1][c] / freqSum1) * 10000) / 100
+          dirt['trip1'] =
+            Math.floor((cData.data[0][c] / tripSum1) * 10000) / 100
+          dirt['freq2'] =
+            Math.floor((cData1.data[1][c] / freqSum2) * 10000) / 100
+          dirt['trip2'] =
+            Math.floor((cData1.data[0][c] / tripSum2) * 10000) / 100
+        } else {
+          dirt['city'] = c
+          dirt['freq1'] =
+            Math.floor((cData1.data[1][c] / freqSum1) * 10000) / 100
+          dirt['trip1'] =
+            Math.floor((cData1.data[0][c] / tripSum1) * 10000) / 100
+          dirt['freq2'] =
+            Math.floor((cData.data[1][c] / freqSum2) * 10000) / 100
+          dirt['trip2'] =
+            Math.floor((cData.data[0][c] / tripSum2) * 10000) / 100
+        }
+      })
+    }
+  },
+  mounted() {
+    // 2、 某年基于手机信令数据的台州市人口联系市内联系表格
+    axios({
+      url: 'http://118.190.204.249:8899/xboot/statistics/getFlowTable',
+      method: 'get',
+      params: {
+        year:2018,
+        area: this.cityName ,
+        type:1,
+        sign:'地市'
+      }
+    }).then(res => {
+      let data = res.data.result
+      this.chartArr.sideItem5_2.list = data
+    })
+    // 5、 某年基于手机信令数据的各地市与台州市人口联系汇总占比表（％）
+    axios({
+      url: 'http://118.190.204.249:8899/xboot/statistics/getFlowTable',
+      method: 'get',
+      params: {
+        year: 2018,
+        area: this.cityName,
+        type: 2,
+        sign: '地市'
+      }
+    }).then(res => {
+      let data = res.data.result
+      this.chartArr.sideItem5_5.list = data
+    })
+    // 8、 某年基于联通手机信令数据的长三角各省与台州市人口联系汇总占比表（％）
+    axios({
+      url: 'http://118.190.204.249:8899/xboot/statistics/getFlowTable',
+      method: 'get',
+      params: {
+        year: 2018,
+        area: this.cityName,
+        type: 3,
+        sign: '地市'
+      }
+    }).then(res => {
+      let data = res.data.result
+      this.chartArr.sideItem5_8.list = data
+    })
+    // 8、 某年基于联通手机信令数据的长三角各地区（除浙江省外TOP5）与台州市人口联系汇总占比表（％）
+    axios({
+      url: 'http://118.190.204.249:8899/xboot/statistics/getFlowTable',
+      method: 'get',
+      params: {
+        year: 2018,
+        area: this.cityName,
+        type: 4,
+        sign: '地市'
+      }
+    }).then(res => {
+      let data = res.data.result
+      data.sort((a, b) => {
+        return b.frequency1 - a.frequency1;
+      })
+      this.chartArr.sideItem5_9.list = data.slice(0,5)
+    })
+    for (let key in this.maps) {
+      this.lineintervalMap(key)
+    }
+  },
+  methods: {
+    lineintervalMap(key) {
+      let params = JSON.parse(JSON.stringify(this.maps[key].params))
+      let url = this.maps[key].url
+      axios({
+        url: 'http://118.190.204.249:8899/xboot' + url,
+        method: 'get',
+        params: params
+      }).then(res => {
+        let result = res.data.result
+
+        let promise = new Promise((resolve, reject) => {
+          this.maps[key].chart = this.$echarts.init(
+            document.getElementById(key)
+          )
+          if (this.maps[key].curCity === '浙江省') {
+            var option = this.createContactMap(
+              result,
+              this.maps[key].curCity,
+              params
+            )
+          } else if (this.maps[key].curCity === '长三角') {
+            var option = this.createContactMap(
+              result,
+              this.maps[key].curCity,
+              params
+            )
+          } else {
+            var option = this.createContactMap(
+              result,
+              this.maps[key].curCity,
+              params
+            )
+          }
+          this.maps[key].chart.on('finished', () => {
+            resolve()
+          })
+          this.$nextTick(() => {
+            this.maps[key].chart.setOption(option)
+          })
+        })
+      })
+    },
+    classifyNumber(arr) {
+      let list = []
+      for (let i = 0; i < arr.length; i++) {
+        let temp = {}
+        switch (i) {
+          case 0:
+            temp = {
+              lte: arr[0]
+            }
+            break
+          default:
+            temp = {
+              gt: arr[i - 1],
+              lte: arr[i]
+            }
+            break
+        }
+        list.push(temp)
+      }
+      return list
+    },
+    getDirtSum(data) {
+      let sum = 0;
+      for (let key in data) {
+        if (key === this.cityName) {
+          continue;
+        }
+        sum += parseFloat(data[key]);
+      }
+      return sum;
+    },
+    createContactMap(data, city, params) {
+      let nameList = []
+      let centerList = {}
+      let self = this
+      this.$echarts.registerMap(city, self.mapConfig[city])
+      let geojson = self.mapConfig[city]
+      let list = []
+      // 区<->区的数据
+      let listDirt = {}
+      // 市<->市的数据
+      let listDirt2 = {}
+      let listDirt3 = {}
+
+      for (let key in geojson) {
+        list = geojson[key]
+      }
+      list.forEach(l => {
+        nameList.push({
+          name: l.properties.name,
+          value: l.properties.center,
+          symbolSize: 0
+        })
+        centerList[l.properties.name] = l.properties.center.slice(0, 2)
+        listDirt[l.properties.name] = 0
+      })
+      let lineList = []
+      data.forEach(d => {
+        let name = d.LEAVE_NAME
+        let name1 = d.ARRIVE_NAME
+        listDirt[name] += parseFloat(d.TRIP_NUMBER)
+        listDirt[name1] += parseFloat(d.TRIP_NUMBER)
+        if (centerList[name] != null && centerList[name1] != null) {
+          lineList.push({
+            fromName: name,
+            toName: name1,
+            coords: [centerList[name], centerList[name1]],
+            num: d.TRIP_NUMBER,
+            value: d.TRIP_NUMBER
+          })
+
+          if (listDirt2.hasOwnProperty(d.ARRIVE_CITY)) {
+            listDirt2[d.ARRIVE_CITY] += parseFloat(d.TRIP_NUMBER)
+            listDirt3[d.ARRIVE_CITY] += parseFloat(d.TRIP_FREQUENCY)
+          } else {
+            listDirt2[d.ARRIVE_CITY] = parseFloat(d.TRIP_NUMBER)
+            listDirt3[d.ARRIVE_CITY] = parseFloat(d.TRIP_FREQUENCY)
+          }
+          if (listDirt2.hasOwnProperty(d.LEAVE_CITY)) {
+            listDirt2[d.LEAVE_CITY] += parseFloat(d.TRIP_NUMBER)
+            listDirt3[d.LEAVE_CITY] += parseFloat(d.TRIP_FREQUENCY)
+          } else {
+            listDirt2[d.LEAVE_CITY] = parseFloat(d.TRIP_NUMBER)
+            listDirt3[d.LEAVE_CITY] = parseFloat(d.TRIP_FREQUENCY)
+          }
+        }
+      })
+
+      lineList.sort((a, b) => {
+        return a.num - b.num
+      })
+
+      let lineListFilter = lineList.filter(li => {
+        return li.num !== 0
+      })
+      let lineMin = lineListFilter[0].num
+      let lineMax = lineListFilter[lineListFilter.length - 1].num
+      // 分级别区间范围
+      let linePeace = getJenksBreaks(lineListFilter, 5)
+      linePeace = linePeace.map(m => {
+        let val = 0
+        if (city == '长三角') {
+          val = Math.ceil(m / 100) * 100
+        } else {
+          val = Math.ceil(m / 1000) * 1000
+        }
+        return val
+      })
+      // 区间值
+      let linePeaces = this.classifyNumber(linePeace)
+      let scattList = nameList.map(li => {
+        let num = listDirt[li.name]
+        li.value.push(num)
+        li.num = num
+        if (num / 50000 > 15) {
+          li.symbolSize = 15
+        } else {
+          li.symbolSize = Math.ceil(num / 50000)
+        }
+        return li
+      })
+      scattList.sort((a, b) => {
+        return a.num - b.num
+      })
+      let scattListFilter = scattList.filter(sca => {
+        return sca.num !== 0
+      })
+      let min = scattListFilter[0].num
+      let max = scattListFilter[scattListFilter.length - 1].num
+      let scattPeace = getJenksBreaks(scattListFilter, 5)
+      scattPeace = scattPeace.map(m => {
+        let val = 0
+        if (city == '长三角') {
+          val = Math.ceil(m / 100) * 100
+        } else {
+          val = Math.ceil(m / 1000) * 1000
+        }
+        return val
+      })
+      let scattPeaces = this.classifyNumber(scattPeace)
+      if (city == '浙江省') {
+        this.cityLineData.push({
+          week: params.week,
+          data: [listDirt2, listDirt3]
+        })
+      } else if (city == '长三角') {
+        // this.cityLineData.push({
+        //   week: params.week,
+        //   data: [listDirt2, listDirt3]
+        // });
+      } else {
+        this.paramsBasic.cityName1 =
+          scattListFilter[scattListFilter.length - 1].name
+        let lineParams = lineListFilter[lineListFilter.length - 1]
+        this.paramsBasic.cityName2 = lineParams.fromName
+        this.paramsBasic.cityName3 = lineParams.toName
+      }
+      let option = {
+        grid: {
+          top: 10,
+          bottom: 0,
+          right: 0,
+          left: 0
+        },
+        tooltip: {
+          trigger: 'item',
+          formatter: function (params) {
+            if (params.componentSubType == 'scatter') {
+              return params.data.name + ':\n' + params.data.num / 10000 + '万人'
+            } else {
+              return `${params.data.fromName} -> ${params.data.toName}为${params.data.value}次数`
+            }
+          }
+        },
+        itemStyle: {
+          opacity: 1,
+          borderWidth: 1,
+          borderColor: '#fff'
+        },
+        geo: {
+          map: city,
+          label: {
+            emphasis: {
+              show: false
+            }
+          },
+          roam: false,
+          itemStyle: {
+            normal: {
+              areaColor: '#142233',
+              borderWidth: 2,
+              borderColor: 'white'
+            },
+            emphasis: {
+              // areaColor: '#2a333d'
+            }
+          }
+        },
+        visualMap: [{
+            type: 'piecewise',
+            text: ['单位:人数（点）'],
+            right: '2%',
+            // splitNumber: 5,
+            // max: max,
+            // min: min,
+            calculable: true,
+            inRange: {
+              color: ['green', 'yellow', 'orange', 'red']
+            },
+            textStyle: {
+              color: '#acf8fd'
+            },
+            showLabel: true,
+            seriesIndex: 0,
+            pieces: scattPeaces
+          },
+          {
+            type: 'piecewise',
+            text: ['单位:次数（线）'],
+            left: '2%',
+            // max: lineMax,
+            // min: lineMin,
+            pieces: linePeaces,
+            calculable: true,
+            inRange: {
+              color: ['green', 'yellow', 'orange', 'red']
+            },
+            textStyle: {
+              color: '#acf8fd'
+            },
+            showLabel: true,
+            seriesIndex: 1
+          }
+        ],
+        series: [{
+            name: '地点',
+            type: 'scatter',
+            coordinateSystem: 'geo',
+            zlevel: 2,
+            rippleEffect: {
+              brushType: 'stroke'
+            },
+            symbolSize: (rawValue, params) => {
+              let num = params.data.symbolSize
+              let index = Math.ceil(num / min)
+              return 100
+            },
+            label: {
+              normal: {
+                show: true,
+                position: 'right', //显示位置
+                offset: [5, 0], //偏移设置
+                formatter: function (params) {
+                  //圆环显示文字
+                  return params.data.name
+                },
+                fontSize: 10
+              },
+              emphasis: {
+                show: true
+              }
+            },
+            itemStyle: {
+              normal: {
+                color: params => {}
+              }
+            },
+            data: scattListFilter
+          },
+          {
+            name: '线路',
+            type: 'lines',
+            coordinateSystem: 'geo',
+            zlevel: 2,
+            large: true,
+            lineStyle: {
+              normal: {
+                width: 1.5,
+                opacity: 0.6,
+                curveness: 0.1
+              }
+            },
+            data: lineListFilter
+          }
+        ]
+      }
+      return option
+    },
+  }
+}
